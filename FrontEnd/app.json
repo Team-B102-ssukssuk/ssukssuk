@@ -1,0 +1,30 @@
+{
+  "expo": {
+    "name": "SSukSSuk",
+    "slug": "SSukSSuk",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./src/assets/img/Logo.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./src/assets/img/Logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./src/assets/img/Logo.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "./src/assets/img/Logo.png"
+    }
+  }
+}
