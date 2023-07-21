@@ -7,11 +7,11 @@ const LoadingScreen = () => {
       <View style={styles.loadingContainer}>
         <Text style={styles.loadingText}>들어가는 중</Text>
         <Image
-          source={require("../../assets/img/loading_dot.gif")}
+          source={require("../../assets/img/LoadingDot.gif")}
           style={styles.loadingDotImg}
         />
         <Image
-          source={require("../../assets/img/loading.gif")}
+          source={require("../../assets/img/Loading.gif")}
           style={styles.loadingImg}
         />
       </View>

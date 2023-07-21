@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, Image, Dimensions, TouchableOpacity } from "react-native";
 
-const ErrorPage = () => {
+const ErrorScreen = () => {
   return (
     <View
       style={{
@@ -69,4 +69,4 @@ const ErrorPage = () => {
   );
 };
 
-export default ErrorPage;
+export default ErrorScreen;

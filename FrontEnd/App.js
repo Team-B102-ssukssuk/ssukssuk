@@ -1,10 +1,10 @@
 import { StyleSheet, View } from "react-native";
-import ProfileScreen from "./src/screens/profile";
+import PasswordFindScreen from "./src/screens/passwordfind";
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <ProfileScreen />
+      <PasswordFindScreen />
     </View>
   );
 }
