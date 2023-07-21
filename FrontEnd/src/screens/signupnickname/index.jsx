@@ -8,12 +8,13 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import Icon2 from "react-native-vector-icons/AntDesign";
 import styles from "./style";
 
-const SignUpScreen = () => {
-  const [email, setEmail] = useState("");
-  const [verifyNumber, setVerifyNumber] = useState("");
+const SignUpNicknameScreen = () => {
+  const [nickname, setNickname] = useState("");
   const [errorOpacity, setErrorOpacity] = useState(0);
+  const [showCheckcircle, setShowCheckcircle] = useState(0);
   const [nextButtonColor, setNextButtonColor] = useState("#CACACA");
 
   return (
@@ -25,7 +26,7 @@ const SignUpScreen = () => {
         <View style={styles.header}>
           <View style={styles.arrowTextContainer}>
             <Icon name="arrow-back-ios" size={28} color="#fff" />
-            <Text style={styles.headerPageNumber}>회원가입 ( 1 / 3 )</Text>
+            <Text style={styles.headerPageNumber}>회원가입 ( 3 / 3 )</Text>
           </View>
         </View>
       </View>
@@ -34,43 +35,43 @@ const SignUpScreen = () => {
       </View>
       <View style={styles.logincontainer}>
         <View style={styles.loginInlineBlock}>
-          <TextInput
-            style={styles.emailJoinInputBox}
-            onChangeText={setEmail}
-            value={email}
-            placeholder="email"
-          ></TextInput>
+          <View style={styles.iconPlaceholder}>
+            <TextInput
+              style={styles.emailJoinInputBox}
+              onChangeText={setNickname}
+              value={nickname}
+              placeholder="닉네임"
+            ></TextInput>
+            <Icon2
+              name="checkcircle"
+              size={20}
+              color="#2DD0AF"
+              style={[styles.checkcircle, { opacity: showCheckcircle }]}
+            />
+          </View>
           <TouchableOpacity
             onPress={() => {
               setErrorOpacity(100);
               setNextButtonColor("#2DD0AF");
+              setShowCheckcircle(100);
             }}
             style={styles.verifyButton}
           >
-            <Text style={styles.verifyText}>인증</Text>
+            <Text style={styles.verifyText}>중복체크</Text>
           </TouchableOpacity>
         </View>
-        <TextInput
-          style={styles.loginIDInputBox}
-          onChangeText={setVerifyNumber}
-          value={verifyNumber}
-          placeholder="인증번호를 입력해주세요."
-        ></TextInput>
         <Text style={[styles.verifyErrorMessage, { opacity: errorOpacity }]}>
-          인증번호를 잘 못 입력했습니다.
+          이미 가입한 사용자입니다.
         </Text>
         <TouchableOpacity
           style={[styles.emailNextButton, { backgroundColor: nextButtonColor }]}
           activeOpacity={0.3}
-          onPress={() => {
-            setErrorOpacity(100);
-          }}
         >
-          <Text style={styles.emailNextButtonText}>다음</Text>
+          <Text style={styles.emailNextButtonText}>완료</Text>
         </TouchableOpacity>
       </View>
     </ImageBackground>
   );
 };
 
-export default SignUpScreen;
+export default SignUpNicknameScreen;

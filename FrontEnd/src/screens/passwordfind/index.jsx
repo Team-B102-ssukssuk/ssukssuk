@@ -10,7 +10,7 @@ import React, { useState } from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import styles from "./style";
 
-const SignUpScreen = () => {
+const PasswordFindScreen = () => {
   const [email, setEmail] = useState("");
   const [verifyNumber, setVerifyNumber] = useState("");
   const [errorOpacity, setErrorOpacity] = useState(0);
@@ -25,7 +25,7 @@ const SignUpScreen = () => {
         <View style={styles.header}>
           <View style={styles.arrowTextContainer}>
             <Icon name="arrow-back-ios" size={28} color="#fff" />
-            <Text style={styles.headerPageNumber}>회원가입 ( 1 / 3 )</Text>
+            <Text style={styles.headerPageNumber}>비밀번호 찾기 ( 1 / 2 )</Text>
           </View>
         </View>
       </View>
@@ -73,4 +73,4 @@ const SignUpScreen = () => {
   );
 };
 
-export default SignUpScreen;
+export default PasswordFindScreen;

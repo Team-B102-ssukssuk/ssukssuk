@@ -1,10 +1,10 @@
 import { StyleSheet, View } from "react-native";
-import SignUpScreen from "./src/screens/signup";
+import PasswordFindScreen from "./src/screens/passwordfind";
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <SignUpScreen />
+      <PasswordFindScreen />
     </View>
   );
 }

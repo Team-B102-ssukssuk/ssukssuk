@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 4,
   },
-  loginIDInputBox: {
+  passwordInputBox: {
     height: 40,
     width: 320,
     margin: 5,

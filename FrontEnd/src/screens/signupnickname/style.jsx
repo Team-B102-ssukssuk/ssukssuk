@@ -11,23 +11,7 @@ const styles = StyleSheet.create({
 
   emailJoinInputBox: {
     height: 40,
-    width: 250,
-    margin: 5,
-    padding: 10,
-    borderRadius: 10,
-    backgroundColor: "white",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.4,
-    shadowRadius: 3.84,
-    elevation: 4,
-  },
-  loginIDInputBox: {
-    height: 40,
-    width: 320,
+    width: 230,
     margin: 5,
     padding: 10,
     borderRadius: 10,
@@ -43,7 +27,7 @@ const styles = StyleSheet.create({
   },
   verifyButton: {
     backgroundColor: "#2DD0AF",
-    width: 60,
+    width: 80,
     height: 40,
     margin: 5,
     padding: 10,
@@ -123,6 +107,25 @@ const styles = StyleSheet.create({
   },
   logoPadding: {
     padding: 35,
+  },
+  placeholderContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  placeholderText: {
+    marginLeft: 5,
+    color: "#CACACA",
+  },
+  checkcircle: {
+    position: "absolute",
+    marginLeft: 205,
+    opacity: 0,
+  },
+  iconPlaceholder: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
   },
 });
 
