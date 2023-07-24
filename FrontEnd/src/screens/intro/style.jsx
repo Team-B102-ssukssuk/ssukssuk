@@ -12,7 +12,6 @@ const styles = StyleSheet.create({
     padding: 10,
     textAlign: "center",
     fontSize: 18,
-    fontWeight: "bold",
   },
   paragraphStyle: {
     padding: 20,
@@ -30,7 +29,6 @@ const styles = StyleSheet.create({
     fontSize: 25,
     color: "#31D7B6",
     textAlign: "center",
-    fontWeight: "bold",
   },
   skipTextStyle: {
     color: "#D9D9D9",

@@ -28,7 +28,6 @@ const styles = StyleSheet.create({
     marginTop: 15,
     color: "white",
     fontSize: 18,
-    fontWeight: "bold",
   },
   gardenContainer: {
     alignItems: "center",
@@ -60,7 +59,6 @@ const styles = StyleSheet.create({
   },
   gardenCharacterNameText: {
     fontSize: 12,
-    fontWeight: "bold",
     color: COLORS.brown,
   },
   absoultPosition: {

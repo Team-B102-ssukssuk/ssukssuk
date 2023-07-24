@@ -22,7 +22,6 @@ const ErrorScreen = () => {
       <Text
         style={{
           color: "#AC1919",
-          fontWeight: "bold",
           fontSize: 25,
           textAlign: "center",
           marginTop: 20,

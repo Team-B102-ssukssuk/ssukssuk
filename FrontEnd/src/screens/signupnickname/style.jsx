@@ -94,13 +94,12 @@ const styles = StyleSheet.create({
   },
   emailNextButtonText: {
     color: "white",
-    fontWeight: "bold",
+
     margin: 10,
   },
   headerPageNumber: {
     color: "white",
     fontSize: 16,
-    fontWeight: "bold",
   },
   arrowTextContainer: {
     flexDirection: "row",

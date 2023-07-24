@@ -45,7 +45,6 @@ const styles = StyleSheet.create({
   },
   singInButtonText: {
     color: "white",
-    fontWeight: "bold",
     margin: 10,
   },
   loginErrorMessage: {
@@ -81,7 +80,7 @@ const styles = StyleSheet.create({
   },
   kakaoLoginButtonText: {
     color: "#3A1D1D",
-    fontWeight: "bold",
+
     margin: 10,
   },
   verticalLine: {
