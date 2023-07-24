@@ -24,31 +24,46 @@ const styles = StyleSheet.create({
     marginTop: 5,
     color: "#4C0C0C",
   },
-  modalTextContent: {
-    fontSize: 15,
-    color: "#4C0C0C",
-  },
-  closeButton: {
+  RegistButton: {
     fontSize: 16,
     color: "white",
-    margin: 10,
     paddingHorizontal: 20,
-    paddingVertical: 10,
+    paddingVertical: 7.5,
     borderRadius: 5,
-    backgroundColor: "#FF6F6F",
+    backgroundColor: "#469C4A",
   },
-  cancelButton: {
-    fontSize: 16,
-    color: "white",
-    margin: 10,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 5,
-    backgroundColor: "#cacaca",
-  },
+  RegisText: { color: "white" },
   modalButtonAlign: {
-    flexDirection: "row",
     marginTop: 10,
+  },
+  PotInputBox: {
+    height: 40,
+    width: 260,
+    margin: 5,
+    padding: 10,
+    borderRadius: 8,
+    backgroundColor: "white",
+    fontWeight: "700",
+    color: "#4C0C0C",
+    borderWidth: 1,
+    borderColor: "#C0AE9D", // Set the border color here
+  },
+  buttonActive: {
+    backgroundColor: "#469C4A",
+  },
+  buttonInactive: {
+    backgroundColor: "#CACACA",
+  },
+  loginErrorMessageActive: {
+    textAlign: "center",
+    color: "#FF2E2E",
+    margin: 5,
+    fontSize: 12,
+  },
+  loginErrorMessageInactive: {
+    textAlign: "center",
+    opacity: 0,
+    fontSize: 2,
   },
 });
 

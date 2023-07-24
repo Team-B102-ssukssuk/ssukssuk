@@ -1,10 +1,10 @@
 import { StyleSheet, View } from "react-native";
-import ModalPlantDelete from "./src/components/modalplantdelete";
+import ParentComponent from "./src/components/test/ParentComponent";
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <ModalPlantDelete />
+      <ParentComponent />
     </View>
   );
 }
