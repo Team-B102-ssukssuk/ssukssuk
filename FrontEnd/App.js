@@ -1,10 +1,10 @@
 import { StyleSheet, View } from "react-native";
-import PasswordFindScreen from "./src/screens/passwordfind";
+import ModalPlantDelete from "./src/components/modalplantdelete";
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <PasswordFindScreen />
+      <ModalPlantDelete />
     </View>
   );
 }

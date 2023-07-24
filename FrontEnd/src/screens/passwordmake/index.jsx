@@ -10,7 +10,7 @@ import React, { useState } from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import styles from "./style";
 
-const SignUpPasswordScreen = () => {
+const PasswordMakeScreen = () => {
   const [password, setPassword] = useState("");
   const [PasswordRe, setPasswordRe] = useState("");
   const [errorOpacity, setErrorOpacity] = useState(0);
@@ -25,7 +25,7 @@ const SignUpPasswordScreen = () => {
         <View style={styles.header}>
           <View style={styles.arrowTextContainer}>
             <Icon name="arrow-back-ios" size={28} color="#fff" />
-            <Text style={styles.headerPageNumber}>회원가입 ( 2 / 3 )</Text>
+            <Text style={styles.headerPageNumber}>비밀번호 찾기 ( 2 / 2 )</Text>
           </View>
         </View>
       </View>
@@ -38,7 +38,7 @@ const SignUpPasswordScreen = () => {
             style={styles.passwordInputBox}
             onChangeText={setPassword}
             value={password}
-            placeholder="비밀번호"
+            placeholder="새로운 비밀번호"
           ></TextInput>
         </View>
         <TextInput
@@ -58,11 +58,11 @@ const SignUpPasswordScreen = () => {
             setNextButtonColor("#2DD0AF");
           }}
         >
-          <Text style={styles.emailNextButtonText}>다음</Text>
+          <Text style={styles.emailNextButtonText}>로그인</Text>
         </TouchableOpacity>
       </View>
     </ImageBackground>
   );
 };
 
-export default SignUpPasswordScreen;
+export default PasswordMakeScreen;
