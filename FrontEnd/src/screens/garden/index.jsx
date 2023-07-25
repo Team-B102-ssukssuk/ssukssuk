@@ -33,7 +33,10 @@ const GardenScreen = () => {
               <View style={styles.gardenContainer}>
                 <View style={styles.absoultPosition}>
                   <View style={styles.gardenCharacterSign}>
-                    <TouchableOpacity style={styles.gardenCharacterName}>
+                    <TouchableOpacity
+                      style={styles.gardenCharacterName}
+                      onPress={() => console.log("시작")}
+                    >
                       <Text style={styles.gardenCharacterNameText}>
                         식물애칭
                       </Text>
