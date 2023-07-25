@@ -1,10 +1,10 @@
 import { StyleSheet, View } from "react-native";
-import AlarmScreen from "./src/screens/alarm";
+import ModalSetting from "./src/components/modalsetting";
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <AlarmScreen />
+      <ModalSetting />
     </View>
   );
 }

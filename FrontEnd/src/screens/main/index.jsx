@@ -23,7 +23,7 @@ const MainScreen = () => {
             </View>
             <View style={styles.tmp}>
               <Image
-                source={require("../../assets/img/tmpSensor.png")}
+                source={require("../../assets/img/humiditySensor.png")}
                 resizeMode="contain"
                 style={styles.sensorSize}
               />
@@ -33,7 +33,7 @@ const MainScreen = () => {
             </View>
             <View style={styles.tmp}>
               <Image
-                source={require("../../assets/img/tmpSensor.png")}
+                source={require("../../assets/img/moistureSensor.png")}
                 resizeMode="contain"
                 style={styles.sensorSize}
               />
