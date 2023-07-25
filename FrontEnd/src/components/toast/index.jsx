@@ -30,7 +30,6 @@ const ToastNotification = () => {
         <Text
           style={{
             color: "#F6F4F4",
-            fontWeight: "bold",
             marginLeft: 10,
             fontSize: 16,
           }}
@@ -40,7 +39,6 @@ const ToastNotification = () => {
         <Text
           style={{
             color: "#F6F4F4",
-            fontWeight: "500",
             marginLeft: 10,
             fontSize: 14,
           }}

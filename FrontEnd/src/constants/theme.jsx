@@ -11,8 +11,8 @@ export const COLORS = {
   Red: "#FF2E2E",
   lightYellow: "#FBFFE5",
   beige: "#F8F3EB",
-  brown: "#896A50",
-  lightBrown: "#4F3017",
+  brown: "#4F3017",
+  lightBrown: "#896A50",
 };
 
 export const SIZES = {

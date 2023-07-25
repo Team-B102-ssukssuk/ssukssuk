@@ -10,22 +10,19 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: "bold",
+
     color: "#fff",
   },
   Collection_text: {
     color: "#4C0C0C",
     fontSize: 16,
-    fontWeight: "bold",
   },
   Collection_num: {
     color: "#77A66B",
     fontSize: 16,
-    fontWeight: "bold",
   },
   myPageTitle: {
     fontSize: 18,
-    fontWeight: "900",
     color: "#fff",
     marginTop: 30,
   },
@@ -67,7 +64,6 @@ const styles = StyleSheet.create({
   caption: {
     fontSize: 14,
     lineHeight: 14,
-    fontWeight: "500",
     color: "#fff",
   },
   row: {
@@ -124,7 +120,6 @@ const styles = StyleSheet.create({
   },
   panelTitle: {
     fontSize: 27,
-    fontWeight: "700",
     height: 35,
     color: "#27C4A5",
   },
@@ -144,8 +139,6 @@ const styles = StyleSheet.create({
   },
   panelButtonTitle: {
     fontSize: 17,
-    fontWeight: "bold",
-    color: "white",
   },
   photo: {
     width: "100%",

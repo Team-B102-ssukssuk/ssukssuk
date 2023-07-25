@@ -9,6 +9,7 @@ import {
 import React, { useState } from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import styles from "./style";
+import CookieRunRegular from "../../components/common/CookieRunRegular";
 
 const PasswordFindScreen = () => {
   const [email, setEmail] = useState("");
@@ -25,7 +26,9 @@ const PasswordFindScreen = () => {
         <View style={styles.header}>
           <View style={styles.arrowTextContainer}>
             <Icon name="arrow-back-ios" size={28} color="#fff" />
-            <Text style={styles.headerPageNumber}>비밀번호 찾기 ( 1 / 2 )</Text>
+            <CookieRunRegular style={styles.headerPageNumber}>
+              비밀번호 찾기 ( 1 / 2 )
+            </CookieRunRegular>
           </View>
         </View>
       </View>
@@ -47,7 +50,7 @@ const PasswordFindScreen = () => {
             }}
             style={styles.verifyButton}
           >
-            <Text style={styles.verifyText}>인증</Text>
+            <CookieRunRegular style={styles.verifyText}>인증</CookieRunRegular>
           </TouchableOpacity>
         </View>
         <TextInput
@@ -66,7 +69,9 @@ const PasswordFindScreen = () => {
             setErrorOpacity(100);
           }}
         >
-          <Text style={styles.emailNextButtonText}>다음</Text>
+          <CookieRunRegular style={styles.emailNextButtonText}>
+            다음
+          </CookieRunRegular>
         </TouchableOpacity>
       </View>
     </ImageBackground>
