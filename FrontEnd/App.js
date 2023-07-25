@@ -1,10 +1,10 @@
 import { StyleSheet, View } from "react-native";
-import ModalSetting from "./src/components/modalsetting";
+import ProfileScreen from "./src/screens/profile";
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <ModalSetting />
+      <ProfileScreen />
     </View>
   );
 }

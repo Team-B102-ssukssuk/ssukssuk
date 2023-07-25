@@ -1,26 +1,52 @@
-import React from "react";
-import { View, StyleSheet } from "react-native";
-import CustomDropdown from "./index"; // Adjust the import path based on the file structure
-
-const options = [
-  { id: 1, label: "장미" },
-  { id: 2, label: "배추" },
-  { id: 3, label: "선인장" },
-];
+import React, { useState } from "react";
+import { View, Text, TouchableOpacity, Modal, StyleSheet } from "react-native";
+import CustomDropdown from ".";
 
 const ParentComponent = () => {
-  const handleDropdownSelect = (item) => {
-    console.log("Selected item:", item);
-    // Perform any actions based on the selected item
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  const handleSelect = (item) => {
+    setSelectedItem(item);
+    setModalVisible(false);
   };
+
+  // Sample data for the dropdown
+  const dropdownData = [
+    { id: 1, label: "Option 1" },
+    { id: 2, label: "Option 2" },
+    { id: 3, label: "Option 3" },
+    { id: 4, label: "Option 4" },
+    { id: 5, label: "Option 5" },
+  ];
 
   return (
     <View style={styles.container}>
-      <CustomDropdown
-        data={options}
-        placeholder="심을 종류를 선택해주세요"
-        onSelect={handleDropdownSelect}
-      />
+      <TouchableOpacity
+        style={styles.openModalButton}
+        onPress={() => setModalVisible(true)}
+      >
+        <Text style={styles.buttonText}>
+          {selectedItem ? selectedItem.label : "Open Modal"}
+        </Text>
+      </TouchableOpacity>
+
+      <Modal visible={isModalVisible} animationType="slide">
+        <View style={styles.modalContainer}>
+          <TouchableOpacity
+            style={styles.closeModalButton}
+            onPress={() => setModalVisible(false)}
+          >
+            <Text style={styles.buttonText}>Close Modal</Text>
+          </TouchableOpacity>
+          <CustomDropdown
+            data={dropdownData}
+            placeholder="Select an option"
+            onSelect={handleSelect}
+          />
+        </View>
+        <Text>안녕</Text>
+      </Modal>
     </View>
   );
 };
@@ -30,11 +56,28 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#f5f5f5",
   },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
+  openModalButton: {
+    backgroundColor: "#C0AE9D",
+    padding: 12,
+    borderRadius: 5,
     marginBottom: 20,
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "700",
+  },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+  closeModalButton: {
+    padding: 12,
+    borderBottomWidth: 1,
+    borderColor: "#C0AE9D",
+    alignItems: "center",
   },
 });
 

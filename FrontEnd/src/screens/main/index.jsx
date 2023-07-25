@@ -1,8 +1,27 @@
+import { useState } from "react";
 import { ImageBackground, View, Image, TouchableOpacity } from "react-native";
 import CookieRunRegular from "../../components/common/CookieRunRegular";
+import ModalSetting from "../../components/modalsetting";
+import ModalPlantSeed from "../../components/modalplantseed";
 import styles from "./style";
 
 const MainScreen = () => {
+  const [isSettingModalVisible, setSettingModalVisible] = useState(false);
+  const [isCharacterModalVisible, setCharacterModalVisible] = useState(false);
+
+  const toggleSettingModal = () => {
+    setSettingModalVisible(!isSettingModalVisible);
+  };
+
+  const toggleCharacterModal = () => {
+    setCharacterModalVisible(!isCharacterModalVisible);
+  };
+
+  const handleSeedPlant = (inputValue) => {
+    // 씨앗 심기 관련 로직
+    console.log("Planting seed with nickname: " + inputValue);
+  };
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -71,7 +90,10 @@ const MainScreen = () => {
                 style={styles.iconSize}
               />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.iconBackground}>
+            <TouchableOpacity
+              style={styles.iconBackground}
+              onPress={toggleSettingModal}
+            >
               <Image
                 source={require("../../assets/img/settingIcon.png")}
                 resizeMode="contain"
@@ -87,13 +109,16 @@ const MainScreen = () => {
             style={styles.nameTagSize}
           />
         </View>
-        <View style={styles.characterSection}>
+        <TouchableOpacity
+          style={styles.characterSection}
+          onPress={toggleCharacterModal}
+        >
           <Image
             source={require("../../assets/img/lettuce_3.gif")}
             resizeMode="contain"
             style={styles.characterSize}
           />
-        </View>
+        </TouchableOpacity>
         <View style={styles.wateringCanSection}>
           <TouchableOpacity>
             <Image
@@ -103,7 +128,20 @@ const MainScreen = () => {
             />
           </TouchableOpacity>
         </View>
+        <ModalSetting
+          isVisible={isSettingModalVisible}
+          onClose={toggleSettingModal}
+        />
       </ImageBackground>
+      <ModalSetting
+        isVisible={isSettingModalVisible}
+        onClose={toggleSettingModal}
+      />
+      <ModalPlantSeed
+        isVisible={isCharacterModalVisible}
+        onClose={() => setCharacterModalVisible(false)}
+        onSeedPlant={handleSeedPlant}
+      />
     </View>
   );
 };
