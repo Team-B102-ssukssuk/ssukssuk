@@ -1,4 +1,14 @@
-﻿DROP TABLE IF EXISTS `user`;
+USE mysql;
+
+SET foreign_key_checks = 0;
+DROP DATABASE IF EXISTS `ssukssuk`;
+SET foreign_key_checks = 1;
+
+CREATE DATABASE `ssukssuk` DEFAULT CHARACTER SET utf8 ;
+
+USE `ssukssuk`;
+
+DROP TABLE IF EXISTS `user`;
 
 CREATE TABLE `user` (
 	`user_id`	int	NOT NULL,
