@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class SsukApplication {
     @RequestMapping("/")
     String home() {
-        return "hi, im server!";
+        return "hi, we are server!";
     }
 
     public static void main(String[] args) {
