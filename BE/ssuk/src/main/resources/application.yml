@@ -8,6 +8,7 @@ spring:
 
 
   jpa:
+    database: mysql   # 추가 해준 부분
     open-in-view: true
     hibernate:
       ddl-auto: none
