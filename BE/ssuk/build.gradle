@@ -27,14 +27,27 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
-	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.3.1'
+	implementation 'com.mysql:mysql-connector-j:8.0.33'
+	//implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.3.1'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:2.3.1'
+	//testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:2.3.1'
 	runtimeOnly 'com.mysql:mysql-connector-j'
+
+	//dto entity mapper 관련
+	implementation 'org.mapstruct:mapstruct:1.4.2.Final'
+	annotationProcessor "org.mapstruct:mapstruct-processor:1.4.2.Final"
+	annotationProcessor(
+			'org.projectlombok:lombok',
+			'org.projectlombok:lombok-mapstruct-binding:0.1.0',
+			'org.mapstruct:mapstruct-processor:1.4.2.Final'
+	)
+	//테스트에서 사용할 경우
+	//testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+
+
 }
 
 tasks.named('test') {

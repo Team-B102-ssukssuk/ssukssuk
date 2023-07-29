@@ -1,5 +1,5 @@
 package com.ssafy.ssuk.user;
 
-public class User {
+public class UserDto {
     private Integer id;
 }
