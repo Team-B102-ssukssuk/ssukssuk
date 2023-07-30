@@ -1,5 +1,6 @@
 package com.ssafy.ssuk.pot.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.ssuk.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,6 +9,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Table(name = "POT")
@@ -21,7 +24,8 @@ public class Pot {
     @Column(name = "POT_ID")
     private Integer id;
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
+    @JsonIgnore
     @JoinColumn(name = "USER_ID")
     private User user;
 

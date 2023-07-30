@@ -14,14 +14,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LoginCheckInterceptor())
-                .order(1)
-                .addPathPatterns("/**")
-                .excludePathPatterns("/user/login",
-                        "/user/signup",
-                        "/user/check/nickname/*",
-                        "/email/authentication/*",
-                        "/check/email/{email}",
-                        "/login/kakao");
+//        registry.addInterceptor(new LoginCheckInterceptor())
+//                .order(1)
+//                .addPathPatterns("/**")
+//                .excludePathPatterns("/user/login",
+//                        "/user/signup",
+//                        "/user/check/nickname/*",
+//                        "/email/authentication/*",
+//                        "/check/email/{email}",
+//                        "/login/kakao");
     }
 }

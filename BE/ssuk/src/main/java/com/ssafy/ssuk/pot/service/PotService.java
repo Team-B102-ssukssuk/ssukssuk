@@ -15,8 +15,6 @@ public interface PotService {
     //등록
     void save(Pot pot);
 
-    //수정
-
     //삭제
     void delete(PotInsertDto potInsertDto);
 }
