@@ -1,4 +1,4 @@
-package com.ssafy.ssuk.plant.dto;
+package com.ssafy.ssuk.plant.dto.response;
 
 import lombok.Data;
 
@@ -13,5 +13,10 @@ public class ResponseDto {
 
     public ResponseDto(String message) {
         this.message = message;
+    }
+
+    public ResponseDto(String message, String dataName, Object data) {
+        this.message = message;
+        this.data.put(dataName, data);
     }
 }

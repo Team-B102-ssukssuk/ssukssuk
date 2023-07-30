@@ -1,10 +1,10 @@
 package com.ssafy.ssuk.plant.service;
 
-import com.ssafy.ssuk.plant.Plant;
-import com.ssafy.ssuk.plant.category.PlantCategory;
-import com.ssafy.ssuk.plant.category.repository.PlantCategoryRepository;
-import com.ssafy.ssuk.plant.dto.PlantRegisterRequestDto;
-import com.ssafy.ssuk.plant.repository.PlantRepository;
+import com.ssafy.ssuk.plant.domain.Plant;
+import com.ssafy.ssuk.plant.domain.Category;
+import com.ssafy.ssuk.plant.dto.request.PlantRegisterRequestDto;
+import com.ssafy.ssuk.plant.dto.request.PlantUpdateRequestDto;
+import com.ssafy.ssuk.plant.repository.domain.PlantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,12 +16,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PlantServiceImpl implements PlantService{
 
-    private final PlantCategoryRepository plantCategoryRepository;
     private final PlantRepository plantRepository;
 
     @Override
     @Transactional
-    public void savePlant(PlantCategory category, PlantRegisterRequestDto plantRegisterRequestDto) {
+    public void savePlant(Category category, PlantRegisterRequestDto plantRegisterRequestDto) {
 
         Plant newPlant = new Plant(category,
                 plantRegisterRequestDto.getPlantName(),
@@ -35,6 +34,22 @@ public class PlantServiceImpl implements PlantService{
 
     @Override
     public List<Plant> findPlants() {
-        return null;
+        return plantRepository.findAll();
+    }
+
+    @Override
+    public Plant findOneById(Integer id) {
+        return plantRepository.findOneById(id);
+    }
+
+
+    @Override
+    @Transactional
+    public boolean modifyPlant(PlantUpdateRequestDto plantUpdateRequestDto, Category category) {
+        Plant plant = plantRepository.findOneById(plantUpdateRequestDto.getPlantId());
+        if(plant == null)
+            return false;
+        plant.updateInfo(plantUpdateRequestDto, category);
+        return true;
     }
 }

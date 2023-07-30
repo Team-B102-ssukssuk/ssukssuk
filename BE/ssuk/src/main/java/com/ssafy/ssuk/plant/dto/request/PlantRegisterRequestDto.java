@@ -1,8 +1,7 @@
-package com.ssafy.ssuk.plant.dto;
+package com.ssafy.ssuk.plant.dto.request;
 
 import lombok.Data;
 
-import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
