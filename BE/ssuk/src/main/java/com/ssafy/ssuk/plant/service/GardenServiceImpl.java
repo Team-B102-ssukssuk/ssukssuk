@@ -2,11 +2,15 @@ package com.ssafy.ssuk.plant.service;
 
 import com.ssafy.ssuk.plant.domain.Garden;
 import com.ssafy.ssuk.plant.domain.Plant;
-import com.ssafy.ssuk.plant.dto.request.GardenRenameRequestDto;
+import com.ssafy.ssuk.plant.dto.response.GardenSearchOneResponseDto;
 import com.ssafy.ssuk.plant.repository.domain.GardenRepository;
+import com.ssafy.ssuk.pot.domain.Pot;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collection;
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -22,9 +26,8 @@ public class GardenServiceImpl implements GardenService {
 
     @Override
     @Transactional
-    public void save(Integer userId, Plant plant, String nickname) {
-        // 일단 potId는 1로 고정...
-        Garden garden = new Garden(userId, plant, 1, nickname);
+    public void save(Integer userId, Plant plant, Pot pot, String nickname) {
+        Garden garden = new Garden(userId, plant, pot, nickname);
         gardenRepository.save(garden);
     }
 
@@ -55,5 +58,20 @@ public class GardenServiceImpl implements GardenService {
         }
         garden.rename(nickname);
         return true;
+    }
+
+    @Override
+    public Garden findOndByIdAndUserId(Integer gardenId, Integer userId) {
+        return gardenRepository.findOneByIdAndUserId(gardenId, userId);
+    }
+
+    @Override
+    public List<Garden> findAllByUserId(Integer userId, Boolean isUse) {
+        return gardenRepository.findAllByUserId(userId, isUse);
+    }
+
+    @Override
+    public List<Garden> findAllByUserId(Integer userId) {
+        return gardenRepository.findAllByUserId(userId);
     }
 }

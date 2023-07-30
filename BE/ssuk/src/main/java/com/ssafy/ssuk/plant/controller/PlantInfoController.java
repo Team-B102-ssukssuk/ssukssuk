@@ -101,7 +101,7 @@ public class PlantInfoController {
     }
 
     @GetMapping("/plant/{plantId}")
-    public ResponseEntity<ResponseDto> searchPlant(@PathVariable Integer plantId) {
+    public ResponseEntity<ResponseDto> searchPlant(@PathVariable(required = true) Integer plantId) {
         // 필요없을듯?
 //        if(plantId == null)
 //            return new ResponseEntity<>(new ResponseDto(FAIL), HttpStatus.NOT_FOUND);
@@ -142,7 +142,7 @@ public class PlantInfoController {
     }
 
     @GetMapping("/info/{plantId}")
-    public ResponseEntity<ResponseDto> searchInfos(@PathVariable Integer plantId) {
+    public ResponseEntity<ResponseDto> searchInfos(@PathVariable(required = true) Integer plantId) {
         // 필요없을듯?
 //        if(plantId == null)
 //            return new ResponseEntity<>(new ResponseDto(FAIL), HttpStatus.NOT_FOUND);
@@ -158,7 +158,7 @@ public class PlantInfoController {
     }
 
     @GetMapping("/info/{plantId}/{level}")
-    public ResponseEntity<ResponseDto> searchInfo(@PathVariable Integer plantId, @PathVariable Integer level) {
+    public ResponseEntity<ResponseDto> searchInfo(@PathVariable(required = true) Integer plantId, @PathVariable(required = true) Integer level) {
         // 필요없을듯?
 //        if(plantId == null)
 //            return new ResponseEntity<>(new ResponseDto(FAIL), HttpStatus.NOT_FOUND);
@@ -211,14 +211,13 @@ public class PlantInfoController {
         return new ResponseEntity<>(new ResponseDto(FAIL), HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping
+    @GetMapping("")
     public ResponseEntity<ResponseDto> searchTotalInfo() {
-        log.debug("왜안됨..");
         List<TotalCategoryResponseDto> result = plantCategoryService.findTotalInfo();
         return new ResponseEntity<>(new ResponseDto(SUCCESS, "categories", result), HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping("")
     public ResponseEntity<ResponseDto> searchTotalInfo(@RequestBody @Validated TotalCategoryRequestDto totalCategoryRequestDto, BindingResult bindingResult) {
         if(bindingResult.hasErrors()){
             return new ResponseEntity<>(new ResponseDto("입력 확인"), HttpStatus.NOT_FOUND);

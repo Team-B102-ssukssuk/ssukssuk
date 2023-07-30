@@ -11,7 +11,7 @@ import javax.persistence.*;
 import static javax.persistence.FetchType.*;
 
 @Entity
-@Table(name = "plant_info")
+@Table(name = "PLANT_INFO")
 @IdClass(InfoId.class)
 @NoArgsConstructor
 @Getter
@@ -19,21 +19,21 @@ public class Info {
 
     @Id
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "plant_id")
+    @JoinColumn(name = "PLANT_ID")
     private Plant plant;
     @Id
     private Integer level;
-    @Column(name = "plant_guide")
+    @Column(name = "PLANT_GUIDE")
     private String guide;
-    @Column(name = "water_term")
+    @Column(name = "WATER_TERM")
     private Integer waterTerm;
-    @Column(name = "water_amount")
+    @Column(name = "WATER_AMOUNT")
     private Integer waterAmount;
-    @Column(name = "character_name")
+    @Column(name = "CHARACTER_NAME")
     private String characterName;
-    @Column(name = "character_comment")
+    @Column(name = "CHARACTER_COMMENT")
     private String characterComment;
-    @Column(name = "character_image")
+    @Column(name = "CHARACTER_IMAGE")
     private String characterImage;
 
     public Info(InfoRegisterRequestDto infoRegisterRequestDto, Plant plant) {
