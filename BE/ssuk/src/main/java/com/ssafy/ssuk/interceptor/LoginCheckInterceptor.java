@@ -25,6 +25,10 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
         // 지금 현재는 그냥 유저아이디가 1, 2 이런식으로 들어온다고 가정함
         String accessToken = request.getHeader(ACCESS_TOKEN);
 
+        if(accessToken == null){
+            log.debug("에세스토큰 없네용");
+            return true;
+        }
         request.setAttribute("userId", Integer.parseInt(accessToken));
         log.debug("JWT 인증 성공!!");
 
