@@ -4,12 +4,15 @@ import CookieRunRegular from "../../components/common/CookieRunRegular";
 import ModalSetting from "../../components/modalsetting";
 import ModalPlantSeed from "../../components/modalplantseed";
 import ModalMap from "../../components/modalmap";
+import ModalDictionary from "../../components/modaldictionary";
 import styles from "./style";
 
 const MainScreen = ({ navigation }) => {
   const [isSettingModalVisible, setSettingModalVisible] = useState(false);
   const [isCharacterModalVisible, setCharacterModalVisible] = useState(false);
   const [isOpenMapModalVisible, setIsOpenMapModalVisible] = useState(false);
+  const [isDictionaryModalVisible, setIsDictionaryModalVisible] =
+    useState(false);
 
   const toggleSettingModal = () => {
     setSettingModalVisible(!isSettingModalVisible);
@@ -21,6 +24,10 @@ const MainScreen = ({ navigation }) => {
 
   const toggleOpenMap = () => {
     setIsOpenMapModalVisible(!isOpenMapModalVisible);
+  };
+
+  const toggleOpenDictionary = () => {
+    setIsDictionaryModalVisible(!isDictionaryModalVisible);
   };
 
   const handleSeedPlant = (inputValue) => {
@@ -92,7 +99,10 @@ const MainScreen = ({ navigation }) => {
                 style={styles.iconSize}
               />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.iconBackground}>
+            <TouchableOpacity
+              style={styles.iconBackground}
+              onPress={toggleOpenDictionary}
+            >
               <Image
                 source={require("../../assets/img/dictionaryIcon.png")}
                 resizeMode="contain"
@@ -154,6 +164,11 @@ const MainScreen = ({ navigation }) => {
       <ModalMap
         isVisible={isOpenMapModalVisible}
         onClose={() => setIsOpenMapModalVisible(false)}
+        navigation={navigation}
+      />
+      <ModalDictionary
+        isVisible={isDictionaryModalVisible}
+        onClose={toggleOpenDictionary}
         navigation={navigation}
       />
     </View>

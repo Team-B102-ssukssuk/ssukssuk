@@ -75,6 +75,8 @@ const GardenScreen = ({ navigation }) => {
                 <View style={styles.gardenGround}>
                   <Image
                     source={require("../../assets/img/gardenGround.png")}
+                    resizeMode="cover"
+                    style={styles.imgSize}
                   />
                 </View>
               </View>
@@ -104,6 +106,8 @@ const GardenScreen = ({ navigation }) => {
                 <View style={styles.gardenGround}>
                   <Image
                     source={require("../../assets/img/gardenGround.png")}
+                    resizeMode="cover"
+                    style={styles.imgSize}
                   />
                 </View>
               </View>
@@ -133,6 +137,8 @@ const GardenScreen = ({ navigation }) => {
                 <View style={styles.gardenGround}>
                   <Image
                     source={require("../../assets/img/gardenGround.png")}
+                    resizeMode="cover"
+                    style={styles.imgSize}
                   />
                 </View>
               </View>

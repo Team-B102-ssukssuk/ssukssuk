@@ -13,6 +13,7 @@ import PotScreen from "./src/screens/pot";
 import AlarmScreen from "./src/screens/alarm";
 import GardenScreen from "./src/screens/garden";
 import ProfileScreen from "./src/screens/profile";
+import ErrorScreen from "./src/screens/main";
 import { StatusBar } from "expo-status-bar";
 
 export default function App() {
@@ -81,6 +82,11 @@ export default function App() {
             options={{ headerShown: false }}
             name="Profile"
             component={ProfileScreen}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="Error"
+            component={ErrorScreen}
           />
         </Stack.Navigator>
       </NavigationContainer>
