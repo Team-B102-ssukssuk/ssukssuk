@@ -1,7 +1,6 @@
 package com.ssafy.ssuk.measurement.service;
 
 import com.ssafy.ssuk.measurement.domain.Measurement;
-import com.ssafy.ssuk.measurement.dto.request.SensorGetDto;
 import com.ssafy.ssuk.measurement.repository.MeasurementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,11 +8,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class MesurementServiceImpl implements MesurementService {
+public class MeasurementServiceImpl implements MeasurementService {
     private final MeasurementRepository measurementRepository;
 
     @Autowired
-    public MesurementServiceImpl(MeasurementRepository measurementRepository) {
+    public MeasurementServiceImpl(MeasurementRepository measurementRepository) {
         this.measurementRepository = measurementRepository;
     }
 
@@ -23,5 +22,11 @@ public class MesurementServiceImpl implements MesurementService {
 
         //화분아이디로 센서값 뱉기
         return measurementRepository.findByPot_Id(pot_id);
+    }
+
+    //센서값 저장
+    @Override
+    public void insertMeasurement(Measurement measurement) {
+        measurementRepository.save(measurement);
     }
 }

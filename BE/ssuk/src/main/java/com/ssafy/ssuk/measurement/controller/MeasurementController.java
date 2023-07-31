@@ -1,8 +1,7 @@
 package com.ssafy.ssuk.measurement.controller;
 
 import com.ssafy.ssuk.measurement.domain.Measurement;
-import com.ssafy.ssuk.measurement.dto.request.SensorGetDto;
-import com.ssafy.ssuk.measurement.service.MesurementService;
+import com.ssafy.ssuk.measurement.service.MeasurementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,10 +15,10 @@ import java.util.List;
 @RequestMapping("/sensor")
 public class MeasurementController {
 
-    private final MesurementService mesurementService;
+    private final MeasurementService mesurementService;
 
     @Autowired
-    public MeasurementController(MesurementService mesurementService) {
+    public MeasurementController(MeasurementService mesurementService) {
         this.mesurementService = mesurementService;
     }
 
