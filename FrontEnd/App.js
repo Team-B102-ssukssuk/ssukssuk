@@ -10,6 +10,9 @@ import SignUpNicknameScreen from "./src/screens/signupnickname";
 import SignUpPasswordScreen from "./src/screens/signuppassword";
 import MainScreen from "./src/screens/main";
 import PotScreen from "./src/screens/pot";
+import AlarmScreen from "./src/screens/alarm";
+import GardenScreen from "./src/screens/garden";
+import ProfileScreen from "./src/screens/profile";
 import { StatusBar } from "expo-status-bar";
 
 export default function App() {
@@ -63,6 +66,21 @@ export default function App() {
             options={{ headerShown: false }}
             name="Pot"
             component={PotScreen}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="Alarm"
+            component={AlarmScreen}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="Garden"
+            component={GardenScreen}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="Profile"
+            component={ProfileScreen}
           />
         </Stack.Navigator>
       </NavigationContainer>
