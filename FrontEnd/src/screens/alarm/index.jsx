@@ -5,6 +5,9 @@ import CookieRunBold from "../../components/common/CookieRunBold";
 import Icon2 from "react-native-vector-icons/MaterialIcons";
 
 import styles from "./style";
+import AlertWaterComponent from "../../components/alertwater";
+import AlertTankComponent from "../../components/alerttank";
+import { ScrollView } from "react-native-gesture-handler";
 
 const AlarmScreen = ({ navigation }) => {
   return (
@@ -27,6 +30,13 @@ const AlarmScreen = ({ navigation }) => {
           </View>
         </View>
       </View>
+      <ScrollView>
+        <View>
+          <AlertWaterComponent />
+          <AlertWaterComponent />
+          <AlertTankComponent />
+        </View>
+      </ScrollView>
     </ImageBackground>
   );
 };
