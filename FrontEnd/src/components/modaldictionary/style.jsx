@@ -3,7 +3,6 @@ import { COLORS } from "../../constants/theme";
 
 const styles = StyleSheet.create({
   modalContainer: {
-    zIndex: 1,
     backgroundColor: COLORS.beige,
     padding: 20,
     borderRadius: 20,
@@ -38,22 +37,22 @@ const styles = StyleSheet.create({
   },
   category: {
     position: "absolute",
-    width: 280,
+    width: 270,
     flexDirection: "row",
     justifyContent: "flex-start",
-    top: -30,
+    top: -38.7,
     zIndex: 2,
   },
   categoryActiveText: {
     backgroundColor: COLORS.lightBrown,
     textAlign: "center",
     width: 60,
-    top: -20,
     paddingTop: 10,
-    paddingBottom: 16,
+    paddingBottom: 5,
     borderWidth: 2,
     borderColor: COLORS.lightBrown, // Set the border color here
     color: COLORS.beige,
+    marginHorizontal: 5,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
   },
@@ -62,7 +61,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     width: 60,
     paddingTop: 10,
-    paddingBottom: 16,
+    paddingBottom: 5,
     borderWidth: 2,
     borderColor: COLORS.lightBrown, // Set the border color here
     color: COLORS.brown,

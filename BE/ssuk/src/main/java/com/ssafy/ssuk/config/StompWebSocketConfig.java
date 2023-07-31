@@ -9,7 +9,6 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @EnableWebSocketMessageBroker
 @Configuration
 public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
-
     //소켓
     //일단은 전부다 허용해놓고 나중에 수정하기
     @Override

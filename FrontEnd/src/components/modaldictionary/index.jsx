@@ -7,9 +7,14 @@ import styles from "./style";
 
 const ModalDictionary = ({ isVisible, onClose }) => {
   const [isContentModalVisible, setContentModalVisible] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("야채");
 
   const toggleContentModal = () => {
     setContentModalVisible(!isContentModalVisible);
+  };
+
+  const toggleCategory = (category) => {
+    setSelectedCategory(category);
   };
 
   return (
@@ -26,11 +31,49 @@ const ModalDictionary = ({ isVisible, onClose }) => {
     >
       <View style={styles.modalContainer}>
         <View style={styles.category}>
-          <CookieRunBold style={styles.categoryActiveText}>야채</CookieRunBold>
-          <CookieRunBold style={styles.categoryInactiveText}>꽃</CookieRunBold>
-          <CookieRunBold style={styles.categoryInactiveText}>
-            선인장
-          </CookieRunBold>
+          {/* 각 카테고리의 TouchableOpacity에 선택 상태에 따라 스타일 적용 */}
+          <TouchableOpacity
+            onPress={() => toggleCategory("야채")}
+            activeOpacity={1}
+          >
+            <CookieRunBold
+              style={
+                selectedCategory === "야채"
+                  ? styles.categoryActiveText
+                  : styles.categoryInactiveText
+              }
+            >
+              야채
+            </CookieRunBold>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => toggleCategory("꽃")}
+            activeOpacity={1}
+          >
+            <CookieRunBold
+              style={
+                selectedCategory === "꽃"
+                  ? styles.categoryActiveText
+                  : styles.categoryInactiveText
+              }
+            >
+              꽃
+            </CookieRunBold>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => toggleCategory("선인장")}
+            activeOpacity={1}
+          >
+            <CookieRunBold
+              style={
+                selectedCategory === "선인장"
+                  ? styles.categoryActiveText
+                  : styles.categoryInactiveText
+              }
+            >
+              선인장
+            </CookieRunBold>
+          </TouchableOpacity>
         </View>
         {/* 모달 내용 */}
         <CookieRunBold style={styles.modalText}>도감</CookieRunBold>
