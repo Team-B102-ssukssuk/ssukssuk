@@ -1,5 +1,6 @@
 package com.ssafy.ssuk.pot.service;
 
+import com.ssafy.ssuk.exception.dto.CustomException;
 import com.ssafy.ssuk.pot.domain.Pot;
 import com.ssafy.ssuk.pot.dto.requset.PotInsertDto;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,7 @@ public interface PotService {
     // 상세조회
 
     //등록
-    void save(Pot pot);
+    void save(Pot pot) throws CustomException;
 
     //삭제
     void delete(PotInsertDto potInsertDto);
