@@ -7,7 +7,7 @@ import CookieRunBold from "../../components/common/CookieRunBold";
 import ModalPlantDelete from "../../components/modalplantdelete";
 import ModalPlantRegist from "../../components/modalplantregist";
 
-const PotScreen = () => {
+const PotScreen = ({ navigation }) => {
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
   const [isRegistModalVisible, setRegistModalVisible] = useState(false);
 
@@ -17,6 +17,11 @@ const PotScreen = () => {
 
   const toggleRegistModal = () => {
     setRegistModalVisible(!isRegistModalVisible);
+  };
+
+  const GoMain = () => {
+    toggleRegistModal();
+    navigation.navigate("Main");
   };
 
   const handleDelete = () => {
@@ -62,7 +67,7 @@ const PotScreen = () => {
 
                   <TouchableOpacity
                     style={styles.gardenCharacter}
-                    onPress={toggleRegistModal}
+                    onPress={GoMain}
                   >
                     <Image
                       source={require("../../assets/img/pot.png")}
