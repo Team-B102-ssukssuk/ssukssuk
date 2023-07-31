@@ -10,7 +10,7 @@ import React, { useState } from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import styles from "./style";
 
-const PasswordMakeScreen = () => {
+const PasswordMakeScreen = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [PasswordRe, setPasswordRe] = useState("");
   const [errorOpacity, setErrorOpacity] = useState(0);
@@ -24,7 +24,9 @@ const PasswordMakeScreen = () => {
       <View style={styles.headerContainer}>
         <View style={styles.header}>
           <View style={styles.arrowTextContainer}>
-            <Icon name="arrow-back-ios" size={28} color="#fff" />
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Icon name="arrow-back-ios" size={28} color="#fff" />
+            </TouchableOpacity>
             <Text style={styles.headerPageNumber}>비밀번호 찾기 ( 2 / 2 )</Text>
           </View>
         </View>
@@ -56,6 +58,7 @@ const PasswordMakeScreen = () => {
           onPress={() => {
             setErrorOpacity(100);
             setNextButtonColor("#2DD0AF");
+            navigation.navigate("Login");
           }}
         >
           <Text style={styles.emailNextButtonText}>로그인</Text>

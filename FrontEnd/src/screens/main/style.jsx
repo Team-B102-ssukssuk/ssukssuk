@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginVertical: 10,
     alignItems: "center",
+    justifyContent: "space-evenly",
   },
   IconContainer: {
     flexDirection: "row",
