@@ -5,25 +5,44 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
-
-// 누나 미안해 잠글게..(덕용, 지민)
 @Entity
+@Table(name = "USER")
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor // 기본 생성자
+@AllArgsConstructor // 모든 필드 값을 파라미터로 받는 생성자
 @Setter
 public class User {
 
     @Id @GeneratedValue
-    @Column(name = "USER_ID")
     private Integer id;
 
-    @Column(name = "USER_NICKNAME")
-    private String name;
+    @Column(name = "EMAIL")
+    private String email;
 
+    @Column(name = "PASSWORD")
+    private String password;
+
+    @Column(name = "USER_NICKNAME")
+    private String nickname;
+
+    @Column(name = "PROFILE_IMAGE")
+    private String profileImage = "default";
+
+    @Column(name = "CREATED_DATE")
+    private LocalDateTime createdTime = LocalDateTime.now();
+
+    @Column(name = "UPDATED_DATE")
+    private LocalDateTime updatedTime = LocalDateTime.now();
+
+    @Column(name = "IS_VALIDATED")
+    private Boolean isValidated = true;
+
+    @Column(name = "PLANT_COUNT")
+    private Integer plantCount = 0;
+ //
 }
