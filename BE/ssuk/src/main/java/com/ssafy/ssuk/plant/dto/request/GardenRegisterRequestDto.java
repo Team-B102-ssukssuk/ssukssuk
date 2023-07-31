@@ -11,8 +11,6 @@ public class GardenRegisterRequestDto {
     private Integer plantId;
     @NotNull
     private Integer potId;
-    @NotNull
-    private Integer categoryId;
     @NotBlank
     private String nickname;
 }

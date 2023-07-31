@@ -27,4 +27,8 @@ public interface PotRepository extends JpaRepository<Pot, Integer> {
     //수정
 
     //삭제
+
+    // 감사합니다 -덕용-
+    @Override
+    Pot getReferenceById(Integer integer);
 }

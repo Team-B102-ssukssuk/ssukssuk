@@ -15,24 +15,24 @@ import static javax.persistence.FetchType.*;
 
 @Entity
 @Getter
-@Table(name = "plant")
+@Table(name = "PLANT")
 @NoArgsConstructor  // 디폴트 생성자(한줄로 대체하는게 깔끔해보여서 써봤음)
 public class Plant {
     @Id @GeneratedValue
-    @Column(name = "plant_id")
+    @Column(name = "PLANT_ID")
     private Integer id;
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "CATEGORY_ID")
     private Category category;
-    @Column(name = "plant_name")
+    @Column(name = "PLANT_NAME")
     private String name;
-    @Column(name = "temp_max")
+    @Column(name = "TEMP_MAX")
     private Float tempMax;
-    @Column(name = "temp_min")
+    @Column(name = "TEMP_MIN")
     private Float tempMin;
-    @Column(name = "moisture_max")
+    @Column(name = "MOISTURE_MAX")
     private Float moistureMax;
-    @Column(name = "moisture_min")
+    @Column(name = "MOISTURE_MIN")
     private Float moistureMin;
     @OneToMany(mappedBy = "plant", cascade = CascadeType.ALL)
     private List<Info> infos = new ArrayList<>();

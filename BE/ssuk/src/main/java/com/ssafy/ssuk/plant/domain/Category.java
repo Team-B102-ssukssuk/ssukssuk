@@ -8,14 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "plant_category")
+@Table(name = "PLANT_CATEGORY")
 @Getter
 @NoArgsConstructor  // 디폴트 생성자(한줄로 대체하는게 깔끔해보여서 써봤음)
 public class Category {
     @Id @GeneratedValue
-    @Column(name = "category_id")
+    @Column(name = "CATEGORY_ID")
     private Integer id;
-    @Column(name = "category_name")
+    @Column(name = "CATEGORY_NAME")
     private String name;
     @OneToMany(mappedBy = "category")
     private List<Plant> plants = new ArrayList<>();
