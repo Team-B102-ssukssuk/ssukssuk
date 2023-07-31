@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   gardenGround: {
-    marginTop: 105,
+    marginTop: 95,
   },
   reContainer: {
     flexDirection: "row",
@@ -83,6 +83,10 @@ const styles = StyleSheet.create({
   },
   trashCanMargin: {
     alignItems: "flex-end",
+  },
+  imgSize: {
+    width: 100,
+    height: 80,
   },
   alignCenterContainer: {
     alignItems: "center",

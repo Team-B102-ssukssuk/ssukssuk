@@ -1,50 +1,52 @@
 import React from "react";
-import { View, Text, Image, Dimensions, TouchableOpacity } from "react-native";
+import { View, Image, Dimensions, TouchableOpacity } from "react-native";
+import CookieRunBold from "../../components/common/CookieRunBold";
+import CookieRunRegular from "../../components/common/CookieRunRegular";
 
-const ErrorScreen = () => {
+const ErrorScreen = ({ navigation }) => {
   return (
     <View
       style={{
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "#F0F7E9",
+        backgroundColor: "#FF6C6C",
       }}
     >
+      <CookieRunBold
+        style={{
+          color: "#fff",
+          fontSize: 66,
+          textAlign: "center",
+          marginTop: 20,
+        }}
+      >
+        ERROR
+      </CookieRunBold>
+      <CookieRunRegdjdular
+        style={{
+          color: "#fff",
+          fontSize: 26,
+          marginTop: 5,
+          marginBottom: 40,
+        }}
+      >
+        오류가 나버렸다추...
+      </CookieRunRegular>
       <Image
-        source={require("../../assets/img/404.png")}
+        source={require("../../assets/img/Error.png")}
         style={{
           width: Dimensions.get("screen").width,
           height: 320,
         }}
         resizeMode="contain"
       />
-      <Text
-        style={{
-          color: "#AC1919",
-          fontSize: 25,
-          textAlign: "center",
-          marginTop: 20,
-        }}
-      >
-        {`상추추! 여기가 아니예요...`}
-      </Text>
-      <Text
-        style={{
-          color: "#AC1919",
-          fontWeight: "600",
-          fontSize: 12,
-          marginVertical: 10,
-        }}
-      >
-        버튼을 클릭해서 이전 페이지로 돌아가세요!
-      </Text>
       <TouchableOpacity
-        onPress={() => {}}
+        onPress={() => navigation.goBack()}
         style={{
-          backgroundColor: "#EC1010",
-          paddingVertical: 10,
-          paddingHorizontal: 20,
+          backgroundColor: "#fff",
+          paddingVertical: 12,
+          paddingHorizontal: 24,
           marginTop: 10,
           borderRadius: 5,
           shadowColor: "#000",
@@ -54,15 +56,14 @@ const ErrorScreen = () => {
           elevation: 10,
         }}
       >
-        <Text
+        <CookieRunBold
           style={{
-            color: "#fff",
-            fontWeight: "600",
-            fontSize: 14,
+            color: "#FF6C6C",
+            fontSize: 36,
           }}
         >
-          GO BACK
-        </Text>
+          돌아가기
+        </CookieRunBold>
       </TouchableOpacity>
     </View>
   );
