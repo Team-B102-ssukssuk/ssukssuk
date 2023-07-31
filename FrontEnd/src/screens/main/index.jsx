@@ -3,11 +3,13 @@ import { ImageBackground, View, Image, TouchableOpacity } from "react-native";
 import CookieRunRegular from "../../components/common/CookieRunRegular";
 import ModalSetting from "../../components/modalsetting";
 import ModalPlantSeed from "../../components/modalplantseed";
+import ModalMap from "../../components/modalmap";
 import styles from "./style";
 
-const MainScreen = () => {
+const MainScreen = ({ navigation }) => {
   const [isSettingModalVisible, setSettingModalVisible] = useState(false);
   const [isCharacterModalVisible, setCharacterModalVisible] = useState(false);
+  const [isOpenMapModalVisible, setIsOpenMapModalVisible] = useState(false);
 
   const toggleSettingModal = () => {
     setSettingModalVisible(!isSettingModalVisible);
@@ -15,6 +17,10 @@ const MainScreen = () => {
 
   const toggleCharacterModal = () => {
     setCharacterModalVisible(!isCharacterModalVisible);
+  };
+
+  const toggleOpenMap = () => {
+    setIsOpenMapModalVisible(!isOpenMapModalVisible);
   };
 
   const handleSeedPlant = (inputValue) => {
@@ -60,7 +66,7 @@ const MainScreen = () => {
                 26.3 C°
               </CookieRunRegular>
             </View>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={toggleOpenMap}>
               <Image
                 source={require("../../assets/img/map.png")}
                 resizeMode="contain"
@@ -69,7 +75,10 @@ const MainScreen = () => {
             </TouchableOpacity>
           </View>
           <View style={styles.IconContainer}>
-            <TouchableOpacity style={styles.iconBackground}>
+            <TouchableOpacity
+              style={styles.iconBackground}
+              onPress={() => navigation.navigate("Alarm")}
+            >
               <Image
                 source={require("../../assets/img/alarmIcon.png")}
                 resizeMode="contain"
@@ -141,6 +150,11 @@ const MainScreen = () => {
         isVisible={isCharacterModalVisible}
         onClose={() => setCharacterModalVisible(false)}
         onSeedPlant={handleSeedPlant}
+      />
+      <ModalMap
+        isVisible={isOpenMapModalVisible}
+        onClose={() => setIsOpenMapModalVisible(false)}
+        navigation={navigation}
       />
     </View>
   );

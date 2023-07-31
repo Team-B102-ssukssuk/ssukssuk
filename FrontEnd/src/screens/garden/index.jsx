@@ -7,7 +7,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import ModalPlantDelete from "../../components/modalplantdelete";
 import CookieRunBold from "../../components/common/CookieRunBold";
 
-const GardenScreen = () => {
+const GardenScreen = ({ navigation }) => {
   const [gardenName] = useState("지민이네");
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
 
@@ -29,13 +29,16 @@ const GardenScreen = () => {
       >
         <View style={styles.userInfoSection}>
           <View style={styles.header}>
-            <Icon name="arrow-back-ios" size={28} color="#fff" />
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Icon name="arrow-back-ios" size={28} color="#fff" />
+            </TouchableOpacity>
           </View>
         </View>
         <ScrollView>
           <View style={styles.gardenWood}>
             <View style={styles.gardenWoodGroup}>
               <Image source={require("../../assets/img/gardenWood.png")} />
+
               <CookieRunBold style={styles.gardenWoodText}>
                 {gardenName}
               </CookieRunBold>

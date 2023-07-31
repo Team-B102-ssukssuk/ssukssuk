@@ -1,12 +1,12 @@
 import React from "react";
-import { View, ImageBackground } from "react-native";
+import { View, ImageBackground, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/Octicons";
 import CookieRunBold from "../../components/common/CookieRunBold";
 import Icon2 from "react-native-vector-icons/MaterialIcons";
 
 import styles from "./style";
 
-const AlarmScreen = () => {
+const AlarmScreen = ({ navigation }) => {
   return (
     <ImageBackground
       source={require("../../assets/img/ProfileBackground.png")}
@@ -14,7 +14,12 @@ const AlarmScreen = () => {
     >
       <View style={styles.userInfoSection}>
         <View style={styles.header}>
-          <Icon2 name="arrow-back-ios" size={28} color="#FBFFE5" />
+          <TouchableOpacity
+            style={styles.mapMainLocation}
+            onPress={() => navigation.goBack()}
+          >
+            <Icon2 name="arrow-back-ios" size={28} color="#FBFFE5" />
+          </TouchableOpacity>
           <View style={styles.alarmSection}>
             <CookieRunBold style={styles.alarmText}>알림</CookieRunBold>
             <View style={styles.notificationCircle}>{/* Red circle */}</View>

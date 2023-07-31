@@ -15,7 +15,7 @@ import ModalPlantRegist from "../../components/modalplantregist";
 import CookieRunBold from "../../components/common/CookieRunBold";
 import styles from "./style";
 
-const ProfileScreen = () => {
+const ProfileScreen = ({ navigation }) => {
   const [isEditModalVisible, setEditModalVisible] = useState(false);
   const [opacity] = useState(new Animated.Value(0));
   const [isOpen, setIsOpen] = useState(false);
@@ -108,7 +108,9 @@ const ProfileScreen = () => {
     >
       <View style={styles.userInfoSection}>
         <View style={styles.header}>
-          <Icon name="arrow-back-ios" size={28} color="#fff" />
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Icon name="arrow-back-ios" size={28} color="#fff" />
+          </TouchableOpacity>
           <TouchableOpacity onPress={toggleEditModal}>
             <Icon name="edit" size={28} color="#fff" />
           </TouchableOpacity>
