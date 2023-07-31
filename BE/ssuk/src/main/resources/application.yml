@@ -2,9 +2,13 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/ssuk_ssuk?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
+    #url: jdbc:mysql://localhost:3306/ssuk_ssuk?useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
     username: ssafy
     #password: ssafy
     password: b102ssuk
+  mail:
+    host: smtp.gmail.com
+    port: 587
 
 
   jpa:
@@ -16,7 +20,7 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
       use-new-id-generator-mappings: false
-    show-sql: true
+#    show-sql: true
     properties:
       hibernate.format_sql: true
       dialect: org.hibernate.dialect.MySQL8InnoDBDialect
@@ -25,3 +29,6 @@ spring:
 logging:
   level:
     org.hibernate.SQL: debug
+    # 일단 ssuk패키지 debug로 설정해놓을게요
+    com.ssafy.ssuk: debug
+
