@@ -1,19 +1,20 @@
 import { StyleSheet } from "react-native";
+import { COLORS } from "../../constants/theme";
 
 const styles = StyleSheet.create({
   modalContainer: {
-    backgroundColor: "#F8F3EB",
+    backgroundColor: COLORS.beige,
     padding: 20,
     borderRadius: 20,
     alignItems: "center",
     borderWidth: 2,
-    borderColor: "#896A50", // Set the border color here
+    borderColor: COLORS.lightBrown, // Set the border color here
   },
   modalText: {
     fontSize: 28,
     marginBottom: 20,
     marginTop: 5,
-    color: "#4C0C0C",
+    color: COLORS.brown,
   },
   emptyImg: {
     borderWidth: 2,
@@ -33,6 +34,40 @@ const styles = StyleSheet.create({
   dictionaryText: {
     margin: 10,
     fontSize: 16,
+  },
+  category: {
+    position: "absolute",
+    width: 270,
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    top: -38.7,
+    zIndex: 2,
+  },
+  categoryActiveText: {
+    backgroundColor: COLORS.lightBrown,
+    textAlign: "center",
+    width: 60,
+    paddingTop: 10,
+    paddingBottom: 5,
+    borderWidth: 2,
+    borderColor: COLORS.lightBrown, // Set the border color here
+    color: COLORS.beige,
+    marginHorizontal: 5,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+  },
+  categoryInactiveText: {
+    backgroundColor: COLORS.beige,
+    textAlign: "center",
+    width: 60,
+    paddingTop: 10,
+    paddingBottom: 5,
+    borderWidth: 2,
+    borderColor: COLORS.lightBrown, // Set the border color here
+    color: COLORS.brown,
+    marginHorizontal: 5,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
   },
 });
 

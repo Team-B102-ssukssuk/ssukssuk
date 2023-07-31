@@ -23,7 +23,7 @@ const ErrorScreen = ({ navigation }) => {
       >
         ERROR
       </CookieRunBold>
-      <CookieRunRegdjdular
+      <CookieRunRegular
         style={{
           color: "#fff",
           fontSize: 26,
