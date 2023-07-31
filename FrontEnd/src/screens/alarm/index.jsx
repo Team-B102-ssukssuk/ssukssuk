@@ -6,6 +6,7 @@ import Icon2 from "react-native-vector-icons/MaterialIcons";
 
 import styles from "./style";
 import AlertWaterComponent from "../../components/alertwater";
+import AlertTankComponent from "../../components/alerttank";
 import { ScrollView } from "react-native-gesture-handler";
 
 const AlarmScreen = ({ navigation }) => {
@@ -33,6 +34,7 @@ const AlarmScreen = ({ navigation }) => {
         <View>
           <AlertWaterComponent />
           <AlertWaterComponent />
+          <AlertTankComponent />
         </View>
       </ScrollView>
     </ImageBackground>

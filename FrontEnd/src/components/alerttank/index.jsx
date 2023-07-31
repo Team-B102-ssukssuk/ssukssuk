@@ -2,26 +2,24 @@ import { View, Image } from "react-native";
 import styles from "./style";
 import CookieRunRegular from "../common/CookieRunRegular";
 
-const AlertWaterComponent = () => {
+const AlertTankComponent = () => {
   return (
     <View>
       <View style={styles.container}>
         <View style={styles.alertContainer}>
           <View style={styles.alignLeft}>
             <Image
-              source={require("../../assets/img/alertWater.png")}
+              source={require("../../assets/img/alertTank.png")}
               style={styles.waterIcon}
             />
           </View>
           <View style={styles.textBlock}>
             <CookieRunRegular style={styles.fontBrown}>
-              &apos;
-              <CookieRunRegular style={styles.fontGreen}>
-                새싹이
-              </CookieRunRegular>
-              &apos;가 &nbsp;
+              화분에&nbsp;
               <CookieRunRegular style={styles.fontBlue}>물</CookieRunRegular>
-              &nbsp;이 부족해요!! 물 뿌리기 버튼을 눌러주세요!
+              <CookieRunRegular>이&nbsp;</CookieRunRegular>
+              <CookieRunRegular style={styles.fontRed}>부족</CookieRunRegular>
+              <CookieRunRegular>해요!! 물탱크를 채워주세요.</CookieRunRegular>
             </CookieRunRegular>
             <View style={styles.minuteStyle}>
               <CookieRunRegular style={styles.minuteColor}>
@@ -35,4 +33,4 @@ const AlertWaterComponent = () => {
   );
 };
 
-export default AlertWaterComponent;
+export default AlertTankComponent;
