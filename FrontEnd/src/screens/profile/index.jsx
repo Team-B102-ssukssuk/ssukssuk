@@ -4,7 +4,6 @@ import {
   StyleSheet,
   Animated,
   ImageBackground,
-  Text,
   Image,
   Dimensions,
   TouchableOpacity,

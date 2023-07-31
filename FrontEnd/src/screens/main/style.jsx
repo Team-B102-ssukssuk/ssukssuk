@@ -73,8 +73,8 @@ const styles = StyleSheet.create({
     marginLeft: 7.5,
   },
   characterSize: {
-    width: 400,
-    height: 400,
+    width: 350,
+    height: 350,
   },
   nameTagSize: {
     width: 150,

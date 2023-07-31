@@ -10,12 +10,13 @@ import SignUpNicknameScreen from "./src/screens/signupnickname";
 import SignUpPasswordScreen from "./src/screens/signuppassword";
 import MainScreen from "./src/screens/main";
 import PotScreen from "./src/screens/pot";
+import { StatusBar } from "expo-status-bar";
 
 export default function App() {
   const Stack = createStackNavigator();
-
   return (
     <View style={styles.container}>
+      <StatusBar hidden={false} />
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
@@ -72,6 +73,5 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
   },
 });
