@@ -4,7 +4,6 @@ import {
   StyleSheet,
   Animated,
   ImageBackground,
-  Text,
   Image,
   Dimensions,
   TouchableOpacity,
@@ -12,11 +11,24 @@ import {
 import { Avatar, Title, Caption } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import BottomSheet from "reanimated-bottom-sheet";
+import ModalPlantRegist from "../../components/modalplantregist";
+import CookieRunBold from "../../components/common/CookieRunBold";
 import styles from "./style";
 
 const ProfileScreen = () => {
+  const [isEditModalVisible, setEditModalVisible] = useState(false);
   const [opacity] = useState(new Animated.Value(0));
   const [isOpen, setIsOpen] = useState(false);
+
+  const toggleEditModal = () => {
+    setEditModalVisible(!isEditModalVisible);
+  };
+
+  const handleEdit = () => {
+    // 삭제 관련 로직
+    console.log("닉네임 수정 관련 로직 넣어야 함");
+    setEditModalVisible(false);
+  };
 
   const bs = useRef(null);
   const window = Dimensions.get("window");
@@ -35,9 +47,11 @@ const ProfileScreen = () => {
         source={require("../../assets/img/Badge.png")}
         style={styles.badge}
       />
-      <Text style={styles.panelTitle}>정원관리사</Text>
-      <Text style={styles.panelSubtitle}>달성조건</Text>
-      <Text style={styles.panelSubtitle}>정원의 한페이지를 모두 채우시오</Text>
+      <CookieRunBold style={styles.panelTitle}>정원관리사</CookieRunBold>
+      <CookieRunBold style={styles.panelSubtitle}>달성조건</CookieRunBold>
+      <CookieRunBold style={styles.panelSubtitle}>
+        정원의 한페이지를 모두 채우시오
+      </CookieRunBold>
     </View>
   );
 
@@ -95,9 +109,11 @@ const ProfileScreen = () => {
       <View style={styles.userInfoSection}>
         <View style={styles.header}>
           <Icon name="arrow-back-ios" size={28} color="#fff" />
-          <Icon name="edit" size={28} color="#fff" />
+          <TouchableOpacity onPress={toggleEditModal}>
+            <Icon name="edit" size={28} color="#fff" />
+          </TouchableOpacity>
         </View>
-        <Text style={styles.myPageTitle}>마이페이지</Text>
+        <CookieRunBold style={styles.myPageTitle}>마이페이지</CookieRunBold>
         <View style={{ flexDirection: "row", marginTop: 15 }}>
           <Avatar.Image
             source={{
@@ -130,16 +146,18 @@ const ProfileScreen = () => {
         >
           <View style={styles.ProfileBarContent}>
             <View style={styles.barContent}>
-              <Text style={styles.Collection_text}>내 식물</Text>
-              <Text style={styles.Collection_num}>3</Text>
+              <CookieRunBold style={styles.Collection_text}>
+                내 식물
+              </CookieRunBold>
+              <CookieRunBold style={styles.Collection_num}>3</CookieRunBold>
             </View>
             <View style={styles.barContent}>
-              <Text style={styles.Collection_text}>정원</Text>
-              <Text style={styles.Collection_num}>2</Text>
+              <CookieRunBold style={styles.Collection_text}>정원</CookieRunBold>
+              <CookieRunBold style={styles.Collection_num}>2</CookieRunBold>
             </View>
             <View style={styles.barContent}>
-              <Text style={styles.Collection_text}>도감</Text>
-              <Text style={styles.Collection_num}>5</Text>
+              <CookieRunBold style={styles.Collection_text}>도감</CookieRunBold>
+              <CookieRunBold style={styles.Collection_num}>5</CookieRunBold>
             </View>
           </View>
         </ImageBackground>
@@ -154,7 +172,7 @@ const ProfileScreen = () => {
       />
 
       <View style={styles.userInfoSection}>
-        <Text style={styles.myPageTitle}>업적</Text>
+        <CookieRunBold style={styles.myPageTitle}>업적</CookieRunBold>
         <View style={styles.badgeContent}>
           <TouchableOpacity onPress={onOpen}>
             <Image
@@ -213,6 +231,13 @@ const ProfileScreen = () => {
         renderHeader={renderHeader}
         renderContent={renderInner}
         onCloseEnd={onClose}
+      />
+      <ModalPlantRegist
+        isVisible={isEditModalVisible}
+        onClose={() => setEditModalVisible(false)}
+        onRegist={handleEdit}
+        title="닉네임 수정"
+        placeholder="변경하시려는 닉네임을 말씀해주세요"
       />
     </ImageBackground>
   );

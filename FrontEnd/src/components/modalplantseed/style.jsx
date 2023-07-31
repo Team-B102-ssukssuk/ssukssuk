@@ -25,15 +25,15 @@ const styles = StyleSheet.create({
     marginTop: 5,
     color: "#4C0C0C",
   },
-  CloseButton: {
+  SeedButton: {
     fontSize: 20,
     color: "white",
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 5,
-    backgroundColor: COLORS.Coral,
+    backgroundColor: COLORS.lightBrown,
   },
-  CloseText: { color: COLORS.white },
+  plantText: { color: COLORS.white },
   modalButtonAlign: {
     flexDirection: "row",
     alignItems: "center",

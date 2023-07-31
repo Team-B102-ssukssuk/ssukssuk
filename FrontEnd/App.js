@@ -1,10 +1,10 @@
 import { StyleSheet, View } from "react-native";
-import ModalPlantSeed from "./src/components/modalplantseed";
+import ProfileScreen from "./src/screens/profile";
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <ModalPlantSeed />
+      <ProfileScreen />
     </View>
   );
 }
