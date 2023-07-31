@@ -10,7 +10,7 @@ import React, { useState } from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import styles from "./style";
 
-const SignUpScreen = () => {
+const SignUpScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [verifyNumber, setVerifyNumber] = useState("");
   const [errorOpacity, setErrorOpacity] = useState(0);
@@ -24,7 +24,9 @@ const SignUpScreen = () => {
       <View style={styles.headerContainer}>
         <View style={styles.header}>
           <View style={styles.arrowTextContainer}>
-            <Icon name="arrow-back-ios" size={28} color="#fff" />
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Icon name="arrow-back-ios" size={28} color="#fff" />
+            </TouchableOpacity>
             <Text style={styles.headerPageNumber}>회원가입 ( 1 / 3 )</Text>
           </View>
         </View>
@@ -64,6 +66,7 @@ const SignUpScreen = () => {
           activeOpacity={0.3}
           onPress={() => {
             setErrorOpacity(100);
+            navigation.navigate("SignUpPassword");
           }}
         >
           <Text style={styles.emailNextButtonText}>다음</Text>

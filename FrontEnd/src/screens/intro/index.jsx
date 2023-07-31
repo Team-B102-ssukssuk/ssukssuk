@@ -7,8 +7,9 @@ import { SafeAreaView, View, Text, Image, Button } from "react-native";
 
 //import AppIntroSlider to use it
 import AppIntroSlider from "react-native-app-intro-slider";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
-const IntroScreen = () => {
+const IntroScreen = ({ navigation }) => {
   const [showRealApp, setShowRealApp] = useState(false);
   const [skipText, setSkipText] = useState("Skip");
   const [doneButtonColor, setDoneButtonColor] = useState("#D9D9D9");
@@ -33,9 +34,14 @@ const IntroScreen = () => {
         }}
       >
         <View style={{ width: "100%", padding: 25 }}>
-          <Text style={[styles.skipTextStyle, { color: doneButtonColor }]}>
-            {skipText}
-          </Text>
+          <TouchableOpacity
+            activeOpacity={1}
+            onPress={() => navigation.navigate("Login")}
+          >
+            <Text style={[styles.skipTextStyle, { color: doneButtonColor }]}>
+              {skipText}
+            </Text>
+          </TouchableOpacity>
         </View>
         <Text style={styles.introTitleStyle}>{item.title}</Text>
         <Text style={styles.introTextStyle}>{item.text}</Text>

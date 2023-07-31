@@ -44,8 +44,11 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   deleteIcon: {
-    color: COLORS.Coral,
-    marginLeft: 68,
+    color: COLORS.white,
+    padding: 3,
+    backgroundColor: COLORS.Coral,
+    borderRadius: 100,
+    marginLeft: 65,
   },
   gardenCharacterName: {
     width: 70,
@@ -55,6 +58,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.lightBrown,
     borderWidth: 2,
     alignItems: "center",
+    justifyContent: "center",
     margin: 5,
   },
   gardenCharacterNameText: {
@@ -67,7 +71,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   gardenGround: {
-    marginTop: 105,
+    marginTop: 95,
   },
   reContainer: {
     flexDirection: "row",
@@ -79,6 +83,10 @@ const styles = StyleSheet.create({
   },
   trashCanMargin: {
     alignItems: "flex-end",
+  },
+  imgSize: {
+    width: 100,
+    height: 80,
   },
   alignCenterContainer: {
     alignItems: "center",

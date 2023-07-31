@@ -9,7 +9,7 @@ import {
 import React, { useState } from "react";
 import styles from "./style";
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorOpacity, setErrorOpacity] = useState(0);
@@ -43,6 +43,7 @@ const LoginScreen = () => {
           activeOpacity={0.3}
           onPress={() => {
             setErrorOpacity(100);
+            navigation.navigate("Pot");
           }}
         >
           <Text style={styles.singInButtonText}>SIGN IN</Text>
@@ -59,12 +60,16 @@ const LoginScreen = () => {
         </TouchableOpacity>
         <View style={styles.loginSubContainer}>
           <View style={styles.subJoin}>
-            <Text style={styles.loginSubText}>회원가입</Text>
+            <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
+              <Text style={styles.loginSubText}>회원가입</Text>
+            </TouchableOpacity>
           </View>
           <View style={styles.subFind}>
-            <Text style={styles.loginSubText}>아이디 찾기</Text>
-            <View style={styles.verticalLine}></View>
-            <Text style={styles.loginSubText}>비밀번호 찾기</Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("PasswordFind")}
+            >
+              <Text style={styles.loginSubText}>비밀번호 찾기</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>

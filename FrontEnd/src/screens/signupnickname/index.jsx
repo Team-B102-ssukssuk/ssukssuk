@@ -11,7 +11,7 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import Icon2 from "react-native-vector-icons/AntDesign";
 import styles from "./style";
 
-const SignUpNicknameScreen = () => {
+const SignUpNicknameScreen = ({ navigation }) => {
   const [nickname, setNickname] = useState("");
   const [errorOpacity, setErrorOpacity] = useState(0);
   const [showCheckcircle, setShowCheckcircle] = useState(0);
@@ -25,7 +25,9 @@ const SignUpNicknameScreen = () => {
       <View style={styles.headerContainer}>
         <View style={styles.header}>
           <View style={styles.arrowTextContainer}>
-            <Icon name="arrow-back-ios" size={28} color="#fff" />
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Icon name="arrow-back-ios" size={28} color="#fff" />
+            </TouchableOpacity>
             <Text style={styles.headerPageNumber}>회원가입 ( 3 / 3 )</Text>
           </View>
         </View>
@@ -66,6 +68,7 @@ const SignUpNicknameScreen = () => {
         <TouchableOpacity
           style={[styles.emailNextButton, { backgroundColor: nextButtonColor }]}
           activeOpacity={0.3}
+          onPress={() => navigation.navigate("Login")}
         >
           <Text style={styles.emailNextButtonText}>완료</Text>
         </TouchableOpacity>

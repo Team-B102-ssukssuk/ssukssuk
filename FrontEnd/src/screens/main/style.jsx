@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginVertical: 10,
     alignItems: "center",
+    justifyContent: "space-evenly",
   },
   IconContainer: {
     flexDirection: "row",
@@ -72,8 +73,8 @@ const styles = StyleSheet.create({
     marginLeft: 7.5,
   },
   characterSize: {
-    width: 400,
-    height: 400,
+    width: 350,
+    height: 350,
   },
   nameTagSize: {
     width: 150,

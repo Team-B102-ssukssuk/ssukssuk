@@ -1,10 +1,40 @@
-import { ImageBackground, View, Image } from "react-native";
+import { useState } from "react";
+import { ImageBackground, View, Image, TouchableOpacity } from "react-native";
 import styles from "./style";
 import Icon2 from "react-native-vector-icons/AntDesign";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import { ScrollView } from "react-native-gesture-handler";
 import CookieRunBold from "../../components/common/CookieRunBold";
+import ModalPlantDelete from "../../components/modalplantdelete";
+import ModalPlantRegist from "../../components/modalplantregist";
 
-const PotScreen = () => {
+const PotScreen = ({ navigation }) => {
+  const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [isRegistModalVisible, setRegistModalVisible] = useState(false);
+
+  const toggleDeleteModal = () => {
+    setDeleteModalVisible(!isDeleteModalVisible);
+  };
+
+  const toggleRegistModal = () => {
+    setRegistModalVisible(!isRegistModalVisible);
+  };
+
+  const GoMain = () => {
+    toggleRegistModal();
+    navigation.navigate("Main");
+  };
+
+  const handleDelete = () => {
+    // 삭제 관련 로직
+    console.log("식물 삭제 인덱스 넣으면 바로 작동");
+    setDeleteModalVisible(false);
+  };
+
+  const handleRegist = (inputValue) => {
+    // 등록 관련 로직
+    console.log("Plant registered with ID: " + inputValue);
+  };
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -29,19 +59,22 @@ const PotScreen = () => {
                       </CookieRunBold>
                     </TouchableOpacity>
                     <View style={styles.potDelete}>
-                      <TouchableOpacity>
+                      <TouchableOpacity onPress={toggleDeleteModal}>
                         <Icon2 name="close" style={styles.deleteIcon} />
                       </TouchableOpacity>
                     </View>
                   </View>
 
-                  <View style={styles.gardenCharacter}>
+                  <TouchableOpacity
+                    style={styles.gardenCharacter}
+                    onPress={GoMain}
+                  >
                     <Image
                       source={require("../../assets/img/pot.png")}
                       resizeMode="contain"
                       style={styles.potResize}
                     />
-                  </View>
+                  </TouchableOpacity>
                 </View>
                 <View style={styles.shelve}>
                   <Image source={require("../../assets/img/shelve.png")} />
@@ -72,6 +105,18 @@ const PotScreen = () => {
           </View>
         </ScrollView>
       </ImageBackground>
+      <ModalPlantDelete
+        isVisible={isDeleteModalVisible}
+        onClose={() => setDeleteModalVisible(false)}
+        onDelete={handleDelete}
+      />
+      <ModalPlantRegist
+        isVisible={isRegistModalVisible}
+        onClose={() => setRegistModalVisible(false)}
+        onRegist={handleRegist}
+        title="화분 등록"
+        placeholder="화분 고유 ID를 입력해주세요"
+      />
     </View>
   );
 };

@@ -1,12 +1,25 @@
-import { ImageBackground, Text, View, Image } from "react-native";
+import { ImageBackground, View, Image, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import styles from "./style";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import Icon2 from "react-native-vector-icons/AntDesign";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import { ScrollView } from "react-native-gesture-handler";
+import ModalPlantDelete from "../../components/modalplantdelete";
+import CookieRunBold from "../../components/common/CookieRunBold";
 
-const GardenScreen = () => {
+const GardenScreen = ({ navigation }) => {
   const [gardenName] = useState("지민이네");
+  const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
+
+  const toggleDeleteModal = () => {
+    setDeleteModalVisible(!isDeleteModalVisible);
+  };
+
+  const handleDelete = () => {
+    // 삭제 관련 로직
+    console.log("식물 삭제 인덱스 넣으면 바로 작동");
+    setDeleteModalVisible(false);
+  };
 
   return (
     <View style={styles.container}>
@@ -16,14 +29,19 @@ const GardenScreen = () => {
       >
         <View style={styles.userInfoSection}>
           <View style={styles.header}>
-            <Icon name="arrow-back-ios" size={28} color="#fff" />
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Icon name="arrow-back-ios" size={28} color="#fff" />
+            </TouchableOpacity>
           </View>
         </View>
         <ScrollView>
           <View style={styles.gardenWood}>
             <View style={styles.gardenWoodGroup}>
               <Image source={require("../../assets/img/gardenWood.png")} />
-              <Text style={styles.gardenWoodText}>{gardenName}</Text>
+
+              <CookieRunBold style={styles.gardenWoodText}>
+                {gardenName}
+              </CookieRunBold>
             </View>
           </View>
           <View style={styles.alignCenterContainer}>
@@ -33,19 +51,17 @@ const GardenScreen = () => {
               <View style={styles.gardenContainer}>
                 <View style={styles.absoultPosition}>
                   <View style={styles.gardenCharacterSign}>
+                    <View style={styles.gardenCharacterName}>
+                      <CookieRunBold style={styles.gardenCharacterNameText}>
+                        식물애칭
+                      </CookieRunBold>
+                    </View>
                     <TouchableOpacity
-                      style={styles.gardenCharacterName}
-                      onPress={() => console.log("시작")}
+                      style={styles.gardenCharacterDelete}
+                      onPress={toggleDeleteModal}
                     >
-                      <Text style={styles.gardenCharacterNameText}>
-                        식물애칭
-                      </Text>
+                      <Icon2 name="close" style={styles.deleteIcon} />
                     </TouchableOpacity>
-                    <View style={styles.gardenCharacterDelete}>
-                      <TouchableOpacity>
-                        <Icon2 name="closecircle" style={styles.deleteIcon} />
-                      </TouchableOpacity>
-                    </View>
                   </View>
 
                   <View style={styles.gardenCharacter}>
@@ -59,6 +75,8 @@ const GardenScreen = () => {
                 <View style={styles.gardenGround}>
                   <Image
                     source={require("../../assets/img/gardenGround.png")}
+                    resizeMode="cover"
+                    style={styles.imgSize}
                   />
                 </View>
               </View>
@@ -68,12 +86,12 @@ const GardenScreen = () => {
                 <View style={styles.absoultPosition}>
                   <View style={styles.gardenCharacterSign}>
                     <TouchableOpacity style={styles.gardenCharacterName}>
-                      <Text style={styles.gardenCharacterNameText}>
+                      <CookieRunBold style={styles.gardenCharacterNameText}>
                         식물애칭
-                      </Text>
+                      </CookieRunBold>
                     </TouchableOpacity>
                     <View style={styles.gardenCharacterDelete}>
-                      <Icon2 name="closecircle" style={styles.deleteIcon} />
+                      <Icon2 name="close" style={styles.deleteIcon} />
                     </View>
                   </View>
 
@@ -88,6 +106,8 @@ const GardenScreen = () => {
                 <View style={styles.gardenGround}>
                   <Image
                     source={require("../../assets/img/gardenGround.png")}
+                    resizeMode="cover"
+                    style={styles.imgSize}
                   />
                 </View>
               </View>
@@ -97,12 +117,12 @@ const GardenScreen = () => {
                 <View style={styles.absoultPosition}>
                   <View style={styles.gardenCharacterSign}>
                     <TouchableOpacity style={styles.gardenCharacterName}>
-                      <Text style={styles.gardenCharacterNameText}>
+                      <CookieRunBold style={styles.gardenCharacterNameText}>
                         식물애칭
-                      </Text>
+                      </CookieRunBold>
                     </TouchableOpacity>
                     <View style={styles.gardenCharacterDelete}>
-                      <Icon2 name="closecircle" style={styles.deleteIcon} />
+                      <Icon2 name="close" style={styles.deleteIcon} />
                     </View>
                   </View>
 
@@ -117,195 +137,15 @@ const GardenScreen = () => {
                 <View style={styles.gardenGround}>
                   <Image
                     source={require("../../assets/img/gardenGround.png")}
+                    resizeMode="cover"
+                    style={styles.imgSize}
                   />
                 </View>
               </View>
               {/* 한칸 끝 */}
             </View>
-            {/* 한 줄 끝 */}
-            {/* 한 줄 시작 */}
-            <View style={styles.reContainer}>
-              {/* 한칸 시작 */}
-              <View style={styles.gardenContainer}>
-                <View style={styles.absoultPosition}>
-                  <View style={styles.gardenCharacterSign}>
-                    <TouchableOpacity style={styles.gardenCharacterName}>
-                      <Text style={styles.gardenCharacterNameText}>
-                        식물애칭
-                      </Text>
-                    </TouchableOpacity>
-                    <View style={styles.gardenCharacterDelete}>
-                      <Icon2 name="closecircle" style={styles.deleteIcon} />
-                    </View>
-                  </View>
-
-                  <View style={styles.gardenCharacter}>
-                    <Image
-                      source={require("../../assets/img/characterBaechoo.png")}
-                      resizeMode="contain"
-                      style={styles.gardenCharacterResize}
-                    />
-                  </View>
-                </View>
-                <View style={styles.gardenGround}>
-                  <Image
-                    source={require("../../assets/img/gardenGround.png")}
-                  />
-                </View>
-              </View>
-              {/* 한칸 끝 */}
-              {/* 한칸 시작 */}
-              <View style={styles.gardenContainer}>
-                <View style={styles.absoultPosition}>
-                  <View style={styles.gardenCharacterSign}>
-                    <TouchableOpacity style={styles.gardenCharacterName}>
-                      <Text style={styles.gardenCharacterNameText}>
-                        식물애칭
-                      </Text>
-                    </TouchableOpacity>
-                    <View style={styles.gardenCharacterDelete}>
-                      <Icon2 name="closecircle" style={styles.deleteIcon} />
-                    </View>
-                  </View>
-
-                  <View style={styles.gardenCharacter}>
-                    <Image
-                      source={require("../../assets/img/characterBaechoo.png")}
-                      resizeMode="contain"
-                      style={styles.gardenCharacterResize}
-                    />
-                  </View>
-                </View>
-                <View style={styles.gardenGround}>
-                  <Image
-                    source={require("../../assets/img/gardenGround.png")}
-                  />
-                </View>
-              </View>
-              {/* 한칸 끝 */}
-              {/* 한칸 시작 */}
-              <View style={styles.gardenContainer}>
-                <View style={styles.absoultPosition}>
-                  <View style={styles.gardenCharacterSign}>
-                    <TouchableOpacity style={styles.gardenCharacterName}>
-                      <Text style={styles.gardenCharacterNameText}>
-                        식물애칭
-                      </Text>
-                    </TouchableOpacity>
-                    <View style={styles.gardenCharacterDelete}>
-                      <Icon2 name="closecircle" style={styles.deleteIcon} />
-                    </View>
-                  </View>
-
-                  <View style={styles.gardenCharacter}>
-                    <Image
-                      source={require("../../assets/img/characterBaechoo.png")}
-                      resizeMode="contain"
-                      style={styles.gardenCharacterResize}
-                    />
-                  </View>
-                </View>
-                <View style={styles.gardenGround}>
-                  <Image
-                    source={require("../../assets/img/gardenGround.png")}
-                  />
-                </View>
-              </View>
-              {/* 한칸 끝 */}
-            </View>
-            {/* 한 줄 끝 */}
-            {/* 한 줄 시작 */}
-            <View style={styles.reContainer}>
-              {/* 한칸 시작 */}
-              <View style={styles.gardenContainer}>
-                <View style={styles.absoultPosition}>
-                  <View style={styles.gardenCharacterSign}>
-                    <TouchableOpacity style={styles.gardenCharacterName}>
-                      <Text style={styles.gardenCharacterNameText}>
-                        식물애칭
-                      </Text>
-                    </TouchableOpacity>
-                    <View style={styles.gardenCharacterDelete}>
-                      <Icon2 name="closecircle" style={styles.deleteIcon} />
-                    </View>
-                  </View>
-
-                  <View style={styles.gardenCharacter}>
-                    <Image
-                      source={require("../../assets/img/characterBaechoo.png")}
-                      resizeMode="contain"
-                      style={styles.gardenCharacterResize}
-                    />
-                  </View>
-                </View>
-                <View style={styles.gardenGround}>
-                  <Image
-                    source={require("../../assets/img/gardenGround.png")}
-                  />
-                </View>
-              </View>
-              {/* 한칸 끝 */}
-              {/* 한칸 시작 */}
-              <View style={styles.gardenContainer}>
-                <View style={styles.absoultPosition}>
-                  <View style={styles.gardenCharacterSign}>
-                    <TouchableOpacity style={styles.gardenCharacterName}>
-                      <Text style={styles.gardenCharacterNameText}>
-                        식물애칭
-                      </Text>
-                    </TouchableOpacity>
-                    <View style={styles.gardenCharacterDelete}>
-                      <Icon2 name="closecircle" style={styles.deleteIcon} />
-                    </View>
-                  </View>
-
-                  <View style={styles.gardenCharacter}>
-                    <Image
-                      source={require("../../assets/img/characterBaechoo.png")}
-                      resizeMode="contain"
-                      style={styles.gardenCharacterResize}
-                    />
-                  </View>
-                </View>
-                <View style={styles.gardenGround}>
-                  <Image
-                    source={require("../../assets/img/gardenGround.png")}
-                  />
-                </View>
-              </View>
-              {/* 한칸 끝 */}
-              {/* 한칸 시작 */}
-              <View style={styles.gardenContainer}>
-                <View style={styles.absoultPosition}>
-                  <View style={styles.gardenCharacterSign}>
-                    <TouchableOpacity style={styles.gardenCharacterName}>
-                      <Text style={styles.gardenCharacterNameText}>
-                        식물애칭
-                      </Text>
-                    </TouchableOpacity>
-                    <View style={styles.gardenCharacterDelete}>
-                      <Icon2 name="closecircle" style={styles.deleteIcon} />
-                    </View>
-                  </View>
-
-                  <View style={styles.gardenCharacter}>
-                    <Image
-                      source={require("../../assets/img/characterBaechoo.png")}
-                      resizeMode="contain"
-                      style={styles.gardenCharacterResize}
-                    />
-                  </View>
-                </View>
-                <View style={styles.gardenGround}>
-                  <Image
-                    source={require("../../assets/img/gardenGround.png")}
-                  />
-                </View>
-              </View>
-              {/* 한칸 끝 */}
-            </View>
-            {/* 한 줄 끝 */}
           </View>
+
           <View style={styles.trashCanMargin}>
             <Image
               source={require("../../assets/img/trashCan.png")}
@@ -314,6 +154,11 @@ const GardenScreen = () => {
           </View>
         </ScrollView>
       </ImageBackground>
+      <ModalPlantDelete
+        isVisible={isDeleteModalVisible}
+        onClose={() => setDeleteModalVisible(false)}
+        onDelete={handleDelete}
+      />
     </View>
   );
 };
