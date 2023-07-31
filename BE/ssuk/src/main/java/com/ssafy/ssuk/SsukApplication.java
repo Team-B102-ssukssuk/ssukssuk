@@ -14,7 +14,7 @@ public class SsukApplication {
     @GetMapping("")
     String home()
     {
-        return "backend form muchin!";
+        return "ssook ssook!";
     }
 
     @PostMapping("")
