@@ -6,8 +6,44 @@ import Modal from "react-native-modal";
 // import { COLORS } from "../../constants/theme";
 
 const ModalMap = ({ isVisible, onClose, navigation }) => {
-  const GoMain = () => {
-    navigation.navigate("SliderPot"); // 네비게이션을 이용하여 "Main" 화면으로 이동
+  const goPot = () => {
+    onClose(false);
+
+    const delayNavigation = setTimeout(() => {
+      navigation.navigate("SliderPot"); // 네비게이션을 이용하여 "Pot" 화면으로 이동
+    }, 300);
+
+    return () => clearTimeout(delayNavigation);
+  };
+
+  const Logout = () => {
+    onClose(false);
+
+    const delayNavigation = setTimeout(() => {
+      navigation.navigate("Login");
+    }, 300);
+
+    return () => clearTimeout(delayNavigation);
+  };
+
+  const goGarden = () => {
+    onClose(false);
+
+    const delayNavigation = setTimeout(() => {
+      navigation.navigate("SliderGarden");
+    }, 300);
+
+    return () => clearTimeout(delayNavigation);
+  };
+
+  const goProfile = () => {
+    onClose(false);
+
+    const delayNavigation = setTimeout(() => {
+      navigation.navigate("Profile");
+    }, 300);
+
+    return () => clearTimeout(delayNavigation);
   };
 
   return (
@@ -36,10 +72,7 @@ const ModalMap = ({ isVisible, onClose, navigation }) => {
               style={styles.mapMain}
             ></Image>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.mapGardenLocation}
-            onPress={() => navigation.navigate("SliderGarden")}
-          >
+          <TouchableOpacity style={styles.mapGardenLocation} onPress={goGarden}>
             <Image
               resizeMode="contain"
               source={require("../../assets/img/mapGarden.png")}
@@ -48,7 +81,7 @@ const ModalMap = ({ isVisible, onClose, navigation }) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.mapProfileLocation}
-            onPress={() => navigation.navigate("Profile")}
+            onPress={goProfile}
           >
             <Image
               resizeMode="contain"
@@ -56,17 +89,14 @@ const ModalMap = ({ isVisible, onClose, navigation }) => {
               style={styles.mapProfile}
             ></Image>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.mapPotLocation} onPress={GoMain}>
+          <TouchableOpacity style={styles.mapPotLocation} onPress={goPot}>
             <Image
               resizeMode="contain"
               source={require("../../assets/img/mapPot.png")}
               style={styles.mapPot}
             ></Image>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.mapLogoutLocation}
-            onPress={() => navigation.navigate("Login")}
-          >
+          <TouchableOpacity style={styles.mapLogoutLocation} onPress={Logout}>
             <Image
               resizeMode="contain"
               source={require("../../assets/img/mapLogout.png")}

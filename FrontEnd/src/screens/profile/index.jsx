@@ -1,18 +1,18 @@
 import React, { useState, useRef } from "react";
 import {
   View,
-  StyleSheet,
   Animated,
   ImageBackground,
   Image,
   Dimensions,
   TouchableOpacity,
 } from "react-native";
-import { Avatar, Title, Caption } from "react-native-paper";
+import { Avatar, Title } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import BottomSheet from "reanimated-bottom-sheet";
 import ModalPlantRegist from "../../components/modalplantregist";
 import CookieRunBold from "../../components/common/CookieRunBold";
+import { ScrollView } from "react-native-gesture-handler";
 import styles from "./style";
 
 const ProfileScreen = ({ navigation }) => {
@@ -223,7 +223,6 @@ const ProfileScreen = ({ navigation }) => {
   const rows = divideIntoRowsAndColumns(badges, 3, 3);
 
   const handleBadgeClick = (badge) => {
-    console.log(badge);
     setClickedBadge(badge);
     onOpen();
   };
@@ -233,113 +232,116 @@ const ProfileScreen = ({ navigation }) => {
       source={require("../../assets/img/ProfileBackground.png")}
       style={styles.container}
     >
-      <View style={styles.userInfoSection}>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Icon name="arrow-back-ios" size={28} color="#fff" />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={toggleEditModal}>
-            <Icon name="edit" size={28} color="#fff" />
-          </TouchableOpacity>
+      <ScrollView>
+        <View style={styles.userInfoSection}>
+          <View style={styles.header}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Icon name="arrow-back-ios" size={28} color="#fff" />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={toggleEditModal}>
+              <Icon name="edit" size={28} color="#fff" />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.profileContent}>
+            <CookieRunBold style={styles.myPageTitle}>마이페이지</CookieRunBold>
+            <View style={{ flexDirection: "row", marginTop: 15 }}>
+              <Avatar.Image
+                source={{
+                  uri: "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y",
+                }}
+                size={80}
+              />
+              <View style={{ marginLeft: 20 }}>
+                <Title
+                  style={[
+                    styles.title,
+                    {
+                      marginTop: 15,
+                      marginBottom: 5,
+                    },
+                  ]}
+                >
+                  손수형
+                </Title>
+              </View>
+            </View>
+          </View>
         </View>
-        <CookieRunBold style={styles.myPageTitle}>마이페이지</CookieRunBold>
-        <View style={{ flexDirection: "row", marginTop: 15 }}>
-          <Avatar.Image
-            source={{
-              uri: "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y",
-            }}
-            size={80}
-          />
-          <View style={{ marginLeft: 20 }}>
-            <Title
-              style={[
-                styles.title,
-                {
-                  marginTop: 15,
-                  marginBottom: 5,
-                },
-              ]}
-            >
-              손수형
-            </Title>
-            <Caption style={styles.caption}>쑥쑥이</Caption>
-          </View>
+
+        <View style={styles.userInfoSection}>
+          <ImageBackground
+            source={require("../../assets/img/ProfileBar.png")}
+            style={styles.Profile_bar}
+            resizeMode="contain"
+          >
+            <View style={styles.ProfileBarContent}>
+              <View style={styles.barContent}>
+                <CookieRunBold style={styles.Collection_text}>
+                  내 식물
+                </CookieRunBold>
+                <CookieRunBold style={styles.Collection_num}>3</CookieRunBold>
+              </View>
+              <View style={styles.barContent}>
+                <CookieRunBold style={styles.Collection_text}>
+                  정원
+                </CookieRunBold>
+                <CookieRunBold style={styles.Collection_num}>2</CookieRunBold>
+              </View>
+              <View style={styles.barContent}>
+                <CookieRunBold style={styles.Collection_text}>
+                  도감
+                </CookieRunBold>
+                <CookieRunBold style={styles.Collection_num}>5</CookieRunBold>
+              </View>
+            </View>
+          </ImageBackground>
         </View>
-      </View>
 
-      <View style={styles.userInfoSection}>
-        <ImageBackground
-          source={require("../../assets/img/ProfileBar.png")}
-          style={styles.Profile_bar}
-          resizeMode="contain"
-        >
-          <View style={styles.ProfileBarContent}>
-            <View style={styles.barContent}>
-              <CookieRunBold style={styles.Collection_text}>
-                내 식물
-              </CookieRunBold>
-              <CookieRunBold style={styles.Collection_num}>3</CookieRunBold>
-            </View>
-            <View style={styles.barContent}>
-              <CookieRunBold style={styles.Collection_text}>정원</CookieRunBold>
-              <CookieRunBold style={styles.Collection_num}>2</CookieRunBold>
-            </View>
-            <View style={styles.barContent}>
-              <CookieRunBold style={styles.Collection_text}>도감</CookieRunBold>
-              <CookieRunBold style={styles.Collection_num}>5</CookieRunBold>
-            </View>
+        <View style={styles.lineSection} />
+
+        <View style={styles.userInfoSection}>
+          <View style={styles.rankText}>
+            <CookieRunBold style={styles.myPageTitle}>업적</CookieRunBold>
           </View>
-        </ImageBackground>
-      </View>
-
-      <View
-        style={{
-          borderBottomColor: "white",
-          borderBottomWidth: StyleSheet.hairlineWidth,
-          marginHorizontal: 30,
-        }}
-      />
-
-      <View style={styles.userInfoSection}>
-        <CookieRunBold style={styles.myPageTitle}>업적</CookieRunBold>
-        {/* Map through the rows */}
-        {rows.map((row, rowIndex) => (
-          <View key={rowIndex} style={styles.badgeContent}>
-            {/* Map through the badges in each row */}
-            {row.map((badge, colIndex) => (
-              <TouchableOpacity
-                key={colIndex}
-                onPress={() => handleBadgeClick(badge)}
-              >
-                <Image
-                  source={require("../../assets/img/Badge.png")} // Replace this with the badge image source from the `badge` object
-                  style={styles.badge}
-                />
-              </TouchableOpacity>
-            ))}
-          </View>
-        ))}
-      </View>
-      {isOpen && renderBackDrop()}
-      <BottomSheet
-        ref={bs}
-        snapPoints={[
-          "-10%",
-          window.height * 0.3,
-          window.height * 0.4,
-          window.height * 0.5,
-        ]}
-        initialSnap={0}
-        renderContent={renderInner}
-        onCloseEnd={onClose}
-      />
-      <ModalPlantRegist
-        isVisible={isEditModalVisible}
-        onClose={() => setEditModalVisible(false)}
-        onRegist={handleEdit}
-        title="닉네임 수정"
-        placeholder="변경하시려는 닉네임을 말씀해주세요"
-      />
+          {/* Map through the rows */}
+          {rows.map((row, rowIndex) => (
+            <View key={rowIndex} style={styles.badgeContent}>
+              {/* Map through the badges in each row */}
+              {row.map((badge, colIndex) => (
+                <TouchableOpacity
+                  key={colIndex}
+                  onPress={() => handleBadgeClick(badge)}
+                >
+                  <Image
+                    source={require("../../assets/img/Badge.png")} // Replace this with the badge image source from the `badge` object
+                    style={styles.badge}
+                  />
+                </TouchableOpacity>
+              ))}
+            </View>
+          ))}
+        </View>
+        {isOpen && renderBackDrop()}
+        <BottomSheet
+          ref={bs}
+          snapPoints={[
+            "-10%",
+            window.height * 0.3,
+            window.height * 0.4,
+            window.height * 0.5,
+          ]}
+          initialSnap={0}
+          renderContent={renderInner}
+          onCloseEnd={onClose}
+        />
+        <ModalPlantRegist
+          isVisible={isEditModalVisible}
+          onClose={() => setEditModalVisible(false)}
+          onRegist={handleEdit}
+          title="닉네임 수정"
+          placeholder="변경하시려는 닉네임을 말씀해주세요"
+        />
+      </ScrollView>
     </ImageBackground>
   );
 };

@@ -18,8 +18,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   wateringCanSection: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
+    position: "absolute",
+    right: 20,
+    bottom: 30,
   },
   SensorContainer: {
     flexDirection: "row",
@@ -83,7 +84,6 @@ const styles = StyleSheet.create({
   wateringCanSize: {
     width: 93,
     height: 84,
-    marginRight: 20,
   },
 });
 

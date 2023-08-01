@@ -149,10 +149,6 @@ const MainScreen = () => {
             />
           </TouchableOpacity>
         </View>
-        <ModalSetting
-          isVisible={isSettingModalVisible}
-          onClose={toggleSettingModal}
-        />
       </ImageBackground>
       <ModalSetting
         isVisible={isSettingModalVisible}

@@ -11,6 +11,8 @@ const ModalDictionary = ({ isVisible, onClose }) => {
   const [selectedCategory, setSelectedCategory] = useState("채소");
   const [selectedPlant, setSelectedPlant] = useState(null);
 
+  
+
   const response = {
     message: "OK",
     data: {
