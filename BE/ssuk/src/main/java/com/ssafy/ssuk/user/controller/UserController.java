@@ -1,10 +1,16 @@
 package com.ssafy.ssuk.user.controller;
 
+import com.ssafy.ssuk.badge.dto.response.UserBadgeResponseDto;
+import com.ssafy.ssuk.badge.service.BadgeService;
+import com.ssafy.ssuk.plant.domain.Garden;
 import com.ssafy.ssuk.plant.dto.response.ResponseDto;
+import com.ssafy.ssuk.plant.service.GardenService;
 import com.ssafy.ssuk.user.domain.User;
 import com.ssafy.ssuk.user.dto.request.CheckEmailRequestDto;
 import com.ssafy.ssuk.user.dto.request.RegisterUserRequestDto;
+import com.ssafy.ssuk.user.dto.response.InfoResponseDto;
 import com.ssafy.ssuk.user.service.UserService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,21 +18,23 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/user")
+@RequiredArgsConstructor    // 변겅
 @Slf4j
 public class UserController {
     private final UserService userService;
+    private final GardenService gardenService;
+    private final BadgeService badgeService;
 
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+//    @Autowired
+//    public UserController(UserService userService) {
+//        this.userService = userService;
+//    }
 
     // 회원 가입
     @PostMapping("/join")
@@ -50,5 +58,37 @@ public class UserController {
         ///////////////////////////구현
         return null;
 
+    }
+
+
+
+
+
+
+
+
+    @GetMapping("/info")
+    public ResponseEntity<ResponseDto> searchUserInfo(@RequestAttribute Integer userId) {
+        // 닉네임이 토큰에 없다고 가정
+        User user = userService.findById(userId);
+        if(user == null){
+            return new ResponseEntity<>(new ResponseDto("유저가 없어용"), HttpStatus.NOT_FOUND);
+        }
+
+        InfoResponseDto infoResponseDto = new InfoResponseDto();
+
+        infoResponseDto.setNickname(user.getNickname());
+
+        gardenService.findAllByUserId(userId).forEach(g -> {
+            if(g.getIsUse()) infoResponseDto.addMyPlantCount();
+            else infoResponseDto.addGardenCount();
+        });
+
+        List<UserBadgeResponseDto> badges = badgeService.findAllWithUserId(userId);
+        infoResponseDto.setBadges(badges);
+
+
+
+        return new ResponseEntity<>(new ResponseDto("ok", "information", infoResponseDto), HttpStatus.OK);
     }
 }

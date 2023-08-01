@@ -1,12 +1,12 @@
 package com.ssafy.ssuk.badge.repository;
 
-import com.ssafy.ssuk.badge.Badge;
+import com.ssafy.ssuk.badge.domain.Badge;
+import com.ssafy.ssuk.badge.domain.UserBadge;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import java.util.Collection;
 import java.util.List;
 
 @Repository
@@ -24,6 +24,11 @@ public class BadgeRepositoryImpl implements BadgeRepository {
     @Override
     public Badge findOneById(Integer badgeId) {
         return em.find(Badge.class, badgeId);
+    }
+
+    @Override
+    public List<UserBadge> findAllWithUserId(Integer userId) {
+        return em.createQuery("select ub from UserBadge ub", UserBadge.class).getResultList();
     }
 
     @Override

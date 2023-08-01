@@ -30,4 +30,9 @@ public class UserServiceImpl implements UserService{
         User findUser = userRepository.findByEmail(checkEmailRequestDto.getEmail());
         return findUser;
     }
+
+    @Override
+    public User findById(Integer userId) {
+        return userRepository.findById(userId);
+    }
 }

@@ -29,5 +29,8 @@ public class UserRepositoryImpl implements UserRepository {
         return users.get(0);
     }
 
-
+    @Override
+    public User findById(int userId) {
+        return em.find(User.class, userId);
+    }
 }

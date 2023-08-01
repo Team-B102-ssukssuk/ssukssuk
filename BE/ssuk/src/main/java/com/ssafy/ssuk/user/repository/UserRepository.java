@@ -6,4 +6,6 @@ public interface UserRepository {
     public void insert(User newUser);
 
     public User findByEmail(String email);
+
+    public User findById(int userId);
 }

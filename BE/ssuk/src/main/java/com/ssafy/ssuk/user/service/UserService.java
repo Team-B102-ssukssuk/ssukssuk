@@ -10,4 +10,6 @@ public interface UserService {
 
     // 사용자 조회
     public User findByEmail(CheckEmailRequestDto checkEmailRequestDto);
+
+    public User findById(Integer userId);
 }

@@ -1,4 +1,4 @@
-package com.ssafy.ssuk.badge;
+package com.ssafy.ssuk.badge.domain;
 
 import com.ssafy.ssuk.badge.dto.request.BadgeRegisterRequestDto;
 import com.ssafy.ssuk.badge.dto.request.BadgeUpdateRequestDto;
