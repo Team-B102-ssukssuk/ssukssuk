@@ -28,7 +28,7 @@
     "prop-types": "^15.8.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-native": "0.71.8",
+    "react-native": "^0.71.8",
     "react-native-app-intro-slider": "^4.0.4",
     "react-native-fast-image": "^8.6.3",
     "react-native-gesture-handler": "~2.9.0",
@@ -39,6 +39,7 @@
     "react-native-screens": "~3.20.0",
     "react-native-share": "^9.2.3",
     "react-native-svg": "^13.4.0",
+    "react-native-swiper": "^1.6.0",
     "react-native-vector-icons": "^9.2.0",
     "react-native-web": "~0.18.10",
     "reanimated-bottom-sheet": "^1.0.0-alpha.22"

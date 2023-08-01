@@ -7,7 +7,7 @@ import Modal from "react-native-modal";
 
 const ModalMap = ({ isVisible, onClose, navigation }) => {
   const GoMain = () => {
-    navigation.navigate("Pot"); // 네비게이션을 이용하여 "Main" 화면으로 이동
+    navigation.navigate("SliderPot"); // 네비게이션을 이용하여 "Main" 화면으로 이동
   };
 
   return (
@@ -38,7 +38,7 @@ const ModalMap = ({ isVisible, onClose, navigation }) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.mapGardenLocation}
-            onPress={() => navigation.navigate("Garden")}
+            onPress={() => navigation.navigate("SliderGarden")}
           >
             <Image
               resizeMode="contain"

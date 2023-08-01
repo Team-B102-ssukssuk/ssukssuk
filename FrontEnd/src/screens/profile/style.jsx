@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { COLORS } from "../../constants/theme";
 
 const styles = StyleSheet.create({
   container: {
@@ -107,6 +108,10 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: "#fff",
     alignItems: "center",
+    shadowColor: "#000000",
+    paddingTop: 20,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
   },
   panelHeader: {
     alignItems: "center",
@@ -121,7 +126,7 @@ const styles = StyleSheet.create({
   panelTitle: {
     fontSize: 27,
     height: 35,
-    color: "#27C4A5",
+    color: COLORS.Mint,
   },
   panelSubtitle: {
     fontSize: 14,

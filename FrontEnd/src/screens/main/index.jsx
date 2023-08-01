@@ -6,8 +6,10 @@ import ModalPlantSeed from "../../components/modalplantseed";
 import ModalMap from "../../components/modalmap";
 import ModalDictionary from "../../components/modaldictionary";
 import styles from "./style";
+import { useNavigation } from "@react-navigation/native";
 
-const MainScreen = ({ navigation }) => {
+const MainScreen = () => {
+  const navigation = useNavigation();
   const [isSettingModalVisible, setSettingModalVisible] = useState(false);
   const [isCharacterModalVisible, setCharacterModalVisible] = useState(false);
   const [isOpenMapModalVisible, setIsOpenMapModalVisible] = useState(false);

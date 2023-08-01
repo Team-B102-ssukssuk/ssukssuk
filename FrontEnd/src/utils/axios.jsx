@@ -54,10 +54,10 @@ customAxios.interceptors.response.use(
         }
         // 토큰 갱신 요청이 실패했을 때 (토큰 갱신이 만료되었음 = 다시 로그인 안내)
         else if (response.status === 404) {
-          alert("실패했습니다.");
+          alert("토큰만료.");
           window.location.replace("/sign-in");
         } else {
-          alert("실패했습니다.");
+          alert("예기치 못한 이유.");
         }
       }
     }

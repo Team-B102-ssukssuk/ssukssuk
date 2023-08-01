@@ -1,15 +1,90 @@
-import { ImageBackground, View, Image, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
+import { ImageBackground, View, Image, TouchableOpacity } from "react-native";
 import styles from "./style";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import Icon2 from "react-native-vector-icons/AntDesign";
 import { ScrollView } from "react-native-gesture-handler";
-import ModalPlantDelete from "../../components/modalplantdelete";
 import CookieRunBold from "../../components/common/CookieRunBold";
+<<<<<<< HEAD
+import ModalPlantDelete from "../../components/modalplantdelete";
+import * as Animatable from "react-native-animatable";
+=======
+import { useNavigation } from "@react-navigation/native";
+>>>>>>> bc177841cff15d53b7047e9b8fa1b43b789ef080
 
-const GardenScreen = ({ navigation }) => {
+const GardenScreen = () => {
+  const navigation = useNavigation();
   const [gardenName] = useState("지민이네");
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [isDeleteIconVisible, setDeleteIconVisible] = useState(false);
+
+  const visibleIcon = () => {
+    setDeleteIconVisible(!isDeleteIconVisible);
+  };
+
+  const response = {
+    message: "OK",
+    data: {
+      gardens: [
+        {
+          gardenId: 1,
+          potId: 1,
+          plantId: 2,
+          plantName: "장미",
+          categoryId: 2,
+          categoryName: "꽃",
+          plantNickname: "장미",
+          level: 1,
+          firstDate: "2023-07-31T18:58:19",
+          secondDate: null,
+          thirdDate: null,
+          isUse: false,
+        },
+        {
+          gardenId: 2,
+          potId: 1,
+          plantId: 3,
+          plantName: "미니 선인장",
+          categoryId: 3,
+          categoryName: "선인장",
+          plantNickname: "선인장",
+          level: 1,
+          firstDate: "2023-07-31T18:59:06",
+          secondDate: null,
+          thirdDate: null,
+          isUse: false,
+        },
+        {
+          gardenId: 3,
+          potId: 1,
+          plantId: 3,
+          plantName: "미니 선인장",
+          categoryId: 3,
+          categoryName: "선인장",
+          plantNickname: "애칭 선인장",
+          level: 1,
+          firstDate: "2023-07-31T18:59:26",
+          secondDate: null,
+          thirdDate: null,
+          isUse: false,
+        },
+        {
+          gardenId: 4,
+          potId: 1,
+          plantId: 3,
+          plantName: "쑥쑥이",
+          categoryId: 3,
+          categoryName: "선인장",
+          plantNickname: "애칭 선인장",
+          level: 1,
+          firstDate: "2023-07-31T18:59:26",
+          secondDate: null,
+          thirdDate: null,
+          isUse: false,
+        },
+      ],
+    },
+  };
 
   const toggleDeleteModal = () => {
     setDeleteModalVisible(!isDeleteModalVisible);
@@ -21,6 +96,21 @@ const GardenScreen = ({ navigation }) => {
     setDeleteModalVisible(false);
   };
 
+  const gardenPlants = response.data.gardens; // Use all the garden data from the response
+
+  // Function to divide the gardenPots into rows
+  const divideIntoRows = (arr, size) => {
+    const rows = [];
+    for (let i = 0; i < arr.length; i += size) {
+      const row = arr.slice(i, i + size);
+      rows.push(row);
+    }
+    return rows;
+  };
+
+  const rows = divideIntoRows(gardenPlants, 3);
+  const lastRowWithCharacter = rows.length;
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -29,130 +119,160 @@ const GardenScreen = ({ navigation }) => {
       >
         <View style={styles.userInfoSection}>
           <View style={styles.header}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
+            <TouchableOpacity onPress={() => navigation.push("Slider")}>
               <Icon name="arrow-back-ios" size={28} color="#fff" />
             </TouchableOpacity>
           </View>
         </View>
-        <ScrollView>
+        <ScrollView style={styles.plantContainer}>
           <View style={styles.gardenWood}>
             <View style={styles.gardenWoodGroup}>
               <Image source={require("../../assets/img/gardenWood.png")} />
-
               <CookieRunBold style={styles.gardenWoodText}>
                 {gardenName}
               </CookieRunBold>
             </View>
           </View>
           <View style={styles.alignCenterContainer}>
-            {/* 한 줄 시작 */}
+            {/* Map through the rows */}
+            {rows.map((row, rowIndex) => (
+              <View style={styles.reContainer} key={rowIndex}>
+                {/* Map through the pots in each row */}
+                {row.map((garden, potIndex) => (
+                  <View style={styles.gardenContainer} key={potIndex}>
+                    {isDeleteIconVisible ? (
+                      <View
+                        style={styles.absoultPosition}
+                        onPress={toggleDeleteModal}
+                      >
+                        <Animatable.View
+                          animation="pulse"
+                          duration={700}
+                          iterationCount="infinite"
+                        >
+                          <TouchableOpacity
+                            style={styles.gardenCharacterSign}
+                            onPress={toggleDeleteModal}
+                          >
+                            <View style={styles.gardenCharacterName}>
+                              <CookieRunBold
+                                style={styles.gardenCharacterNameText}
+                              >
+                                {garden.plantName}
+                                {/* Display the plant name */}
+                              </CookieRunBold>
+                            </View>
+                            <View style={styles.gardenCharacterDelete}>
+                              <Icon2 name="close" style={styles.deleteIcon} />
+                            </View>
+                          </TouchableOpacity>
+                        </Animatable.View>
+                        <View style={styles.gardenCharacter}>
+                          {/* Transparent character image */}
+                          <Image
+                            source={require("../../assets/img/characterBaechoo.png")}
+                            resizeMode="contain"
+                            style={styles.gardenCharacterResize}
+                          />
+                        </View>
+                      </View>
+                    ) : (
+                      <View
+                        style={styles.absoultPosition}
+                        onPress={toggleDeleteModal}
+                      >
+                        <View style={styles.gardenCharacterSign}>
+                          <View style={styles.gardenCharacterName}>
+                            <CookieRunBold
+                              style={styles.gardenCharacterNameText}
+                            >
+                              {garden.plantName}
+                              {/* Display the plant name */}
+                            </CookieRunBold>
+                          </View>
+                        </View>
+                        <View style={styles.gardenCharacter}>
+                          {/* Transparent character image */}
+                          <Image
+                            source={require("../../assets/img/characterBaechoo.png")}
+                            resizeMode="contain"
+                            style={styles.gardenCharacterResize}
+                          />
+                        </View>
+                      </View>
+                    )}
+
+                    <View style={styles.gardenGround}>
+                      {/* Garden ground image */}
+                      <Image
+                        source={require("../../assets/img/gardenGround.png")}
+                        resizeMode="cover"
+                        style={styles.imgSize}
+                      />
+                    </View>
+                  </View>
+                ))}
+                {/* Add transparent pots to fill the remaining spaces */}
+                {Array(3 - row.length)
+                  .fill()
+                  .map((_, emptyIndex) => (
+                    <View style={styles.gardenContainer} key={emptyIndex}>
+                      <View style={styles.absoultPosition}>
+                        {rowIndex === lastRowWithCharacter - 1 ? (
+                          emptyIndex === 0 ? (
+                            <TouchableOpacity style={styles.gardenCharacter}>
+                              {/* Display the characterBaechoo image */}
+                              <Image
+                                source={require("../../assets/img/silhouette.png")}
+                                resizeMode="contain"
+                                style={styles.gardenEmptyResize}
+                              />
+                            </TouchableOpacity>
+                          ) : null
+                        ) : null}
+                      </View>
+                      <View style={styles.gardenGround}>
+                        {/* Garden ground image */}
+                        <Image
+                          source={require("../../assets/img/gardenGround.png")}
+                          resizeMode="cover"
+                          style={styles.imgSize}
+                        />
+                      </View>
+                    </View>
+                  ))}
+              </View>
+            ))}
+            {/* Add one extra row with the transparent character */}
             <View style={styles.reContainer}>
-              {/* 한칸 시작 */}
-              <View style={styles.gardenContainer}>
-                <View style={styles.absoultPosition}>
-                  <View style={styles.gardenCharacterSign}>
-                    <View style={styles.gardenCharacterName}>
-                      <CookieRunBold style={styles.gardenCharacterNameText}>
-                        식물애칭
-                      </CookieRunBold>
+              {Array(3)
+                .fill()
+                .map((_, emptyIndex) => (
+                  <View style={styles.gardenContainer} key={emptyIndex}>
+                    <View style={styles.absoultPosition}>
+                      <View style={styles.gardenCharacter}>
+                        {/* Transparent character image */}
+                      </View>
                     </View>
-                    <TouchableOpacity
-                      style={styles.gardenCharacterDelete}
-                      onPress={toggleDeleteModal}
-                    >
-                      <Icon2 name="close" style={styles.deleteIcon} />
-                    </TouchableOpacity>
-                  </View>
-
-                  <View style={styles.gardenCharacter}>
-                    <Image
-                      source={require("../../assets/img/characterBaechoo.png")}
-                      resizeMode="contain"
-                      style={styles.gardenCharacterResize}
-                    />
-                  </View>
-                </View>
-                <View style={styles.gardenGround}>
-                  <Image
-                    source={require("../../assets/img/gardenGround.png")}
-                    resizeMode="cover"
-                    style={styles.imgSize}
-                  />
-                </View>
-              </View>
-              {/* 한칸 끝 */}
-              {/* 한칸 시작 */}
-              <View style={styles.gardenContainer}>
-                <View style={styles.absoultPosition}>
-                  <View style={styles.gardenCharacterSign}>
-                    <TouchableOpacity style={styles.gardenCharacterName}>
-                      <CookieRunBold style={styles.gardenCharacterNameText}>
-                        식물애칭
-                      </CookieRunBold>
-                    </TouchableOpacity>
-                    <View style={styles.gardenCharacterDelete}>
-                      <Icon2 name="close" style={styles.deleteIcon} />
+                    <View style={styles.gardenGround}>
+                      {/* Garden ground image */}
+                      <Image
+                        source={require("../../assets/img/gardenGround.png")}
+                        resizeMode="cover"
+                        style={styles.imgSize}
+                      />
                     </View>
                   </View>
-
-                  <View style={styles.gardenCharacter}>
-                    <Image
-                      source={require("../../assets/img/characterBaechoo.png")}
-                      resizeMode="contain"
-                      style={styles.gardenCharacterResize}
-                    />
-                  </View>
-                </View>
-                <View style={styles.gardenGround}>
-                  <Image
-                    source={require("../../assets/img/gardenGround.png")}
-                    resizeMode="cover"
-                    style={styles.imgSize}
-                  />
-                </View>
-              </View>
-              {/* 한칸 끝 */}
-              {/* 한칸 시작 */}
-              <View style={styles.gardenContainer}>
-                <View style={styles.absoultPosition}>
-                  <View style={styles.gardenCharacterSign}>
-                    <TouchableOpacity style={styles.gardenCharacterName}>
-                      <CookieRunBold style={styles.gardenCharacterNameText}>
-                        식물애칭
-                      </CookieRunBold>
-                    </TouchableOpacity>
-                    <View style={styles.gardenCharacterDelete}>
-                      <Icon2 name="close" style={styles.deleteIcon} />
-                    </View>
-                  </View>
-
-                  <View style={styles.gardenCharacter}>
-                    <Image
-                      source={require("../../assets/img/characterBaechoo.png")}
-                      resizeMode="contain"
-                      style={styles.gardenCharacterResize}
-                    />
-                  </View>
-                </View>
-                <View style={styles.gardenGround}>
-                  <Image
-                    source={require("../../assets/img/gardenGround.png")}
-                    resizeMode="cover"
-                    style={styles.imgSize}
-                  />
-                </View>
-              </View>
-              {/* 한칸 끝 */}
+                ))}
             </View>
           </View>
-
-          <View style={styles.trashCanMargin}>
-            <Image
-              source={require("../../assets/img/trashCan.png")}
-              style={styles.trashCan}
-            />
-          </View>
         </ScrollView>
+        <TouchableOpacity style={styles.trashCanMargin} onPress={visibleIcon}>
+          <Image
+            source={require("../../assets/img/trashCan.png")}
+            style={styles.trashCan}
+          />
+        </TouchableOpacity>
       </ImageBackground>
       <ModalPlantDelete
         isVisible={isDeleteModalVisible}

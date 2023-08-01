@@ -5,7 +5,11 @@ import CookieRunBold from "../common/CookieRunBold";
 import CookieRunRegular from "../common/CookieRunRegular";
 import styles from "./style";
 
-const ModalInfo = ({ isVisible, onClose }) => {
+const ModalInfo = ({ isVisible, onClose, plant }) => {
+  if (!plant) {
+    return null;
+  }
+
   return (
     <Modal
       isVisible={isVisible}
@@ -26,18 +30,19 @@ const ModalInfo = ({ isVisible, onClose }) => {
             style={styles.emptyImg}
           />
           <View style={styles.titleText}>
-            <CookieRunBold style={styles.plantName}>상추</CookieRunBold>
+            <CookieRunBold style={styles.plantName}>
+              {plant.characterName}
+            </CookieRunBold>
             <CookieRunRegular style={styles.plantLevel}>
-              1단계 씨앗
+              {plant.level}단계 식물
             </CookieRunRegular>
           </View>
         </View>
         <CookieRunRegular style={styles.guideText}>
-          물주는법 : 우루룰루라라라 라라라라라라나우ㅜ우우우우
-          ㄴㅁㄴㅇ머ㅏㅓㅏㅇㅁ
+          {plant.plantGuide}
         </CookieRunRegular>
         <CookieRunBold style={styles.voiceText}>
-          &apos;나는 잎이 여리다추~!!&apos;
+          &apos;{plant.characterComment}&apos;
         </CookieRunBold>
       </View>
     </Modal>
