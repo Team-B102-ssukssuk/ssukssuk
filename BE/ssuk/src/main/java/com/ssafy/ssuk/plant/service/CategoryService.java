@@ -24,5 +24,5 @@ public interface CategoryService {
 
     public List<TotalCategoryResponseDto> findTotalInfo();
 
-    public List<TotalCategoryResponseDto> findTotalInfo(List<Integer> categoryIds);
+    public List<TotalCategoryResponseDto> findTotalInfo(List<Integer> categoryIds, Integer userId);
 }

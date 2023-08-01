@@ -5,7 +5,7 @@ import com.ssafy.ssuk.plant.dto.request.TotalCategoryRequestDto;
 import com.ssafy.ssuk.plant.dto.response.TotalCategoryResponseDto;
 import com.ssafy.ssuk.plant.domain.Info;
 import com.ssafy.ssuk.plant.dto.request.InfoRegisterRequestDto;
-import com.ssafy.ssuk.plant.dto.Response.InfoSearchResponseDto;
+import com.ssafy.ssuk.plant.dto.response.InfoSearchResponseDto;
 import com.ssafy.ssuk.plant.dto.request.InfoUpdateRequestDto;
 import com.ssafy.ssuk.plant.service.InfoService;
 import com.ssafy.ssuk.plant.domain.Plant;
@@ -14,7 +14,7 @@ import com.ssafy.ssuk.plant.dto.request.CategoryRegisterRequestDto;
 import com.ssafy.ssuk.plant.dto.response.CategorySearchResponseDto;
 import com.ssafy.ssuk.plant.dto.request.CategoryUpdateRequestDto;
 import com.ssafy.ssuk.plant.dto.request.PlantRegisterRequestDto;
-import com.ssafy.ssuk.plant.dto.Response.PlantSearchResponseDto;
+import com.ssafy.ssuk.plant.dto.response.PlantSearchResponseDto;
 import com.ssafy.ssuk.plant.dto.request.PlantUpdateRequestDto;
 import com.ssafy.ssuk.plant.service.CategoryService;
 import com.ssafy.ssuk.plant.service.PlantService;
@@ -218,12 +218,14 @@ public class PlantInfoController {
     }
 
     @PostMapping("")
-    public ResponseEntity<ResponseDto> searchTotalInfo(@RequestBody @Validated TotalCategoryRequestDto totalCategoryRequestDto, BindingResult bindingResult) {
+    public ResponseEntity<ResponseDto> searchTotalInfo(@RequestBody @Validated TotalCategoryRequestDto totalCategoryRequestDto,
+                                                       BindingResult bindingResult,
+                                                       @RequestAttribute Integer userId) {
         if(bindingResult.hasErrors()){
             return new ResponseEntity<>(new ResponseDto("입력 확인"), HttpStatus.NOT_FOUND);
         }
 
-        List<TotalCategoryResponseDto> result = plantCategoryService.findTotalInfo(totalCategoryRequestDto.getCategoryIds());
+        List<TotalCategoryResponseDto> result = plantCategoryService.findTotalInfo(totalCategoryRequestDto.getCategoryIds(), userId);
         return new ResponseEntity<>(new ResponseDto(SUCCESS, "categories", result), HttpStatus.OK);
     }
 }

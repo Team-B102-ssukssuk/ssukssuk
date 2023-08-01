@@ -88,14 +88,15 @@ public class UserController {
     @GetMapping("/info")
     public ResponseEntity<ResponseDto> searchUserInfo(@RequestAttribute Integer userId) {
         // 닉네임이 토큰에 없다고 가정
-        User user = userService.findById(userId);
-        if(user == null){
-            return new ResponseEntity<>(new ResponseDto("유저가 없어용"), HttpStatus.NOT_FOUND);
-        }
+//        User user = userService.findById(userId);
+//        if(user == null){
+//            return new ResponseEntity<>(new ResponseDto("유저가 없어용"), HttpStatus.NOT_FOUND);
+//        }
 
         InfoResponseDto infoResponseDto = new InfoResponseDto();
 
-        infoResponseDto.setNickname(user.getNickname());
+//        infoResponseDto.setNickname(user.getNickname());
+        infoResponseDto.setNickname("security...");
 
         gardenService.findAllByUserId(userId).forEach(g -> {
             if(g.getIsUse()) infoResponseDto.addMyPlantCount();

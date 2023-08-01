@@ -35,12 +35,13 @@ public class CategoryQueryRepositoryImpl implements CategoryQueryRepository {
      * 아래 만들어 둔거 아까워서 만들어둠
      */
     @Override
-    public List<TotalCategoryResponseDto> findTotalInfo(List<Integer> catergoryIds) {
+    public List<TotalCategoryResponseDto> findTotalInfo(List<Integer> catergoryIds, int userId) {
         List<TotalCategoryResponseDto> categories = findCategories(catergoryIds);
         List<Integer> categoryIds = categories.stream().map(c -> c.getCategoryId()).collect(Collectors.toList());
         List<TotalPlantResponseDto> plants = findPlants(categoryIds);
         List<Integer> plantIds = plants.stream().map(p -> p.getPlantId()).collect(Collectors.toList());
-        List<TotalInfoResponseDto> infos = findInfos(plantIds);
+        List<TotalInfoResponseDto> infos = findInfos(plantIds, userId);
+
 
         Map<Integer, List<TotalInfoResponseDto>> infoMap = infos.stream().collect(Collectors.groupingBy(pi -> pi.getPlantId()));
         plants.forEach(p -> p.setPlantInfos(infoMap.get(p.getPlantId())));
@@ -98,14 +99,19 @@ public class CategoryQueryRepositoryImpl implements CategoryQueryRepository {
     /**
      * 얘도 위와 마찬가지
      */
-    private List<TotalInfoResponseDto> findInfos(List<Integer> plantIds) {
+    private List<TotalInfoResponseDto> findInfos(List<Integer> plantIds, int userId) {
         return em.createQuery("select new com.ssafy.ssuk.plant.dto.response.TotalInfoResponseDto(" +
-                        "p.id, pi.level, pi.guide, pi.waterTerm, pi.waterAmount, pi.characterName, pi.characterComment, pi.characterImage" +
+                        "p.id, pi.level, pi.guide, pi.waterTerm, pi.waterAmount, pi.characterName, pi.characterComment, pi.characterImage, c.createdDate" +
                         ")" +
                         " from Info pi" +
                         " join pi.plant p" +
+                        " left join Collection c" +
+                        " on c.id.userId = :userId" +
+                        " and c.id.level = pi.level" +
+                        " and c.id.plantId = p.id" +
                         " where p.id in :plantIds", TotalInfoResponseDto.class)
                 .setParameter("plantIds", plantIds)
+                .setParameter("userId", userId)
                 .getResultList();
     }
 }
