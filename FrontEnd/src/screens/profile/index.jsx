@@ -33,14 +33,6 @@ const ProfileScreen = ({ navigation }) => {
   const bs = useRef(null);
   const window = Dimensions.get("window");
 
-  const renderHeader = () => (
-    <View style={styles.modal_header}>
-      <View style={styles.panelHeader}>
-        <View style={styles.panelHandle} />
-      </View>
-    </View>
-  );
-
   const renderInner = () => (
     <View style={styles.panel}>
       <Image
@@ -230,7 +222,6 @@ const ProfileScreen = ({ navigation }) => {
           window.height * 0.5,
         ]}
         initialSnap={0}
-        renderHeader={renderHeader}
         renderContent={renderInner}
         onCloseEnd={onClose}
       />

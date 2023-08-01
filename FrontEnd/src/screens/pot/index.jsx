@@ -28,16 +28,12 @@ const PotScreen = () => {
         plant_nickname: "Sprout2",
       },
       {
-        pot_plant_id: 235,
-        plant_nickname: "Sprout3",
-      },
-      {
         pot_plant_id: 236,
         plant_nickname: "Sprout4",
       },
       {
-        pot_plant_id: 237,
-        plant_nickname: "Sprout5",
+        pot_plant_id: 236,
+        plant_nickname: "Sprout4",
       },
     ],
   };

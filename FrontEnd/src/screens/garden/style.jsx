@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { COLORS } from "../../constants/theme";
+import { COLORS, SIZES } from "../../constants/theme";
 
 const styles = StyleSheet.create({
   container: {
@@ -82,6 +82,9 @@ const styles = StyleSheet.create({
     marginVertical: 40,
   },
   trashCanMargin: {
+    position: "absolute",
+    bottom: 10,
+    right: 10,
     alignItems: "flex-end",
   },
   imgSize: {
@@ -90,6 +93,14 @@ const styles = StyleSheet.create({
   },
   alignCenterContainer: {
     alignItems: "center",
+  },
+  plantContainer: {
+    height: SIZES.height - 20,
+  },
+  gardenEmptyResize: {
+    width: 130,
+    height: 170,
+    opacity: 0.7,
   },
 });
 
