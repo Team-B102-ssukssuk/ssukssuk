@@ -8,9 +8,9 @@ import java.util.List;
 @Data
 public class InfoResponseDto {
     private String nickname;
-    private Integer myPlantCount;
-    private Integer gardenCount;
-    private Integer collectionCount;
+    private int myPlantCount;
+    private int gardenCount;
+    private int collectionCount;
     private List<UserBadgeResponseDto> badges;
     public void addMyPlantCount() {
         this.myPlantCount++;

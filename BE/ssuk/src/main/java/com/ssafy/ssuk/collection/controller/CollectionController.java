@@ -23,6 +23,7 @@ public class CollectionController {
     @GetMapping("")
     public ResponseEntity<ResponseDto> searchCollections(@RequestAttribute Integer userId) {
         // user확인안했넹...
+        // 아 상관없나??
         List<CollectionSearchResponseDto> returnDto = collectionService.findAllByUserId(userId);
         return new ResponseEntity<>(new ResponseDto("ok", "collections", returnDto), HttpStatus.OK);
     }

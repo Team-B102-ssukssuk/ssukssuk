@@ -2,6 +2,7 @@ package com.ssafy.ssuk.user.controller;
 
 import com.ssafy.ssuk.badge.dto.response.UserBadgeResponseDto;
 import com.ssafy.ssuk.badge.service.BadgeService;
+import com.ssafy.ssuk.collection.service.CollectionService;
 import com.ssafy.ssuk.plant.domain.Garden;
 import com.ssafy.ssuk.plant.dto.response.ResponseDto;
 import com.ssafy.ssuk.plant.service.GardenService;
@@ -30,6 +31,7 @@ public class UserController {
     private final UserService userService;
     private final GardenService gardenService;
     private final BadgeService badgeService;
+    private final CollectionService collectionService;
 
 //    @Autowired
 //    public UserController(UserService userService) {
@@ -87,7 +89,8 @@ public class UserController {
         List<UserBadgeResponseDto> badges = badgeService.findAllWithUserId(userId);
         infoResponseDto.setBadges(badges);
 
-
+        int collectionCount = collectionService.findAllByUserId(userId).size();
+        infoResponseDto.setCollectionCount(collectionCount);
 
         return new ResponseEntity<>(new ResponseDto("ok", "information", infoResponseDto), HttpStatus.OK);
     }
