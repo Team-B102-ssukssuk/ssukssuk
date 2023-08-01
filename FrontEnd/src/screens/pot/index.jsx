@@ -19,19 +19,23 @@ const PotScreen = ({ navigation }) => {
     data: [
       {
         pot_plant_id: 232,
-        plant_nickname: "Sprout3",
+        plant_nickname: "Sprout1",
       },
       {
         pot_plant_id: 234,
-        plant_nickname: "Sprout4",
+        plant_nickname: "Sprout2",
       },
       {
         pot_plant_id: 235,
-        plant_nickname: "Sprout4",
+        plant_nickname: "Sprout3",
       },
       {
         pot_plant_id: 236,
         plant_nickname: "Sprout4",
+      },
+      {
+        pot_plant_id: 237,
+        plant_nickname: "Sprout5",
       },
     ],
   };
@@ -59,7 +63,7 @@ const PotScreen = ({ navigation }) => {
         const plant = response.data[i];
         pots.push(
           <View
-            key={plant.pot_plant_id}
+            key={`pot_${plant.pot_plant_id}`}
             style={styles[`absoultPosition${i + 1}`]}
           >
             {isDeleteIconVisible ? (
