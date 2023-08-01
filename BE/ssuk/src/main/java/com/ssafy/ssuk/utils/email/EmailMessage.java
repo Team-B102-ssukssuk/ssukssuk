@@ -1,0 +1,77 @@
+package com.ssafy.ssuk.utils.email;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.mail.MailException;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Component;
+
+import javax.mail.Message;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import java.util.Random;
+
+@Component
+@Slf4j
+@RequiredArgsConstructor
+public class EmailMessage {
+    private static String randomCode;
+    private final JavaMailSender javaMailSender;
+
+    public String sendMail(String to) throws Exception{
+        MimeMessage mimeMessage = createMessage(to);
+        System.out.println(mimeMessage);
+        try {
+            javaMailSender.send(mimeMessage);
+        } catch (MailException e) {
+            e.printStackTrace();
+            throw new IllegalArgumentException();
+        }
+        return randomCode;
+    }
+
+    public MimeMessage createMessage(String to) throws Exception {
+        MimeMessage message = javaMailSender.createMimeMessage();
+        randomCode = createCode(8);
+        message.addRecipients(Message.RecipientType.TO, to); // 보내는 대상
+        message.setSubject("[쑥쑥] 이메일 인증을 위한 인증코드 발송"); // 제목
+//        String msg = "";
+//        msg += "인증 코드입니다.";
+//        msg += randomCode;
+
+        String msg="";
+        msg += "<div style='margin:100px;'>";
+        msg += "<h1> 안녕하세요 쑥쑥입니다. </h1>";
+        msg += "<br>";
+        msg += "<p>아래 인증코드를 입력해주세요.<p>";
+        msg += "<p>감사합니다.<p>";
+        msg += "<br>";
+        msg += "<div align='center' style='border:1px solid black; font-family:verdana';>";
+        msg += "<h3 style='color:blue;'>이메일 인증 코드</h3>";
+        msg += "<div style='font-size:130%'>";
+        msg += "CODE : <strong>";
+        msg += randomCode+"</strong><div><br/> ";
+        msg += "</div>";
+
+        message.setText(msg, "UTF-8", "HTML");
+        message.setFrom(new InternetAddress("ssukssuk102@gmail.com", "ssukssuk"));
+
+        return message;
+    }
+
+    private String createCode(int codeLength) {
+        Random random = new Random();
+        StringBuffer key = new StringBuffer();
+
+        for (int i = 0; i < codeLength; i++) {
+            int index = random.nextInt(4);
+
+            switch (index) {
+                case 0: key.append((char) ((int) random.nextInt(26) + 97)); break;
+                case 1: key.append((char) ((int) random.nextInt(26) + 97)); break;
+                default: key.append(random.nextInt(9));
+            }
+        }
+        return key.toString();
+    }
+}

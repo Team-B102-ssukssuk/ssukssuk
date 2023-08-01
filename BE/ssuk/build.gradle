@@ -35,9 +35,6 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	//testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:2.3.1'
 	runtimeOnly 'com.mysql:mysql-connector-j'
-	// 메일 발송 라이브러리
-	implementation 'org.springframework.boot:spring-boot-starter-mail'
-
 	//dto entity mapper 관련
 	implementation 'org.mapstruct:mapstruct:1.4.2.Final'
 	annotationProcessor "org.mapstruct:mapstruct-processor:1.4.2.Final"
@@ -48,6 +45,17 @@ dependencies {
 	)
 	//테스트에서 사용할 경우
 	//testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+
+	// 메일 발송 라이브러리
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+	// sercurity
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	// JWT
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+	// redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 }
 
 tasks.named('test') {
