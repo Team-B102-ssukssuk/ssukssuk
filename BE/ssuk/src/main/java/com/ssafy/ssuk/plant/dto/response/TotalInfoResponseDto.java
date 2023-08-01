@@ -3,6 +3,8 @@ package com.ssafy.ssuk.plant.dto.response;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 public class TotalInfoResponseDto {
     @JsonIgnore // 얘도 출력시키고 싶지 않아..
@@ -14,6 +16,7 @@ public class TotalInfoResponseDto {
     private String characterName;
     private String characterComment;
     private String characterImage;
+    private LocalDateTime createdDate;
 
     public TotalInfoResponseDto(Integer plantId, Integer level, String plantGuide, Integer waterTerm, Integer waterAmount, String characterName, String characterComment, String characterImage) {
         this.plantId = plantId;
@@ -24,5 +27,17 @@ public class TotalInfoResponseDto {
         this.characterName = characterName;
         this.characterComment = characterComment;
         this.characterImage = characterImage;
+    }
+
+    public TotalInfoResponseDto(Integer plantId, Integer level, String plantGuide, Integer waterTerm, Integer waterAmount, String characterName, String characterComment, String characterImage, LocalDateTime createdDate) {
+        this.plantId = plantId;
+        this.level = level;
+        this.plantGuide = plantGuide;
+        this.waterTerm = waterTerm;
+        this.waterAmount = waterAmount;
+        this.characterName = characterName;
+        this.characterComment = characterComment;
+        this.characterImage = characterImage;
+        this.createdDate = createdDate;
     }
 }

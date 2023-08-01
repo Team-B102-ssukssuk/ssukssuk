@@ -1,9 +1,11 @@
 package com.ssafy.ssuk.badge.service;
 
-import com.ssafy.ssuk.badge.Badge;
+import com.ssafy.ssuk.badge.domain.Badge;
+import com.ssafy.ssuk.badge.domain.UserBadge;
 import com.ssafy.ssuk.badge.dto.request.BadgeRegisterRequestDto;
 import com.ssafy.ssuk.badge.dto.request.BadgeUpdateRequestDto;
 import com.ssafy.ssuk.badge.dto.response.BadgeSearchResponseDto;
+import com.ssafy.ssuk.badge.dto.response.UserBadgeResponseDto;
 import com.ssafy.ssuk.badge.repository.BadgeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -66,5 +70,17 @@ public class BadgeServiceImpl implements BadgeService {
             return;
         }
         badge.modify(badgeUpdateRequestDto);
+    }
+
+    @Override
+    public List<UserBadgeResponseDto> findAllWithUserId(Integer userId) {
+
+        Map<Integer, List<Badge>> badgeMap = badgeRepository.findAll().stream().collect(Collectors.groupingBy(b -> b.getId()));
+        Map<Integer, List<UserBadge>> userBadgeMap = badgeRepository.findAllWithUserId(userId).stream().collect(Collectors.groupingBy(ub -> ub.getBadge().getId()));
+
+        return badgeMap.keySet()
+                .stream()
+                .map(key -> new UserBadgeResponseDto(badgeMap.get(key), userBadgeMap.get(key)))
+                .collect(Collectors.toList());
     }
 }

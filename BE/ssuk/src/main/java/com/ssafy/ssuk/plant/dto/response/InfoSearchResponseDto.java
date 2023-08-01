@@ -1,4 +1,4 @@
-package com.ssafy.ssuk.plant.dto.Response;
+package com.ssafy.ssuk.plant.dto.response;
 
 import com.ssafy.ssuk.plant.domain.Info;
 import lombok.Data;

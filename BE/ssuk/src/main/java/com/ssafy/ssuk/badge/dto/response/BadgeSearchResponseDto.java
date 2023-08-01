@@ -1,6 +1,6 @@
 package com.ssafy.ssuk.badge.dto.response;
 
-import com.ssafy.ssuk.badge.Badge;
+import com.ssafy.ssuk.badge.domain.Badge;
 import lombok.Data;
 
 @Data

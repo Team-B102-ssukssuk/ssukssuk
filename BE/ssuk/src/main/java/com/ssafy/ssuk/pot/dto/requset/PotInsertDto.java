@@ -9,6 +9,5 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PotInsertDto {
-    private Integer userId;
     private String serialNumber;
 }

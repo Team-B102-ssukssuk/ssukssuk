@@ -1,6 +1,7 @@
 package com.ssafy.ssuk.pot.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ssafy.ssuk.plant.domain.Garden;
 import com.ssafy.ssuk.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,6 +10,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static javax.persistence.FetchType.LAZY;
 
@@ -40,4 +42,7 @@ public class Pot {
 
     @Column(name="IS_REGISTED")
     private Boolean isRegisted;
+
+    @OneToMany(mappedBy = "pot")
+    private List<Garden> garden;
 }

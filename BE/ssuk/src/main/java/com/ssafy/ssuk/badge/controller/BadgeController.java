@@ -3,6 +3,7 @@ package com.ssafy.ssuk.badge.controller;
 import com.ssafy.ssuk.badge.dto.request.BadgeRegisterRequestDto;
 import com.ssafy.ssuk.badge.dto.request.BadgeUpdateRequestDto;
 import com.ssafy.ssuk.badge.dto.response.BadgeSearchResponseDto;
+import com.ssafy.ssuk.badge.dto.response.UserBadgeResponseDto;
 import com.ssafy.ssuk.badge.service.BadgeService;
 import com.ssafy.ssuk.plant.dto.response.ResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -68,5 +69,11 @@ public class BadgeController {
         badgeService.modifyBadge(badgeUpdateRequestDto);
 
         return new ResponseEntity<>(new ResponseDto(SUCCESS), HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/test")
+    public ResponseEntity<ResponseDto> searchUserBadges(@RequestAttribute Integer userId) {
+        List<UserBadgeResponseDto> collect = badgeService.findAllWithUserId(userId);
+        return new ResponseEntity<>(new ResponseDto(SUCCESS, "userBadges", collect), HttpStatus.BAD_REQUEST);
     }
 }

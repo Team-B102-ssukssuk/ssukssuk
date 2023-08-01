@@ -2,10 +2,14 @@ package com.ssafy.ssuk.pot.service;
 
 import com.ssafy.ssuk.exception.dto.CustomException;
 import com.ssafy.ssuk.exception.dto.ErrorCode;
+import com.ssafy.ssuk.plant.domain.Garden;
 import com.ssafy.ssuk.pot.domain.Pot;
 import com.ssafy.ssuk.pot.dto.requset.PotInsertDto;
+import com.ssafy.ssuk.pot.dto.response.PotResponseDto;
 import com.ssafy.ssuk.pot.repository.PotRepository;
 import com.ssafy.ssuk.user.domain.User;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.jdbc.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@Slf4j
 public class PotServiceImpl implements PotService {
 
     PotRepository potRepository;
@@ -24,14 +29,18 @@ public class PotServiceImpl implements PotService {
 
     //화분 조회 (유저가 가지고 있는 전체 화분 조회)
     @Override
-    public List<Pot> findByUser_Id(Integer user_id) {
+    public List<PotResponseDto> findByUser_Id(Integer user_id) {
+        List<PotResponseDto> result = potRepository.findByUser_Id(user_id);
 
-        return potRepository.findByUser_Id(user_id);
+        return result;
     }
 
     @Override
     public void save(Pot pot) throws CustomException {
         Pot findPot = potRepository.findBySerialNumber(pot.getSerialNumber());
+
+        if(findPot == null)
+            throw new CustomException(ErrorCode.INVALID_SERIAL_NUMBER);
 
         //개선의 여지, user안에 내부적으로 클래스 만들까?
         //db에서 유저를 조회해서 들고올까? 왜 와이? -> 유저 아이디 잘못된거 날라올수도있음.
@@ -53,17 +62,18 @@ public class PotServiceImpl implements PotService {
 
     //화분 삭제
     @Override
-    public void delete(PotInsertDto potInsertDto) {
-        Pot findPot = potRepository.selectPotBySerialNumAndUserId(potInsertDto.getUserId(),potInsertDto.getSerialNumber());
+    public void delete(Integer potId, Integer userId) {
+        Pot findPot = potRepository.selectPotBySerialNumAndUserId(potId, userId);
 
-        if(findPot != null)
-        {
+        if(findPot != null) {
             findPot.setUser(null);
+            findPot.setRegistedDate(null);
             findPot.setIsRegisted(false);
             potRepository.save(findPot);
         }
         else { // 예외처리
-
+            throw new CustomException(ErrorCode.POT_NOT_FOUND);
         }
     }
+
 }

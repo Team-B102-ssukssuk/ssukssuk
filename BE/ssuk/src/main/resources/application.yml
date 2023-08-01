@@ -4,12 +4,25 @@ spring:
     url: jdbc:mysql://localhost:3306/ssuk_ssuk?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
     #url: jdbc:mysql://localhost:3306/ssuk_ssuk?useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
     username: ssafy
-#    password: ssafy
+    #password: ssafy
     password: b102ssuk
+
   mail:
     host: smtp.gmail.com
     port: 587
+    username: ssukssuk102
+    password: bodxihtuxhwrzcfb
+    properties:
+      mail:
+        smtp:
+          auth: true
+          timeout: 5000
+          starttls:
+            enable: true
 
+  redis:
+    host: localhost
+    port: 6379
 
   jpa:
     database: mysql   # 추가 해준 부분
@@ -25,10 +38,12 @@ spring:
       hibernate.format_sql: true
       dialect: org.hibernate.dialect.MySQL8InnoDBDialect
 
-
 logging:
   level:
+#    root: debug
     org.hibernate.SQL: debug
     # 일단 ssuk패키지 debug로 설정해놓을게요
     com.ssafy.ssuk: debug
 
+jwt:
+  secret: thefirstprojectssukssuk2fighting

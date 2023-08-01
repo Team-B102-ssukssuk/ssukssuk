@@ -16,9 +16,13 @@ public enum ErrorCode {
     INVALID_AUTH_TOKEN(HttpStatus.UNAUTHORIZED, "권한 정보가 없는 토큰입니다."),
 
     //추가할 것들은 여기에 작성해주세요.
+    //화분
+    INVALID_SERIAL_NUMBER(HttpStatus.BAD_REQUEST, "유효하지 않은 시리얼 넘버입니다."),
+    POT_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 화분이 유효하지 않습니다."),
 
     //기타
     DUPLICATE_RESOURCE(HttpStatus.CONFLICT, "데이터가 이미 존재합니다."),
+    INPUT_EXCEPTION(HttpStatus.BAD_REQUEST, "입력값을 확인하세요")
     ;
 
     private final HttpStatus httpStatus;
