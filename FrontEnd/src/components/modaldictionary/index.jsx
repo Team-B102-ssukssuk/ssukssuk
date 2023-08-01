@@ -4,6 +4,7 @@ import Modal from "react-native-modal";
 import CookieRunBold from "../common/CookieRunBold";
 import ModalInfo from "../modalInfo";
 import styles from "./style";
+import { ScrollView } from "react-native-gesture-handler";
 
 const ModalDictionary = ({ isVisible, onClose }) => {
   const [isContentModalVisible, setContentModalVisible] = useState(false);
@@ -77,90 +78,94 @@ const ModalDictionary = ({ isVisible, onClose }) => {
         </View>
         {/* 모달 내용 */}
         <CookieRunBold style={styles.modalText}>도감</CookieRunBold>
-        <View>
-          <View style={styles.content}>
-            <CookieRunBold style={styles.dictionaryText}>상추</CookieRunBold>
-            <View style={styles.dictionaryContainer}>
-              <TouchableOpacity onPress={toggleContentModal}>
-                <Image
-                  source={require("../../assets/img/silhouette.png")}
-                  resizeMode="contain"
-                  style={styles.emptyImg}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <Image
-                  source={require("../../assets/img/silhouette.png")}
-                  resizeMode="contain"
-                  style={styles.emptyImg}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <Image
-                  source={require("../../assets/img/silhouette.png")}
-                  resizeMode="contain"
-                  style={styles.emptyImg}
-                />
-              </TouchableOpacity>
+        <ScrollView>
+          <View>
+            <View style={styles.content}>
+              <CookieRunBold style={styles.dictionaryText}>상추</CookieRunBold>
+              <View style={styles.dictionaryContainer}>
+                <TouchableOpacity onPress={toggleContentModal}>
+                  <Image
+                    source={require("../../assets/img/silhouette.png")}
+                    resizeMode="contain"
+                    style={styles.emptyImg}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <Image
+                    source={require("../../assets/img/silhouette.png")}
+                    resizeMode="contain"
+                    style={styles.emptyImg}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <Image
+                    source={require("../../assets/img/silhouette.png")}
+                    resizeMode="contain"
+                    style={styles.emptyImg}
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-        </View>
-        <View>
-          <View style={styles.content}>
-            <CookieRunBold style={styles.dictionaryText}>비밀임</CookieRunBold>
-            <View style={styles.dictionaryContainer}>
-              <TouchableOpacity>
-                <Image
-                  source={require("../../assets/img/silhouette.png")}
-                  resizeMode="contain"
-                  style={styles.emptyImg}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <Image
-                  source={require("../../assets/img/silhouette.png")}
-                  resizeMode="contain"
-                  style={styles.emptyImg}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <Image
-                  source={require("../../assets/img/silhouette.png")}
-                  resizeMode="contain"
-                  style={styles.emptyImg}
-                />
-              </TouchableOpacity>
+          <View>
+            <View style={styles.content}>
+              <CookieRunBold style={styles.dictionaryText}>
+                비밀임
+              </CookieRunBold>
+              <View style={styles.dictionaryContainer}>
+                <TouchableOpacity>
+                  <Image
+                    source={require("../../assets/img/silhouette.png")}
+                    resizeMode="contain"
+                    style={styles.emptyImg}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <Image
+                    source={require("../../assets/img/silhouette.png")}
+                    resizeMode="contain"
+                    style={styles.emptyImg}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <Image
+                    source={require("../../assets/img/silhouette.png")}
+                    resizeMode="contain"
+                    style={styles.emptyImg}
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-        </View>
-        <View>
-          <View style={styles.content}>
-            <CookieRunBold style={styles.dictionaryText}>비밀</CookieRunBold>
-            <View style={styles.dictionaryContainer}>
-              <TouchableOpacity onPress={toggleContentModal}>
-                <Image
-                  source={require("../../assets/img/silhouette.png")}
-                  resizeMode="contain"
-                  style={styles.emptyImg}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <Image
-                  source={require("../../assets/img/silhouette.png")}
-                  resizeMode="contain"
-                  style={styles.emptyImg}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <Image
-                  source={require("../../assets/img/silhouette.png")}
-                  resizeMode="contain"
-                  style={styles.emptyImg}
-                />
-              </TouchableOpacity>
+          <View>
+            <View style={styles.content}>
+              <CookieRunBold style={styles.dictionaryText}>비밀</CookieRunBold>
+              <View style={styles.dictionaryContainer}>
+                <TouchableOpacity onPress={toggleContentModal}>
+                  <Image
+                    source={require("../../assets/img/silhouette.png")}
+                    resizeMode="contain"
+                    style={styles.emptyImg}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <Image
+                    source={require("../../assets/img/silhouette.png")}
+                    resizeMode="contain"
+                    style={styles.emptyImg}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <Image
+                    source={require("../../assets/img/silhouette.png")}
+                    resizeMode="contain"
+                    style={styles.emptyImg}
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-        </View>
+        </ScrollView>
       </View>
 
       <ModalInfo

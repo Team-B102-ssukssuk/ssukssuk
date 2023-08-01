@@ -6,10 +6,35 @@ import { ScrollView } from "react-native-gesture-handler";
 import CookieRunBold from "../../components/common/CookieRunBold";
 import ModalPlantDelete from "../../components/modalplantdelete";
 import ModalPlantRegist from "../../components/modalplantregist";
+import * as Animatable from "react-native-animatable";
 
 const PotScreen = ({ navigation }) => {
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
   const [isRegistModalVisible, setRegistModalVisible] = useState(false);
+  const [isDeleteIconVisible, setDeleteIconVisible] = useState(false);
+
+  const response = {
+    message: "OK",
+    status: "200",
+    data: [
+      {
+        pot_plant_id: 232,
+        plant_nickname: "Sprout3",
+      },
+      {
+        pot_plant_id: 234,
+        plant_nickname: "Sprout4",
+      },
+      {
+        pot_plant_id: 235,
+        plant_nickname: "Sprout4",
+      },
+      {
+        pot_plant_id: 236,
+        plant_nickname: "Sprout4",
+      },
+    ],
+  };
 
   const toggleDeleteModal = () => {
     setDeleteModalVisible(!isDeleteModalVisible);
@@ -19,9 +44,89 @@ const PotScreen = ({ navigation }) => {
     setRegistModalVisible(!isRegistModalVisible);
   };
 
+  const visibleIcon = () => {
+    setDeleteIconVisible(!isDeleteIconVisible);
+  };
+
   const GoMain = () => {
-    toggleRegistModal();
     navigation.navigate("Main");
+  };
+
+  const renderPotsOnShelve = (startIndex, endIndex) => {
+    const pots = [];
+    for (let i = startIndex; i < endIndex; i++) {
+      if (i < response.data.length) {
+        const plant = response.data[i];
+        pots.push(
+          <View
+            key={plant.pot_plant_id}
+            style={styles[`absoultPosition${i + 1}`]}
+          >
+            {isDeleteIconVisible ? (
+              <Animatable.View
+                animation="pulse"
+                duration={700}
+                iterationCount="infinite"
+              >
+                <TouchableOpacity
+                  style={styles.potSign}
+                  onPress={toggleDeleteModal}
+                >
+                  <View style={styles.potName}>
+                    <CookieRunBold style={styles.potText}>
+                      {plant.plant_nickname}
+                    </CookieRunBold>
+                  </View>
+                  <View style={styles.potDelete}>
+                    <View>
+                      <Icon2 name="close" style={styles.deleteIcon} />
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              </Animatable.View>
+            ) : (
+              <View style={styles.potSign}>
+                <View style={styles.potName}>
+                  <CookieRunBold style={styles.potText}>
+                    {plant.plant_nickname}
+                  </CookieRunBold>
+                </View>
+              </View>
+            )}
+
+            <TouchableOpacity style={styles.gardenCharacter} onPress={GoMain}>
+              <Image
+                source={require("../../assets/img/pot.png")}
+                resizeMode="contain"
+                style={styles.potResize}
+              />
+            </TouchableOpacity>
+          </View>
+        );
+      } else if (i === response.data.length) {
+        // If there are no more pots, display an empty transparent pot
+        const transparentPotStyle = {
+          ...styles[`absoultPosition${i + 1}`],
+          opacity: 0.5, // Set opacity to make it transparent
+        };
+        pots.push(
+          <View key={`empty_pot_${endIndex}`} style={transparentPotStyle}>
+            <TouchableOpacity
+              style={styles.gardenCharacter}
+              onPress={toggleRegistModal}
+            >
+              <Image
+                source={require("../../assets/img/pot.png")}
+                resizeMode="contain"
+                style={styles.potResize}
+              />
+            </TouchableOpacity>
+          </View>
+        );
+      }
+    }
+
+    return pots;
   };
 
   const handleDelete = () => {
@@ -50,32 +155,8 @@ const PotScreen = ({ navigation }) => {
           </View>
           <View style={styles.alignCenterContainer}>
             <View style={styles.reContainer}>
-              <View>
-                <View style={styles.absoultPosition1}>
-                  <View style={styles.potSign}>
-                    <TouchableOpacity style={styles.potName}>
-                      <CookieRunBold style={styles.potText}>
-                        식물애칭
-                      </CookieRunBold>
-                    </TouchableOpacity>
-                    <View style={styles.potDelete}>
-                      <TouchableOpacity onPress={toggleDeleteModal}>
-                        <Icon2 name="close" style={styles.deleteIcon} />
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-
-                  <TouchableOpacity
-                    style={styles.gardenCharacter}
-                    onPress={GoMain}
-                  >
-                    <Image
-                      source={require("../../assets/img/pot.png")}
-                      resizeMode="contain"
-                      style={styles.potResize}
-                    />
-                  </TouchableOpacity>
-                </View>
+              <View style={styles.gardenContainer}>
+                {renderPotsOnShelve(0, 3)}
                 <View style={styles.shelve}>
                   <Image source={require("../../assets/img/shelve.png")} />
                 </View>
@@ -84,6 +165,7 @@ const PotScreen = ({ navigation }) => {
 
             <View style={styles.reContainer}>
               <View style={styles.gardenContainer}>
+                {renderPotsOnShelve(3, 6)}
                 <View style={styles.shelve}>
                   <Image source={require("../../assets/img/shelve.png")} />
                 </View>
@@ -91,6 +173,7 @@ const PotScreen = ({ navigation }) => {
             </View>
             <View style={styles.reContainer}>
               <View style={styles.gardenContainer}>
+                {renderPotsOnShelve(6, 9)}
                 <View style={styles.shelve}>
                   <Image source={require("../../assets/img/shelve.png")} />
                 </View>
@@ -98,10 +181,12 @@ const PotScreen = ({ navigation }) => {
             </View>
           </View>
           <View style={styles.trashCanMargin}>
-            <Image
-              source={require("../../assets/img/trashCan.png")}
-              style={styles.trashCan}
-            />
+            <TouchableOpacity onPress={visibleIcon}>
+              <Image
+                source={require("../../assets/img/trashCan.png")}
+                style={styles.trashCan}
+              />
+            </TouchableOpacity>
           </View>
         </ScrollView>
       </ImageBackground>

@@ -4,6 +4,7 @@ import { COLORS } from "../../constants/theme";
 const styles = StyleSheet.create({
   modalContainer: {
     backgroundColor: COLORS.beige,
+    height: 550,
     padding: 20,
     borderRadius: 20,
     alignItems: "center",
