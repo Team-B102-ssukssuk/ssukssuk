@@ -1,5 +1,7 @@
 package com.ssafy.ssuk.pot.service;
 
+import com.ssafy.ssuk.exception.dto.CustomException;
+import com.ssafy.ssuk.exception.dto.ErrorCode;
 import com.ssafy.ssuk.pot.domain.Pot;
 import com.ssafy.ssuk.pot.dto.requset.PotInsertDto;
 import com.ssafy.ssuk.pot.repository.PotRepository;
@@ -28,7 +30,7 @@ public class PotServiceImpl implements PotService {
     }
 
     @Override
-    public void save(Pot pot) {
+    public void save(Pot pot) throws CustomException {
         Pot findPot = potRepository.findBySerialNumber(pot.getSerialNumber());
 
         //개선의 여지, user안에 내부적으로 클래스 만들까?
@@ -44,7 +46,7 @@ public class PotServiceImpl implements PotService {
             potRepository.save(findPot);
         }
         else {// 조회 후, 등록여부가 true면 등록이 불가능
-            //예외 처리
+            throw new CustomException(ErrorCode.DUPLICATE_RESOURCE);
         }
 
     }

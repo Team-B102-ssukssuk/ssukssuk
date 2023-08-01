@@ -29,7 +29,7 @@ DROP TABLE IF EXISTS `badge`;
 CREATE TABLE `badge` (
   `badge_id` int NOT NULL AUTO_INCREMENT,
   `badge_name` varchar(30) NOT NULL COMMENT '업적 이름',
-  `contition` varchar(100) NOT NULL COMMENT '업적 획득 조건 설명',
+  `badge_condition` varchar(100) NOT NULL COMMENT '업적 획득 조건 설명',
   `description` varchar(100) NOT NULL COMMENT '업적 획득 후 표시할 설명',
   `is_hidden` tinyint(1) NOT NULL DEFAULT '0' COMMENT '히든 업적 플래그(없어도 되면 말구)',
   `badge_image` varchar(40) NOT NULL COMMENT '업적 뱃지 이미지',

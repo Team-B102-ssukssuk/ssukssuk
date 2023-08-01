@@ -27,9 +27,12 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
 
         if(accessToken == null){
             log.debug("에세스토큰 없네용");
+            log.debug("그냥 userId 1로 할게요");
+            request.setAttribute("userId", 1);
             return true;
         }
         request.setAttribute("userId", Integer.parseInt(accessToken));
+        log.debug("userId={}", Integer.parseInt(accessToken));
         log.debug("JWT 인증 성공!!");
 
         return true;
