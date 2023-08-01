@@ -6,8 +6,10 @@ import Icon2 from "react-native-vector-icons/AntDesign";
 import { ScrollView } from "react-native-gesture-handler";
 import ModalPlantDelete from "../../components/modalplantdelete";
 import CookieRunBold from "../../components/common/CookieRunBold";
+import { useNavigation } from "@react-navigation/native";
 
-const GardenScreen = ({ navigation }) => {
+const GardenScreen = () => {
+  const navigation = useNavigation();
   const [gardenName] = useState("지민이네");
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
 
@@ -29,7 +31,7 @@ const GardenScreen = ({ navigation }) => {
       >
         <View style={styles.userInfoSection}>
           <View style={styles.header}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
+            <TouchableOpacity onPress={() => navigation.push("Slider")}>
               <Icon name="arrow-back-ios" size={28} color="#fff" />
             </TouchableOpacity>
           </View>

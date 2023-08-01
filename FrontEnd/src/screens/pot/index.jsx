@@ -7,8 +7,10 @@ import CookieRunBold from "../../components/common/CookieRunBold";
 import ModalPlantDelete from "../../components/modalplantdelete";
 import ModalPlantRegist from "../../components/modalplantregist";
 import * as Animatable from "react-native-animatable";
+import { useNavigation } from "@react-navigation/native";
 
-const PotScreen = ({ navigation }) => {
+const PotScreen = () => {
+  const navigation = useNavigation();
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
   const [isRegistModalVisible, setRegistModalVisible] = useState(false);
   const [isDeleteIconVisible, setDeleteIconVisible] = useState(false);
@@ -53,7 +55,7 @@ const PotScreen = ({ navigation }) => {
   };
 
   const GoMain = () => {
-    navigation.navigate("Main");
+    navigation.push("Slider");
   };
 
   const renderPotsOnShelve = (startIndex, endIndex) => {
