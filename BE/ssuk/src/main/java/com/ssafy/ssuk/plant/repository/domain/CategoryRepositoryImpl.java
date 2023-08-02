@@ -25,7 +25,7 @@ public class CategoryRepositoryImpl implements CategoryRepository {
 
     @Override
     public List<Category> findAll() {
-        return em.createQuery("select pc from Category pc", Category.class).getResultList();
+        return em.createQuery("select distinct pc from Category pc join fetch pc.plants", Category.class).getResultList();
     }
 
     @Override

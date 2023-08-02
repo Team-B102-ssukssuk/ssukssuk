@@ -1,6 +1,6 @@
 package com.ssafy.ssuk.utils.jwt;
 
-import com.ssafy.ssuk.user.domain.User;
+//import com.ssafy.ssuk.user.domain.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -10,9 +10,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.ServletRequest;
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
@@ -23,27 +26,26 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 public class JwtTokenProvider {
+
     private final Key key;
 
     public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-        this.key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+        this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public TokenInfo createToken(Authentication authentication) {
+    public TokenInfo createToken(Authentication authentication, Integer userId, String userNickname) {
         // 사용자의 권한 정보 가져오기
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
-
+        if(authorities.isEmpty())
+            authorities = null;
         Long now = (new Date()).getTime();
-        String userId = getUserIdFromAuthentication(authentication);
-        String userNickname = getUserNicknameFromAuthentication(authentication);
 
         // AccessToken 생성
         Date accessTokenExt = new Date(now + 86400000); // 24시간 후
         String accessToken = Jwts.builder()
-                .setSubject(authentication.getName())
                 .claim("auth", authorities)
                 .claim("userId", userId)
                 .claim("userNickname", userNickname)
@@ -65,47 +67,38 @@ public class JwtTokenProvider {
                 .build();
     }
 
-    private String getUserIdFromAuthentication(Authentication authentication) {
-        Object principal = authentication.getPrincipal();
-        if (principal instanceof User) {
-            return ((User)principal).getId().toString();
-        }
-        return null;
-    }
-
-    private String getUserNicknameFromAuthentication(Authentication authentication) {
-        Object principal = authentication.getPrincipal();
-        if (principal instanceof User) {
-            return ((User)principal).getNickname();
-        }
-        return null;
-    }
-
-
     // JWT 토큰을 복호화하여 토큰에 들어있는 정보를 꺼냄
-    public Authentication getAuthentication(String accessToken) {
+    public Authentication getAuthentication(String accessToken, ServletRequest request) {
+
         Claims claims = parseClaims(accessToken);
+
+        log.debug("claims={}", claims);
+        log.debug("auth={}", claims.get("auth"));
 
         if (claims.get("auth") == null) {
             throw new RuntimeException("권한 정보가 없는 토큰입니다.");
         }
 
         // Claims에서 권한 정보 가져오기
-        Collection<? extends  GrantedAuthority> authorities =
+        Collection<? extends GrantedAuthority> authorities =
                 Arrays.stream(claims.get("auth").toString().split(","))
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
         // UserDetails 객체를 만들어서 Authentication 리턴
-        UserDetails principal = new org.springframework.security.core.userdetails.User(claims.getSubject(), "", authorities);
+        UserDetails principal = new User(claims.get("userNickname",String.class), "", authorities);
+        request.setAttribute("userId", claims.get("userId"));
+        request.setAttribute("userNickname", claims.get("userNickname"));
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 
     // 토큰 검증
     public boolean validateToken(String token) {
         try {
+            log.debug("token={}", token);
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
+
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             log.info("Invalid JWT Token", e);
         } catch (ExpiredJwtException e) {
@@ -113,7 +106,7 @@ public class JwtTokenProvider {
         } catch (UnsupportedJwtException e) {
             log.info("Unsupported JWT Token", e);
         } catch (IllegalArgumentException e) {
-            log.info("JWT claims string is empty", e);
+            log.info("JWT claims string is empty.", e);
         }
         return false;
     }

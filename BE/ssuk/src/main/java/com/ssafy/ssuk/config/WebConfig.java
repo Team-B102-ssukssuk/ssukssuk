@@ -1,6 +1,6 @@
 package com.ssafy.ssuk.config;
 
-import com.ssafy.ssuk.interceptor.LoginCheckInterceptor;
+//import com.ssafy.ssuk.interceptor.LoginCheckInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -12,17 +12,17 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LoginCheckInterceptor())
-                .order(1)
-                .addPathPatterns("/**")
-                .excludePathPatterns("/user/login",
-                        "/user/signup",
-                        "/user/check/nickname/*",
-                        "/email/authentication/*",
-                        "/check/email/{email}",
-                        "/login/kakao");
-    }
+//    @Override
+//    public void addInterceptors(InterceptorRegistry registry) {
+//        registry.addInterceptor(new LoginCheckInterceptor())
+//                .order(1)
+//                .addPathPatterns("/**")
+//                .excludePathPatterns("/user/login",
+//                        "/user/signup",
+//                        "/user/check/nickname/*",
+//                        "/email/authentication/*",
+//                        "/check/email/{email}",
+//                        "/login/kakao");
+//    }
 
 }
