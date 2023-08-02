@@ -46,4 +46,4 @@ logging:
     com.ssafy.ssuk: debug
 
 jwt:
-  secret: thefirstprojectssukssuk2fighting
+  secret: "6YCyHl8E+3j0FHz13dF4lNU6YFLx/8ZKdo/Z0rZzGps="

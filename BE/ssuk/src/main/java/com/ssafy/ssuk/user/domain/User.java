@@ -2,7 +2,7 @@ package com.ssafy.ssuk.user.domain;
 
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.Entity;
@@ -11,13 +11,13 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "USER")
 @Getter
-//@NoArgsConstructor // 기본 생성자
+@NoArgsConstructor // 기본 생성자
 @AllArgsConstructor // 모든 필드 값을 파라미터로 받는 생성자
 @Setter
 public class User implements UserDetails {
@@ -50,15 +50,23 @@ public class User implements UserDetails {
     @Column(name = "PLANT_COUNT")
     private Integer plantCount = 0;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Builder.Default
-    private List<String> roles = new ArrayList<>();
+    @ManyToMany(cascade = CascadeType.MERGE)
+    @JoinTable(
+            name = "USER_ROLE",
+            joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID")},
+            inverseJoinColumns = {@JoinColumn(name = "ROLE_ID", referencedColumnName = "ROLE_ID")}
+    )
+    private List<Role> roles = new ArrayList<>();
+
+    public void addRole(Role role) {
+        roles.add(role);
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles.stream()
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+        String[] userRoles = getRoles().stream().map((role -> role.getRolename())).toArray(String[]::new);
+        Collection<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(userRoles);
+        return authorities != null ? authorities : Collections.emptyList();
     }
 
     @Override
@@ -86,12 +94,10 @@ public class User implements UserDetails {
         return true;
     }
 
-    public User() {
-    }
-
     public User(String email, String password, String nickname) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
     }
+
 }

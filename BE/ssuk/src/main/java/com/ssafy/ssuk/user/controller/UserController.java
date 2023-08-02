@@ -38,12 +38,10 @@ public class UserController {
     private final BadgeService badgeService;
     private final CollectionService collectionService;
 
-
     // 회원가입 시 이메일 인증
     @GetMapping("/email")
     public ResponseEntity<?> checkEmail
     (@RequestBody @Validated CheckEmailRequestDto checkEmailRequestDto, BindingResult bindingResult) throws Exception {
-        log.debug("휴");
         if(bindingResult.hasErrors()){
             return new ResponseEntity<>("Email is empty", HttpStatus.FORBIDDEN);
         }
@@ -65,9 +63,7 @@ public class UserController {
         if(bindingResult.hasErrors()){
             return new ResponseEntity<>("error", HttpStatus.FORBIDDEN);
         }
-        log.debug("dddd");
         userService.createUser(registerUserRequestDto);
-        log.debug("assaas");
         return new ResponseEntity<>("OK", HttpStatus.OK);
     }
 
@@ -77,11 +73,8 @@ public class UserController {
         if(bindingResult.hasErrors()){
             return new ResponseEntity<>("error", HttpStatus.FORBIDDEN);
         }
-//        String email = loginRequestDto.getEmail();
-//        String password = loginRequestDto.getPassword();
         log.debug("before token");
         TokenInfo tokenInfo = userService.login(loginRequestDto);
-        System.out.println(tokenInfo.toString());
         return new ResponseEntity<>(tokenInfo,HttpStatus.OK);
     }
 
