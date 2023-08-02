@@ -9,12 +9,35 @@ import {
 import React, { useState } from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import styles from "./style";
+import CookieRunRegular from "../../components/common/CookieRunRegular";
 
-const SignUpPasswordScreen = ({ navigation }) => {
+const SignUpPasswordScreen = ({ route, navigation }) => {
   const [password, setPassword] = useState("");
+  // const [nickname] = useState("");
   const [PasswordRe, setPasswordRe] = useState("");
   const [errorOpacity, setErrorOpacity] = useState(0);
   const [nextButtonColor, setNextButtonColor] = useState("#CACACA");
+
+  const { SignUpData } = route.params;
+  // const { email } = SignUpData;
+
+  // 세팅된 비밀번호 값이 동일하면 서버로 데이터 보내주기
+
+  const checkPassword = () => {
+    if (password === PasswordRe && password !== "") {
+      const updatedSignUpData = {
+        ...SignUpData,
+        password: password,
+      };
+      navigation.navigate("SignUpNickname", {
+        SignUpData: updatedSignUpData,
+      });
+      console.log(SignUpData);
+    } else {
+      setErrorOpacity(100);
+      console.log(SignUpData);
+    }
+  };
 
   return (
     <ImageBackground
@@ -27,7 +50,9 @@ const SignUpPasswordScreen = ({ navigation }) => {
             <TouchableOpacity onPress={() => navigation.goBack()}>
               <Icon name="arrow-back-ios" size={28} color="#fff" />
             </TouchableOpacity>
-            <Text style={styles.headerPageNumber}>회원가입 ( 2 / 3 )</Text>
+            <CookieRunRegular style={styles.headerPageNumber}>
+              회원가입 ( 2 / 3 )
+            </CookieRunRegular>
           </View>
         </View>
       </View>
@@ -55,13 +80,12 @@ const SignUpPasswordScreen = ({ navigation }) => {
         <TouchableOpacity
           style={[styles.emailNextButton, { backgroundColor: nextButtonColor }]}
           activeOpacity={0.3}
-          onPress={() => {
-            setErrorOpacity(100);
-            setNextButtonColor("#2DD0AF");
-            navigation.navigate("SignUpNickname");
-          }}
+          onPress={checkPassword}
+          // setNextButtonColor("#2DD0AF");
         >
-          <Text style={styles.emailNextButtonText}>다음</Text>
+          <CookieRunRegular style={styles.emailNextButtonText}>
+            다음
+          </CookieRunRegular>
         </TouchableOpacity>
       </View>
     </ImageBackground>
