@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ImageBackground, View, Image, TouchableOpacity } from "react-native";
 import styles from "./style";
 import Icon from "react-native-vector-icons/MaterialIcons";
@@ -8,12 +8,24 @@ import CookieRunBold from "../../components/common/CookieRunBold";
 import ModalPlantDelete from "../../components/modalplantdelete";
 import * as Animatable from "react-native-animatable";
 import { useNavigation } from "@react-navigation/native";
+import customAxios from "../../utils/axios";
 
 const GardenScreen = () => {
   const navigation = useNavigation();
   const [gardenName] = useState("지민이네");
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
   const [isDeleteIconVisible, setDeleteIconVisible] = useState(false);
+  const [isPlantData, setPlantData] = useState([]);
+
+  const getPotData = () => {
+    customAxios.get("/plant/all").then((res) => {
+      setPlantData(res.data.data.gardens);
+    });
+  };
+
+  useEffect(() => {
+    getPotData();
+  }, []);
 
   const visibleIcon = () => {
     setDeleteIconVisible(!isDeleteIconVisible);
@@ -93,7 +105,7 @@ const GardenScreen = () => {
     setDeleteModalVisible(false);
   };
 
-  const gardenPlants = response.data.gardens; // Use all the garden data from the response
+  const gardenPlants = isPlantData; // Use all the garden data from the response
 
   // Function to divide the gardenPots into rows
   const divideIntoRows = (arr, size) => {
@@ -155,7 +167,7 @@ const GardenScreen = () => {
                               <CookieRunBold
                                 style={styles.gardenCharacterNameText}
                               >
-                                {garden.plantName}
+                                {garden.plantNickname}
                                 {/* Display the plant name */}
                               </CookieRunBold>
                             </View>
@@ -183,7 +195,7 @@ const GardenScreen = () => {
                             <CookieRunBold
                               style={styles.gardenCharacterNameText}
                             >
-                              {garden.plantName}
+                              {garden.plantNickname}
                               {/* Display the plant name */}
                             </CookieRunBold>
                           </View>
