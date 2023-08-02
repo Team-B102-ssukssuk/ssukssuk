@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
   },
   modalText: {
     fontSize: 28,
-    marginBottom: 20,
+    marginBottom: 10,
     marginTop: 5,
     color: "#4C0C0C",
   },
@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
   characterSize: {
     width: 180,
     height: 180,
+    margin: 20,
   },
   PotInputBox: {
     height: 40,

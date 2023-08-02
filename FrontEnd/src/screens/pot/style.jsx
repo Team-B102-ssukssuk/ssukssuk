@@ -30,12 +30,23 @@ const styles = StyleSheet.create({
   potDelete: {
     position: "absolute",
   },
+  potEmptyDelete: {
+    position: "absolute",
+    bottom: 2,
+    right: -13,
+  },
   deleteIcon: {
     color: COLORS.white,
     padding: 5,
     backgroundColor: COLORS.Coral,
     borderRadius: 100,
     marginLeft: 65,
+  },
+  emptyDeleteIcon: {
+    color: COLORS.white,
+    padding: 5,
+    backgroundColor: COLORS.Coral,
+    borderRadius: 100,
   },
   potName: {
     width: 70,

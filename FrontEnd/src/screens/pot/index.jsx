@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ImageBackground, View, Image, TouchableOpacity } from "react-native";
 import styles from "./style";
 import Icon2 from "react-native-vector-icons/AntDesign";
@@ -8,37 +8,29 @@ import ModalPlantDelete from "../../components/modalplantdelete";
 import ModalPlantRegist from "../../components/modalplantregist";
 import * as Animatable from "react-native-animatable";
 import { useNavigation } from "@react-navigation/native";
+import customAxios from "../../utils/axios";
 
 const PotScreen = () => {
   const navigation = useNavigation();
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
   const [isRegistModalVisible, setRegistModalVisible] = useState(false);
   const [isDeleteIconVisible, setDeleteIconVisible] = useState(false);
+  const [isPotId, setPotID] = useState(0);
 
-  const response = {
-    message: "OK",
-    status: "200",
-    data: [
-      {
-        pot_plant_id: 232,
-        plant_nickname: "Sprout1",
-      },
-      {
-        pot_plant_id: 234,
-        plant_nickname: "Sprout2",
-      },
-      {
-        pot_plant_id: 236,
-        plant_nickname: "Sprout4",
-      },
-      {
-        pot_plant_id: 236,
-        plant_nickname: "Sprout4",
-      },
-    ],
+  const [isPotData, setPotData] = useState([]);
+
+  const getPotData = () => {
+    customAxios.get("/pot").then((res) => {
+      setPotData(res.data);
+    });
   };
 
-  const toggleDeleteModal = () => {
+  useEffect(() => {
+    getPotData();
+  }, []);
+
+  const toggleDeleteModal = (potId) => {
+    setPotID(potId);
     setDeleteModalVisible(!isDeleteModalVisible);
   };
 
@@ -57,55 +49,90 @@ const PotScreen = () => {
   const renderPotsOnShelve = (startIndex, endIndex) => {
     const pots = [];
     for (let i = startIndex; i < endIndex; i++) {
-      if (i < response.data.length) {
-        const plant = response.data[i];
+      if (i < isPotData.length) {
+        const plant = isPotData[i];
         pots.push(
           <View
-            key={`pot_${plant.pot_plant_id}`}
+            key={`pot_${plant.potId}`}
             style={styles[`absoultPosition${i + 1}`]}
           >
-            {isDeleteIconVisible ? (
-              <Animatable.View
-                animation="pulse"
-                duration={700}
-                iterationCount="infinite"
-              >
-                <TouchableOpacity
-                  style={styles.potSign}
-                  onPress={toggleDeleteModal}
-                >
-                  <View style={styles.potName}>
-                    <CookieRunBold style={styles.potText}>
-                      {plant.plant_nickname}
-                    </CookieRunBold>
-                  </View>
-                  <View style={styles.potDelete}>
-                    <View>
-                      <Icon2 name="close" style={styles.deleteIcon} />
+            {plant.isUse ? (
+              <>
+                {isDeleteIconVisible ? (
+                  <Animatable.View
+                    animation="pulse"
+                    duration={700}
+                    iterationCount="infinite"
+                  >
+                    <TouchableOpacity
+                      style={styles.potSign}
+                      onPress={() => toggleDeleteModal(plant.potId)}
+                    >
+                      <View style={styles.potName}>
+                        <CookieRunBold style={styles.potText}>
+                          {plant.nickname}
+                        </CookieRunBold>
+                      </View>
+                      <View style={styles.potDelete}>
+                        <View>
+                          <Icon2 name="close" style={styles.deleteIcon} />
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                  </Animatable.View>
+                ) : (
+                  <View style={styles.potSign}>
+                    <View style={styles.potName}>
+                      <CookieRunBold style={styles.potText}>
+                        {plant.nickname}
+                      </CookieRunBold>
                     </View>
                   </View>
-                </TouchableOpacity>
-              </Animatable.View>
+                )}
+              </>
             ) : (
-              <View style={styles.potSign}>
-                <View style={styles.potName}>
-                  <CookieRunBold style={styles.potText}>
-                    {plant.plant_nickname}
-                  </CookieRunBold>
-                </View>
-              </View>
+              <>
+                {isDeleteIconVisible ? (
+                  <Animatable.View
+                    animation="pulse"
+                    duration={700}
+                    iterationCount="infinite"
+                  >
+                    <TouchableOpacity
+                      style={styles.potSign}
+                      onPress={() => toggleDeleteModal(plant.potId)}
+                    >
+                      <View style={styles.potEmptyDelete}>
+                        <View>
+                          <Icon2 name="close" style={styles.emptyDeleteIcon} />
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                  </Animatable.View>
+                ) : null}
+              </>
             )}
 
-            <TouchableOpacity style={styles.gardenCharacter} onPress={GoMain}>
-              <Image
-                source={require("../../assets/img/pot.png")}
-                resizeMode="contain"
-                style={styles.potResize}
-              />
-            </TouchableOpacity>
+            {plant.isUse ? (
+              <TouchableOpacity style={styles.gardenCharacter} onPress={GoMain}>
+                <Image
+                  source={require("../../assets/img/characterBaechoo.png")}
+                  resizeMode="contain"
+                  style={styles.potResize}
+                />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity style={styles.gardenCharacter} onPress={GoMain}>
+                <Image
+                  source={require("../../assets/img/pot.png")}
+                  resizeMode="contain"
+                  style={styles.potResize}
+                />
+              </TouchableOpacity>
+            )}
           </View>
         );
-      } else if (i === response.data.length) {
+      } else if (i === isPotData.length) {
         // If there are no more pots, display an empty transparent pot
         const transparentPotStyle = {
           ...styles[`absoultPosition${i + 1}`],
@@ -131,15 +158,33 @@ const PotScreen = () => {
     return pots;
   };
 
-  const handleDelete = () => {
-    // 삭제 관련 로직
-    console.log("식물 삭제 인덱스 넣으면 바로 작동");
+  const handleDelete = (potID) => {
+    // Log the potID before deleting
+    const data = {
+      potId: potID,
+    };
+    customAxios.put("/pot", data).then(() => {
+      getPotData();
+    });
     setDeleteModalVisible(false);
   };
 
   const handleRegist = (inputValue) => {
+    const serialNumber = {
+      serialNumber: inputValue,
+    };
+
     // 등록 관련 로직
     console.log("Plant registered with ID: " + inputValue);
+    customAxios
+      .post("/pot", serialNumber)
+      .then(() => {
+        console.log("등록 성공");
+        getPotData();
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
   };
 
   return (
@@ -196,6 +241,7 @@ const PotScreen = () => {
         isVisible={isDeleteModalVisible}
         onClose={() => setDeleteModalVisible(false)}
         onDelete={handleDelete}
+        potID={isPotId}
       />
       <ModalPlantRegist
         isVisible={isRegistModalVisible}

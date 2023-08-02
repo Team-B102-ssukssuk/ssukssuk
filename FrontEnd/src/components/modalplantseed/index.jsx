@@ -1,23 +1,35 @@
 import React, { useState } from "react";
-import { View, TouchableOpacity, Image, TextInput } from "react-native";
+import { View, TouchableOpacity, Image } from "react-native";
 import Modal from "react-native-modal";
+import CustomDropdown from "../dropdown";
 import CookieRunBold from "../common/CookieRunBold";
 import styles from "./style";
 
 const ModalPlantSeed = ({ isVisible, onClose, onSeedPlant }) => {
-  const [inputValue, setInputValue] = useState("");
-
-  const handleInputChange = (text) => {
-    setInputValue(text);
-  };
+  const [selectedOption, setSelectedOption] = useState(null);
 
   const handleSeedPlant = () => {
-    // Call the onSeedPlant function and pass the input value as a parameter
-    onSeedPlant(inputValue);
-    // Reset the input value and close the modal
-    setInputValue("");
+    // Call the onSeedPlant function and pass the selected option as a parameter
+    onSeedPlant(selectedOption);
     onClose();
   };
+
+  // Create an array of options for the custom dropdown
+  const categories = [
+    {
+      name: "야채",
+      subcategories: ["토마토", "배추", "당근"],
+    },
+    {
+      name: "선인장",
+      subcategories: ["꽃 선인장", "가시 선인장", "종류 몰라", "안이"],
+    },
+    {
+      name: "꽃",
+      subcategories: ["장미", "철쭉", "붓꽃"],
+    },
+    // Add more categories as needed
+  ];
 
   return (
     <Modal
@@ -32,7 +44,7 @@ const ModalPlantSeed = ({ isVisible, onClose, onSeedPlant }) => {
       backdropTransitionOutTiming={300}
     >
       <View style={styles.modalContainer}>
-        {/* 모달 내용 */}
+        {/* Your existing modal content */}
         <CookieRunBold style={styles.modalText}>씨앗 심기</CookieRunBold>
         <View style={styles.characterSection}>
           <Image
@@ -41,19 +53,14 @@ const ModalPlantSeed = ({ isVisible, onClose, onSeedPlant }) => {
             style={styles.characterSize}
           />
         </View>
-        <CookieRunBold style={styles.characterText}>상추</CookieRunBold>
+        {/* Replace TextInput with CustomDropdown */}
         <View style={styles.modalButtonAlign}>
-          <TextInput
-            style={styles.PotInputBox}
-            onChangeText={handleInputChange}
-            value={inputValue}
-            placeholder="애칭을 입력해주세요"
-          />
+          <CustomDropdown options={categories} onSelect={setSelectedOption} />
           <TouchableOpacity
             style={[styles.SeedButton]}
             onPress={handleSeedPlant}
           >
-            <CookieRunBold style={styles.plantText}>심기</CookieRunBold>
+            <CookieRunBold style={styles.plantText}>선택</CookieRunBold>
           </TouchableOpacity>
         </View>
       </View>

@@ -5,7 +5,7 @@ import CookieRunBold from "../common/CookieRunBold";
 import CookieRunRegular from "../common/CookieRunRegular";
 import styles from "./style";
 
-const ModalPlantDelete = ({ isVisible, onClose, onDelete }) => {
+const ModalPlantDelete = ({ isVisible, onClose, onDelete, potID }) => {
   return (
     <Modal
       isVisible={isVisible}
@@ -28,7 +28,8 @@ const ModalPlantDelete = ({ isVisible, onClose, onDelete }) => {
           사라지며 복구가 불가합니다.
         </CookieRunRegular>
         <View style={styles.modalButtonAlign}>
-          <TouchableOpacity onPress={onDelete}>
+          {/* Pass the potID to the onDelete function */}
+          <TouchableOpacity onPress={() => onDelete(potID)}>
             <CookieRunBold style={styles.closeButton}>삭제</CookieRunBold>
           </TouchableOpacity>
           <TouchableOpacity onPress={onClose}>
