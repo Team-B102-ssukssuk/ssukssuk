@@ -21,7 +21,7 @@ public interface PotRepository extends JpaRepository<Pot, Integer> {
 
     //조회
     @Query(value = "select new com.ssafy.ssuk.pot.dto.response.PotResponseDto(p.id, p.user.id, p.registedDate, g.level, g.nickname, g.isUse, g.plant.id) "
-            + "from Pot p left join Garden g on g.pot.id = p.id "
+            + "from Pot p left join Garden g on g.pot.id = p.id and g.isUse != false "
             + " where p.user.id = :userId" )
     List<PotResponseDto> findByUser_Id(@Param("userId") Integer user_id);
 
