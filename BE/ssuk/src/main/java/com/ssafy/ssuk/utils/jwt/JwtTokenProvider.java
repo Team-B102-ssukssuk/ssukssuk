@@ -60,11 +60,6 @@ public class JwtTokenProvider {
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
-        System.out.println(key.toString());
-        System.out.println(key.getAlgorithm());
-        System.out.println(key.getEncoded());
-        System.out.println(key.getFormat());
-
         return TokenInfo.builder()
                 .grantType("Bearer")
                 .accessToken(accessToken)
@@ -93,20 +88,15 @@ public class JwtTokenProvider {
         // UserDetails 객체를 만들어서 Authentication 리턴
         UserDetails principal = new User(claims.get("userNickname",String.class), "", authorities);
         request.setAttribute("userId", claims.get("userId"));
+        request.setAttribute("userNickname", claims.get("userNickname"));
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 
     // 토큰 검증
     public boolean validateToken(String token) {
         try {
-            log.debug("111111111111111111111");
             log.debug("token={}", token);
-//            String[] split = token.split(" ");
-//            for (String s : split) {
-//                log.debug("split[{}]={}", s);
-//            }
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-            log.debug("222222222222222222222");
             return true;
 
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {

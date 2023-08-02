@@ -46,7 +46,7 @@ public class PlantInfoController {
     public ResponseEntity<ResponseDto> searchCategories() {
         List<CategorySearchResponseDto> collect = plantCategoryService.findPlantCategories()
                 .stream()
-                .map(pc -> new CategorySearchResponseDto(pc.getId(), pc.getName()))
+                .map(pc -> new CategorySearchResponseDto(pc.getName(), pc.getPlants()))
                 .collect(Collectors.toList());
         return new ResponseEntity<>(new ResponseDto(SUCCESS, "categories", collect), HttpStatus.OK);
     }
@@ -212,20 +212,20 @@ public class PlantInfoController {
     }
 
     @GetMapping("")
-    public ResponseEntity<ResponseDto> searchTotalInfo() {
-        List<TotalCategoryResponseDto> result = plantCategoryService.findTotalInfo();
+    public ResponseEntity<ResponseDto> searchTotalInfo(@RequestAttribute Integer userId) {
+        List<TotalCategoryResponseDto> result = plantCategoryService.findTotalInfo(userId);
         return new ResponseEntity<>(new ResponseDto(SUCCESS, "categories", result), HttpStatus.OK);
     }
 
-    @PostMapping("")
-    public ResponseEntity<ResponseDto> searchTotalInfo(@RequestBody @Validated TotalCategoryRequestDto totalCategoryRequestDto,
-                                                       BindingResult bindingResult,
-                                                       @RequestAttribute Integer userId) {
-        if(bindingResult.hasErrors()){
-            return new ResponseEntity<>(new ResponseDto("입력 확인"), HttpStatus.NOT_FOUND);
-        }
-
-        List<TotalCategoryResponseDto> result = plantCategoryService.findTotalInfo(totalCategoryRequestDto.getCategoryIds(), userId);
-        return new ResponseEntity<>(new ResponseDto(SUCCESS, "categories", result), HttpStatus.OK);
-    }
+//    @PostMapping("")
+//    public ResponseEntity<ResponseDto> searchTotalInfo(@RequestBody @Validated TotalCategoryRequestDto totalCategoryRequestDto,
+//                                                       BindingResult bindingResult,
+//                                                       @RequestAttribute Integer userId) {
+//        if(bindingResult.hasErrors()){
+//            return new ResponseEntity<>(new ResponseDto("입력 확인"), HttpStatus.NOT_FOUND);
+//        }
+//
+//        List<TotalCategoryResponseDto> result = plantCategoryService.findTotalInfo(userId);
+//        return new ResponseEntity<>(new ResponseDto(SUCCESS, "categories", result), HttpStatus.OK);
+//    }
 }

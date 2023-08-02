@@ -79,7 +79,7 @@ public class UserController {
     }
 
     @GetMapping("/info")
-    public ResponseEntity<ResponseDto> searchUserInfo(@RequestAttribute Integer userId) {
+    public ResponseEntity<ResponseDto> searchUserInfo(@RequestAttribute Integer userId, @RequestAttribute String userNickname) {
         // 닉네임이 토큰에 없다고 가정
 //        User user = userService.findById(userId);
 //        if(user == null){
@@ -88,8 +88,7 @@ public class UserController {
 
         InfoResponseDto infoResponseDto = new InfoResponseDto();
 
-//        infoResponseDto.setNickname(user.getNickname());
-        infoResponseDto.setNickname("security...");
+        infoResponseDto.setNickname(userNickname);
 
         gardenService.findAllByUserId(userId).forEach(g -> {
             if(g.getIsUse()) infoResponseDto.addMyPlantCount();

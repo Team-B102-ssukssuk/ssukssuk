@@ -35,8 +35,8 @@ public class CategoryQueryRepositoryImpl implements CategoryQueryRepository {
      * 아래 만들어 둔거 아까워서 만들어둠
      */
     @Override
-    public List<TotalCategoryResponseDto> findTotalInfo(List<Integer> catergoryIds, int userId) {
-        List<TotalCategoryResponseDto> categories = findCategories(catergoryIds);
+    public List<TotalCategoryResponseDto> findTotalInfo(int userId) {
+        List<TotalCategoryResponseDto> categories = findCategories();
         List<Integer> categoryIds = categories.stream().map(c -> c.getCategoryId()).collect(Collectors.toList());
         List<TotalPlantResponseDto> plants = findPlants(categoryIds);
         List<Integer> plantIds = plants.stream().map(p -> p.getPlantId()).collect(Collectors.toList());

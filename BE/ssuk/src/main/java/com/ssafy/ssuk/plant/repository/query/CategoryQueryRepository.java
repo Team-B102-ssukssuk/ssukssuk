@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface CategoryQueryRepository {
     List<TotalCategoryResponseDto> findTotalInfo();
-    List<TotalCategoryResponseDto> findTotalInfo(List<Integer> catergoryIds, int userId);
+    List<TotalCategoryResponseDto> findTotalInfo(int userId);
 }

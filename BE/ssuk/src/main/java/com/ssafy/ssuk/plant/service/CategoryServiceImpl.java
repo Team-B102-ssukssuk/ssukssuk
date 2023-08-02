@@ -60,7 +60,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<TotalCategoryResponseDto> findTotalInfo(List<Integer> categoryIds, Integer userId) {
-        return categoryQueryRepository.findTotalInfo(categoryIds, userId);
+    public List<TotalCategoryResponseDto> findTotalInfo(Integer userId) {
+        return categoryQueryRepository.findTotalInfo(userId);
     }
 }
