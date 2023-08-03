@@ -43,6 +43,6 @@ public class SensorSokcetController {
         Measurement measurement = measurementMapper.MessageDtoToMeasurement(message);
         measurementService.insertMeasurement(measurement);
 
-        template.convertAndSend("/sub/socket/room/" + message.getSerialNumber(), message);
+        //template.convertAndSend("/sub/socket/room/" + message.getSerialNumber(), message);
     }
 }
