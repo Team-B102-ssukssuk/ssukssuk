@@ -9,8 +9,10 @@ import ModalPlantRegist from "../../components/modalplantregist";
 import * as Animatable from "react-native-animatable";
 import { useNavigation } from "@react-navigation/native";
 import customAxios from "../../utils/axios";
+import { connect } from "react-redux";
+import { storePotID } from "../../redux/action";
 
-const PotScreen = () => {
+const PotScreen = (props) => {
   const navigation = useNavigation();
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
   const [isRegistModalVisible, setRegistModalVisible] = useState(false);
@@ -42,7 +44,9 @@ const PotScreen = () => {
     setDeleteIconVisible(!isDeleteIconVisible);
   };
 
-  const GoMain = () => {
+  const GoMain = (potId) => {
+    // Store the potID in Redux using the action
+    props.storePotID(potId);
     navigation.push("Slider");
   };
 
@@ -51,6 +55,7 @@ const PotScreen = () => {
     for (let i = startIndex; i < endIndex; i++) {
       if (i < isPotData.length) {
         const plant = isPotData[i];
+        const potId = plant.potId;
         pots.push(
           <View
             key={`pot_${plant.potId}`}
@@ -114,7 +119,10 @@ const PotScreen = () => {
             )}
 
             {plant.isUse ? (
-              <TouchableOpacity style={styles.gardenCharacter} onPress={GoMain}>
+              <TouchableOpacity
+                style={styles.gardenCharacter}
+                onPress={() => GoMain(potId)}
+              >
                 <Image
                   source={require("../../assets/img/characterBaechoo.png")}
                   resizeMode="contain"
@@ -122,7 +130,10 @@ const PotScreen = () => {
                 />
               </TouchableOpacity>
             ) : (
-              <TouchableOpacity style={styles.gardenCharacter} onPress={GoMain}>
+              <TouchableOpacity
+                style={styles.gardenCharacter}
+                onPress={() => GoMain(potId)}
+              >
                 <Image
                   source={require("../../assets/img/pot.png")}
                   resizeMode="contain"
@@ -254,4 +265,4 @@ const PotScreen = () => {
   );
 };
 
-export default PotScreen;
+export default connect(null, { storePotID })(PotScreen);

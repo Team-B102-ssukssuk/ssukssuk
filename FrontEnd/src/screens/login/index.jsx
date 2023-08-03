@@ -67,7 +67,7 @@ const LoginScreen = ({ navigation }) => {
       await AsyncStorage.setItem("accessToken", accessToken);
       await AsyncStorage.setItem("refreshToken", refreshToken);
       const value = await AsyncStorage.getItem("accessToken");
-
+      navigation.navigate("Pot");
       console.log(value);
     } catch (error) {
       console.error("서버에서 데이터를 받아오는데 실패했습니다:", error);

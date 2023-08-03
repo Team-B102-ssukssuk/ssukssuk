@@ -7,14 +7,19 @@ import ModalMap from "../../components/modalmap";
 import ModalDictionary from "../../components/modaldictionary";
 import styles from "./style";
 import { useNavigation } from "@react-navigation/native";
+import { connect } from "react-redux";
 
-const MainScreen = () => {
+const MainScreen = (props) => {
   const navigation = useNavigation();
   const [isSettingModalVisible, setSettingModalVisible] = useState(false);
   const [isCharacterModalVisible, setCharacterModalVisible] = useState(false);
   const [isOpenMapModalVisible, setIsOpenMapModalVisible] = useState(false);
   const [isDictionaryModalVisible, setIsDictionaryModalVisible] =
     useState(false);
+
+  const { potID } = props;
+
+  console.log("메인부분에서" + potID);
 
   const toggleSettingModal = () => {
     setSettingModalVisible(!isSettingModalVisible);
@@ -95,13 +100,13 @@ const MainScreen = () => {
                 style={styles.iconSize}
               />
             </TouchableOpacity>
-            {/* <TouchableOpacity style={styles.iconBackground}>
+            <TouchableOpacity style={styles.iconBackground}>
               <Image
                 source={require("../../assets/img/boardIIcon.png")}
                 resizeMode="contain"
                 style={styles.iconSize}
               />
-            </TouchableOpacity> */}
+            </TouchableOpacity>
             <TouchableOpacity
               style={styles.iconBackground}
               onPress={toggleOpenDictionary}
@@ -174,4 +179,10 @@ const MainScreen = () => {
   );
 };
 
-export default MainScreen;
+const mapStateToProps = (state) => {
+  return {
+    potID: state.potID, // 'potID' should match the name you have in your Redux state
+  };
+};
+
+export default connect(mapStateToProps)(MainScreen);
