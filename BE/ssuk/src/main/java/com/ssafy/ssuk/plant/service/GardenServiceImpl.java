@@ -26,9 +26,10 @@ public class GardenServiceImpl implements GardenService {
 
     @Override
     @Transactional
-    public void save(Integer userId, Plant plant, Pot pot, String nickname) {
+    public Garden save(Integer userId, Plant plant, Pot pot, String nickname) {
         Garden garden = new Garden(userId, plant, pot, nickname);
         gardenRepository.save(garden);
+        return garden;
     }
 
     @Override
