@@ -4,7 +4,7 @@ spring:
     url: jdbc:mysql://localhost:3306/ssuk_ssuk?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
     #url: jdbc:mysql://localhost:3306/ssuk_ssuk?useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
     username: ssafy
-    #password: ssafy
+#    password: ssafy
     password: b102ssuk
 
   mail:
@@ -21,6 +21,11 @@ spring:
             enable: true
 
   redis:
+    lettuce:
+      pool:
+        max-active: 5
+        max-idle: 5
+        min-idle: 2
     host: localhost
     port: 6379
 
@@ -38,6 +43,9 @@ spring:
       hibernate.format_sql: true
       dialect: org.hibernate.dialect.MySQL8InnoDBDialect
 
+  config:
+    import: port.yml
+
 logging:
   level:
 #    root: debug
@@ -47,3 +55,16 @@ logging:
 
 jwt:
   secret: 6YCyHl8E+3j0FHz13dF4lNU6YFLx/8ZKdo/Z0rZzGps=
+
+#cloud:
+#  aws:
+#    s3:
+#      bucket: ssook
+#      dir: image/
+#    region:
+#      static: ap-northeast-2
+#    stack:
+#      auto: false
+#    credentials:
+#      accessKey: ${ac}
+#      secretKey: ${sc}

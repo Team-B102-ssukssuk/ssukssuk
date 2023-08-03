@@ -7,6 +7,7 @@ import com.ssafy.ssuk.user.domain.User;
 import com.ssafy.ssuk.user.dto.request.CheckEmailRequestDto;
 import com.ssafy.ssuk.user.dto.request.LoginRequestDto;
 import com.ssafy.ssuk.user.dto.request.RegisterUserRequestDto;
+import com.ssafy.ssuk.user.dto.request.UpdatePasswordDto;
 import com.ssafy.ssuk.user.repository.RoleRepository;
 import com.ssafy.ssuk.user.repository.UserRepository;
 import com.ssafy.ssuk.utils.jwt.JwtTokenProvider;
@@ -35,7 +36,6 @@ public class UserServiceImpl implements UserService {
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
 
-
     @Override
     @Transactional
     public void createUser(RegisterUserRequestDto registerUserRequestDto) {
@@ -50,12 +50,6 @@ public class UserServiceImpl implements UserService {
         newUser.addRole(userRole);
         userRepository.save(newUser);
 
-    }
-
-    @Override
-    public Optional<User> findByEmail(CheckEmailRequestDto checkEmailRequestDto) {
-        Optional<User> findUser = userRepository.findByEmail(checkEmailRequestDto.getEmail());
-        return findUser;
     }
 
     @Override
@@ -90,6 +84,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Optional<User> findByEmail(CheckEmailRequestDto checkEmailRequestDto) {
+        Optional<User> findUser = userRepository.findByEmail(checkEmailRequestDto.getEmail());
+        return findUser;
+    }
+
+    @Override
+    public Optional<User> findByNickname(String nickname) {
+        Optional<User> findUser = userRepository.findByNickname(nickname);
+        return findUser;
+    }
+
+    @Override
     public User findById(Integer userId) {
         Optional<User> user = userRepository.findById(userId);
 
@@ -100,5 +106,11 @@ public class UserServiceImpl implements UserService {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
     }
 
+    @Override
+    @Transactional
+    public void updatePassword(UpdatePasswordDto updatePasswordDto) {
+        String encodePassword = passwordEncoder.encode(updatePasswordDto.getPassword());
+        userRepository.updatePassword(updatePasswordDto.getEmail(), encodePassword);
+    }
 
 }

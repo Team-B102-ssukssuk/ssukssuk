@@ -56,7 +56,7 @@ public class MeasurementController {
         log.info("물 급수 요청 : " + serialNumber);
         template.convertAndSend("/sub/socket/room/" + serialNumber, new RaspberryRequestDto(1, "물 급수 요청"));
 
-        return null;
+        return ResponseEntity.ok("물 급수 완료");
     }
 
 }
