@@ -3,9 +3,9 @@ import axios from "axios";
 // 토큰이 필요한 API 요청을 보내는 axios 인스턴스
 export const customAxios = axios.create({
   baseURL: `http://i9b102.p.ssafy.io:8080`,
-  //   headers: {
-  //     Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-  //   },
+  // headers: {
+  //   Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+  // },
 });
 
 // 토큰 갱신 API

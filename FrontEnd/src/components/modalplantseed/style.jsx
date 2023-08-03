@@ -33,6 +33,14 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: COLORS.lightBrown,
   },
+  disabledSeedButton: {
+    fontSize: 20,
+    color: "white",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 5,
+    backgroundColor: COLORS.Grey,
+  },
   plantText: { color: COLORS.white },
   modalButtonAlign: {
     flexDirection: "row",

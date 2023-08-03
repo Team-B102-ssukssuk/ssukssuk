@@ -9,13 +9,21 @@ import ModalPlantDelete from "../../components/modalplantdelete";
 import * as Animatable from "react-native-animatable";
 import { useNavigation } from "@react-navigation/native";
 import customAxios from "../../utils/axios";
+import ModalPlantSeed from "../../components/modalplantseed";
 
 const GardenScreen = () => {
   const navigation = useNavigation();
   const [gardenName] = useState("지민이네");
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
   const [isDeleteIconVisible, setDeleteIconVisible] = useState(false);
+  const [isCharacterModalVisible, setCharacterModalVisible] = useState(false);
   const [isPlantData, setPlantData] = useState([]);
+
+  const handleSeedPlant = (nickname, option) => {
+    // 씨앗 심기 관련 로직
+    console.log("Planting seed with nickname: " + nickname);
+    console.log("Selected option: " + option);
+  };
 
   const getPotData = () => {
     customAxios.get("/plant/all").then((res) => {
@@ -31,68 +39,8 @@ const GardenScreen = () => {
     setDeleteIconVisible(!isDeleteIconVisible);
   };
 
-  const response = {
-    message: "OK",
-    data: {
-      gardens: [
-        {
-          gardenId: 1,
-          potId: 1,
-          plantId: 2,
-          plantName: "장미",
-          categoryId: 2,
-          categoryName: "꽃",
-          plantNickname: "장미",
-          level: 1,
-          firstDate: "2023-07-31T18:58:19",
-          secondDate: null,
-          thirdDate: null,
-          isUse: false,
-        },
-        {
-          gardenId: 2,
-          potId: 1,
-          plantId: 3,
-          plantName: "미니 선인장",
-          categoryId: 3,
-          categoryName: "선인장",
-          plantNickname: "선인장",
-          level: 1,
-          firstDate: "2023-07-31T18:59:06",
-          secondDate: null,
-          thirdDate: null,
-          isUse: false,
-        },
-        {
-          gardenId: 3,
-          potId: 1,
-          plantId: 3,
-          plantName: "미니 선인장",
-          categoryId: 3,
-          categoryName: "선인장",
-          plantNickname: "애칭 선인장",
-          level: 1,
-          firstDate: "2023-07-31T18:59:26",
-          secondDate: null,
-          thirdDate: null,
-          isUse: false,
-        },
-        {
-          gardenId: 4,
-          potId: 1,
-          plantId: 3,
-          plantName: "쑥쑥이",
-          categoryId: 3,
-          categoryName: "선인장",
-          plantNickname: "애칭 선인장",
-          level: 1,
-          firstDate: "2023-07-31T18:59:26",
-          secondDate: null,
-          thirdDate: null,
-          isUse: false,
-        },
-      ],
-    },
+  const toggleCharacterModal = () => {
+    setCharacterModalVisible(!isCharacterModalVisible);
   };
 
   const toggleDeleteModal = () => {
@@ -229,7 +177,10 @@ const GardenScreen = () => {
                       <View style={styles.absoultPosition}>
                         {rowIndex === lastRowWithCharacter - 1 ? (
                           emptyIndex === 0 ? (
-                            <TouchableOpacity style={styles.gardenCharacter}>
+                            <TouchableOpacity
+                              style={styles.gardenCharacter}
+                              onPress={toggleCharacterModal}
+                            >
                               {/* Display the characterBaechoo image */}
                               <Image
                                 source={require("../../assets/img/silhouette.png")}
@@ -283,6 +234,11 @@ const GardenScreen = () => {
           />
         </TouchableOpacity>
       </ImageBackground>
+      <ModalPlantSeed
+        isVisible={isCharacterModalVisible}
+        onClose={() => setCharacterModalVisible(false)}
+        onSeedPlant={handleSeedPlant}
+      />
       <ModalPlantDelete
         isVisible={isDeleteModalVisible}
         onClose={() => setDeleteModalVisible(false)}

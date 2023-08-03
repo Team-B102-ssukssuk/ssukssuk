@@ -30,101 +30,127 @@ const ProfileScreen = ({ navigation }) => {
     createdDate: "",
   });
 
-  const response = {
-    message: "OK",
+  const profileData = {
+    message: "ok",
     data: {
-      userBadges: [
-        {
-          badgeId: 1,
-          badgeName: "시작이 반",
-          condition: "화분 첫 등록 시 획득",
-          description: "쑥쑥을 이용해주셔서 감사합니다!",
-          badgeImage: "업적 사진 파일명",
-          isHidden: false,
-          isDone: true,
-          createdDate: "2023-08-01T15:33:45",
-        },
-        {
-          badgeId: 2,
-          badgeName: "시작이 반",
-          condition: "화분 첫 등록 시 획득",
-          description: "쑥쑥을 이용해주셔서 감사합니다!",
-          badgeImage: "업적 사진 파일명",
-          isHidden: false,
-          isDone: true,
-          createdDate: "2023-08-01T15:33:45",
-        },
-        {
-          badgeId: 3,
-          badgeName: "시작이 반",
-          condition: "화분 첫 등록 시 획득",
-          description: "쑥쑥을 이용해주셔서 감사합니다!",
-          badgeImage: "업적 사진 파일명",
-          isHidden: false,
-          isDone: true,
-          createdDate: "2023-08-01T15:33:45",
-        },
-        {
-          badgeId: 4,
-          badgeName: "시작이 반",
-          condition: "화분 첫 등록 시 획득",
-          description: "쑥쑥을 이용해주셔서 감사합니다!",
-          badgeImage: "업적 사진 파일명",
-          isHidden: false,
-          isDone: true,
-          createdDate: "2023-08-01T15:33:45",
-        },
-        {
-          badgeId: 5,
-          badgeName: "시작이 반",
-          condition: "화분 첫 등록 시 획득",
-          description: "쑥쑥을 이용해주셔서 감사합니다!",
-          badgeImage: "업적 사진 파일명",
-          isHidden: false,
-          isDone: true,
-          createdDate: "2023-08-01T15:33:45",
-        },
-        {
-          badgeId: 6,
-          badgeName: "진짜 반",
-          condition: "화분 다섯번 등록 시 획득",
-          description: "쑥쑥을 꾸준히 이용해주셔서 감사합니다!",
-          badgeImage: "업적 사진 파일명",
-          isHidden: false,
-          isDone: false,
-          createdDate: null,
-        },
-        {
-          badgeId: 7,
-          badgeName: "이스터 에그111",
-          condition: "안알려줘야지",
-          description: "이스터에그111!",
-          badgeImage: "사진 파일명",
-          isHidden: true,
-          isDone: true,
-          createdDate: "2023-08-01T15:33:48",
-        },
-        {
-          badgeId: 8,
-          badgeName: "이스터 에그2",
-          condition: "안알려줘야지",
-          description: "이스터에그222!",
-          badgeImage: "사진 파일명",
-          isHidden: true,
-          isDone: false,
-          createdDate: null,
-        },
-        {
-          badgeId: 9,
-          badgeName: "이스터 에그2",
-          condition: "안알려줘야지",
-          description: "이스터에그222!",
-          badgeImage: "사진 파일명",
-          isHidden: true,
-          isDone: false,
-          createdDate: null,
-        },
-      ],
+      information: {
+        nickname: "security...",
+        myPlantCount: 1,
+        gardenCount: 4,
+        collectionCount: 7,
+        badges: [
+          {
+            badgeId: 1,
+            badgeName: "드루이드",
+            condition: "식물 10번 등록 시 획득",
+            description: "식물을 키우는데 도가 튼 사람",
+            badgeImage: "업적 사진 파일명",
+            isHidden: false,
+            isDone: true,
+            createdDate: "2023-08-01T07:40:16",
+          },
+          {
+            badgeId: 2,
+            badgeName: "시작이 반",
+            condition: "화분 첫 등록 시 획득",
+            description: "쑥쑥을 이용해주셔서 감사합니다!",
+            badgeImage: "업적 사진 파일명",
+            isHidden: false,
+            isDone: true,
+            createdDate: "2023-08-01T07:40:19",
+          },
+          {
+            badgeId: 3,
+            badgeName: "이스터 에그2",
+            condition: "안알려줘야지",
+            description: "이스터에그222!",
+            badgeImage: "사진 파일명",
+            isHidden: true,
+            isDone: true,
+            createdDate: "2023-08-01T07:40:18",
+          },
+          {
+            badgeId: 4,
+            badgeName: "진짜 반",
+            condition: "식물 5번 등록 시 획득",
+            description: "쑥쑥을 꾸준히 이용해주셔서 감사합니다!",
+            badgeImage: "업적 사진 파일명",
+            isHidden: false,
+            isDone: false,
+            createdDate: null,
+          },
+          {
+            badgeId: 5,
+            badgeName: "업적 1",
+            condition: "업적 조건 설명 1",
+            description: "업적 획득 후 표시할 설명 1",
+            badgeImage: "업적 사진 파일명",
+            isHidden: false,
+            isDone: false,
+            createdDate: null,
+          },
+          {
+            badgeId: 6,
+            badgeName: "업적 수정",
+            condition: "잠이 오네",
+            description: "잠이 막 쏟아진다",
+            badgeImage: "사진 파일명",
+            isHidden: true,
+            isDone: true,
+            createdDate: "2023-08-01T07:40:21",
+          },
+          {
+            badgeId: 7,
+            badgeName: "업적 3",
+            condition: "업적 조건 설명 3",
+            description: "업적 획득 후 표시할 설명 3",
+            badgeImage: "업적 사진 파일명",
+            isHidden: false,
+            isDone: true,
+            createdDate: "2023-08-01T07:40:22",
+          },
+          {
+            badgeId: 8,
+            badgeName: "업적 4",
+            condition: "업적 조건 설명 4",
+            description: "업적 획득 후 표시할 설명 4",
+            badgeImage: "업적 사진 파일명",
+            isHidden: false,
+            isDone: false,
+            createdDate: null,
+          },
+          {
+            badgeId: 9,
+            badgeName: "업적 5",
+            condition: "업적 조건 설명 5",
+            description: "업적 획득 후 표시할 설명 5",
+            badgeImage: "업적 사진 파일명",
+            isHidden: false,
+            isDone: false,
+            createdDate: null,
+          },
+          {
+            badgeId: 10,
+            badgeName: "업적 6",
+            condition: "업적 조건 설명 6",
+            description: "업적 획득 후 표시할 설명 6",
+            badgeImage: "업적 사진 파일명",
+            isHidden: false,
+            isDone: false,
+            createdDate: null,
+          },
+          {
+            badgeId: 11,
+            badgeName: "업적 7",
+            condition: "업적 조건 설명 7",
+            description: "업적 획득 후 표시할 설명 7",
+            badgeImage: "업적 사진 파일명",
+            isHidden: false,
+            isDone: false,
+            createdDate: null,
+          },
+        ],
+      },
     },
   };
 
@@ -219,7 +245,7 @@ const ProfileScreen = ({ navigation }) => {
     return divided;
   };
 
-  const badges = response.data.userBadges; // Use all the badge data from the response
+  const badges = profileData.data.information.badges; // Use all the badge data from the response
   const rows = divideIntoRowsAndColumns(badges, 3, 3);
 
   const handleBadgeClick = (badge) => {
@@ -261,7 +287,7 @@ const ProfileScreen = ({ navigation }) => {
                     },
                   ]}
                 >
-                  손수형
+                  {profileData.data.information.nickname}
                 </Title>
               </View>
             </View>
@@ -279,19 +305,25 @@ const ProfileScreen = ({ navigation }) => {
                 <CookieRunBold style={styles.Collection_text}>
                   내 식물
                 </CookieRunBold>
-                <CookieRunBold style={styles.Collection_num}>3</CookieRunBold>
+                <CookieRunBold style={styles.Collection_num}>
+                  {profileData.data.information.myPlantCount}
+                </CookieRunBold>
               </View>
               <View style={styles.barContent}>
                 <CookieRunBold style={styles.Collection_text}>
                   정원
                 </CookieRunBold>
-                <CookieRunBold style={styles.Collection_num}>2</CookieRunBold>
+                <CookieRunBold style={styles.Collection_num}>
+                  {profileData.data.information.gardenCount}
+                </CookieRunBold>
               </View>
               <View style={styles.barContent}>
                 <CookieRunBold style={styles.Collection_text}>
                   도감
                 </CookieRunBold>
-                <CookieRunBold style={styles.Collection_num}>5</CookieRunBold>
+                <CookieRunBold style={styles.Collection_num}>
+                  {profileData.data.information.collectionCount}
+                </CookieRunBold>
               </View>
             </View>
           </ImageBackground>

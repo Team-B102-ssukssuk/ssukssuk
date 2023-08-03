@@ -1,11 +1,16 @@
 import React, { useState } from "react";
-import { View, TouchableOpacity, Modal } from "react-native";
+import { View, TouchableOpacity, Modal, Image } from "react-native";
 import CookieRunRegular from "../common/CookieRunRegular";
+import CookieRunBold from "../common/CookieRunBold";
+import { ScrollView } from "react-native-gesture-handler";
 import styles from "./style";
 
 const CustomDropdown = ({ options, onSelect }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState({
+    name: options[0].name,
+    subcategories: options[0].subcategories,
+  });
   const [selectedSubcategory, setSelectedSubcategory] = useState(null);
 
   const toggleModal = () => {
@@ -21,6 +26,44 @@ const CustomDropdown = ({ options, onSelect }) => {
     setSelectedSubcategory(subcategory);
     onSelect(subcategory);
     toggleModal();
+  };
+
+  const renderEmptyImageRows = (subcategories) => {
+    const numColumns = 3;
+
+    // Group the subcategories into rows with three items per row
+    const rows = [];
+    for (let i = 0; i < subcategories.length; i += numColumns) {
+      const row = subcategories.slice(i, i + numColumns);
+      rows.push(row);
+    }
+
+    return rows.map((row, rowIndex) => (
+      <View key={rowIndex} style={styles.rowContainer}>
+        {row.map((subcategory, columnIndex) => (
+          <View key={columnIndex} style={styles.rowItem}>
+            <TouchableOpacity
+              onPress={() => handleSubcategoryPress(subcategory)}
+            >
+              <Image
+                source={require("../../assets/img/silhouette.png")}
+                resizeMode="contain"
+                style={[
+                  styles.emptyImg,
+                  {
+                    width: 75,
+                    height: 75,
+                  },
+                ]}
+              />
+            </TouchableOpacity>
+            <CookieRunBold style={{ textAlign: "center", color: "#4D0C0C" }}>
+              {subcategory}
+            </CookieRunBold>
+          </View>
+        ))}
+      </View>
+    ));
   };
 
   return (
@@ -41,60 +84,75 @@ const CustomDropdown = ({ options, onSelect }) => {
         >
           {selectedSubcategory
             ? selectedSubcategory
-            : selectedCategory
-            ? `${selectedCategory.name}`
             : "심을 식물을 선택해주세요"}
         </CookieRunRegular>
       </TouchableOpacity>
 
-      <Modal
-        visible={isVisible}
-        transparent={true}
-        onRequestClose={toggleModal}
-      >
-        <TouchableOpacity
-          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-          activeOpacity={1}
-          onPressOut={toggleModal}
+      <Modal visible={isVisible} transparent={true}>
+        {/* Add a TouchableOpacity to cover the entire screen and close the modal */}
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
         >
           <View style={styles.modalContainer}>
-            <View
-              style={{
-                margin: 20,
-                borderWidth: 2,
-                borderColor: "#896A50", // Set the border color here
-              }}
-            >
-              {options.map((option) => (
-                <TouchableOpacity
-                  key={option.name}
-                  onPress={() => handleCategoryPress(option)}
+            <View style={styles.category}>
+              {/* 각 카테고리의 TouchableOpacity에 선택 상태에 따라 스타일 적용 */}
+              <TouchableOpacity
+                onPress={() => handleCategoryPress(options[0])}
+                activeOpacity={1}
+              >
+                <CookieRunBold
+                  style={
+                    selectedCategory.name === "채소"
+                      ? styles.categoryActiveText
+                      : styles.categoryInactiveText
+                  }
                 >
-                  <CookieRunRegular style={styles.categoryText}>
-                    {option.name}
-                  </CookieRunRegular>
-                </TouchableOpacity>
-              ))}
+                  채소
+                </CookieRunBold>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => handleCategoryPress(options[1])}
+                activeOpacity={1}
+              >
+                <CookieRunBold
+                  style={
+                    selectedCategory.name === "꽃"
+                      ? styles.categoryActiveText
+                      : styles.categoryInactiveText
+                  }
+                >
+                  꽃
+                </CookieRunBold>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => handleCategoryPress(options[2])}
+                activeOpacity={1}
+              >
+                <CookieRunBold
+                  style={
+                    selectedCategory.name === "선인장"
+                      ? styles.categoryActiveText
+                      : styles.categoryInactiveText
+                  }
+                >
+                  선인장
+                </CookieRunBold>
+              </TouchableOpacity>
             </View>
-            <View
-              style={{
-                margin: 20,
-              }}
-            >
+            {/* 모달 내용 */}
+            <CookieRunBold style={styles.modalText}>
+              식물을 선택해주세요
+            </CookieRunBold>
+            <ScrollView>
               {selectedCategory &&
-                selectedCategory.subcategories.map((subcategory) => (
-                  <TouchableOpacity
-                    key={subcategory}
-                    onPress={() => handleSubcategoryPress(subcategory)}
-                  >
-                    <CookieRunRegular style={styles.subCategoryItem}>
-                      {subcategory}
-                    </CookieRunRegular>
-                  </TouchableOpacity>
-                ))}
-            </View>
+                renderEmptyImageRows(selectedCategory.subcategories)}
+            </ScrollView>
           </View>
-        </TouchableOpacity>
+        </View>
       </Modal>
     </>
   );

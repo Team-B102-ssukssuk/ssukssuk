@@ -32,9 +32,10 @@ const MainScreen = () => {
     setIsDictionaryModalVisible(!isDictionaryModalVisible);
   };
 
-  const handleSeedPlant = (inputValue) => {
+  const handleSeedPlant = (nickname, option) => {
     // 씨앗 심기 관련 로직
-    console.log("Planting seed with nickname: " + inputValue);
+    console.log("Planting seed with nickname: " + nickname);
+    console.log("Selected option: " + option);
   };
 
   return (
@@ -94,13 +95,13 @@ const MainScreen = () => {
                 style={styles.iconSize}
               />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.iconBackground}>
+            {/* <TouchableOpacity style={styles.iconBackground}>
               <Image
                 source={require("../../assets/img/boardIIcon.png")}
                 resizeMode="contain"
                 style={styles.iconSize}
               />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <TouchableOpacity
               style={styles.iconBackground}
               onPress={toggleOpenDictionary}
