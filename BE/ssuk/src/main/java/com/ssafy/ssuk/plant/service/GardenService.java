@@ -12,7 +12,7 @@ import java.util.List;
 public interface GardenService {
     Garden findUsingByPotId(Integer potId);
 
-    void save(Integer userId, Plant plant, Pot pot, String nickname);
+    Garden save(Integer userId, Plant plant, Pot pot, String nickname);
 
     Garden findOndById(Integer id);
 

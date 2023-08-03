@@ -74,14 +74,14 @@ public class GardenController {
         }
 
         String nickname = gardenRegisterRequestDto.getNickname();
-        gardenService.save(userId, plant, pot, nickname);
+        Garden newGarden = gardenService.save(userId, plant, pot, nickname);
 
         /**
          * user의 plantcount 늘리는 메소드 추가해야함
          * user.plusPlantCount()
          */
 
-        return new ResponseEntity<>(new ResponseDto(SUCCESS), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDto(SUCCESS, "gardenId", newGarden.getId()), HttpStatus.OK);
     }
 
     @PutMapping("")
