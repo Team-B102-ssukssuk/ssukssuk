@@ -40,4 +40,8 @@ out/
 .DS_Store
 
 #aws
-aws.yml
+cloud.yml
+db.yml
+email.yml
+jwt.yml
+port.yml
