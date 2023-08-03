@@ -7,14 +7,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = {
+        org.springframework.cloud.aws.autoconfigure.context.ContextInstanceDataAutoConfiguration.class,
+        org.springframework.cloud.aws.autoconfigure.context.ContextStackAutoConfiguration.class,
+        org.springframework.cloud.aws.autoconfigure.context.ContextRegionProviderAutoConfiguration.class
+})
 @RestController // 테스트용
 @RequestMapping("/")
 public class SsukApplication {
+
     @GetMapping("")
     String home()
     {
-        return "ssook ssook!";
+        return "백엔드!";
     }
 
     @PostMapping("")
