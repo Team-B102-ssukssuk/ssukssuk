@@ -16,14 +16,16 @@ public class PotResponseDto {
     private String nickname;
     private Boolean isUse;
     private Integer plantId;
+    private Integer gardenId;
 
-    public PotResponseDto(Integer potId, Integer userId, LocalDateTime registedDate, Integer level, String nickname, Boolean isUse, Integer plantId) {
+    public PotResponseDto(Integer potId, Integer userId, LocalDateTime registedDate, Integer level, String nickname, Boolean isUse, Integer plantId, Integer gardenId) {
         this.potId = potId;
         this.userId = userId;
         this.registedDate = registedDate;
         this.level = level;
         this.nickname = nickname;
         this.plantId = plantId;
+        this.gardenId = gardenId;
 
         if (isUse == null)
             this.isUse = false;
