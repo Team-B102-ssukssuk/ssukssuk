@@ -43,6 +43,8 @@ spring:
       hibernate.format_sql: true
       dialect: org.hibernate.dialect.MySQL8InnoDBDialect
 
+  config:
+    import: port.yml
 
 logging:
   level:
