@@ -1,0 +1,12 @@
+#cloud:
+#  aws:
+#    s3:
+#      bucket: hello1
+#      dir: hi1/
+#    region:
+#      static: ap-northeast-2
+#    stack:
+#      auto: false
+#    credentials:
+#      accessKey: hello
+#      secretKey: hi

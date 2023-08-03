@@ -38,10 +38,3 @@ out/
 
 #MacOs
 .DS_Store
-
-#aws
-cloud.yml
-db.yml
-email.yml
-jwt.yml
-port.yml
