@@ -1,6 +1,6 @@
 package com.ssafy.ssuk.utils.jwt;
 
-//import com.ssafy.ssuk.user.domain.User;
+import com.ssafy.ssuk.exception.dto.CustomJwtException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -15,7 +15,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletRequest;
-import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
@@ -45,6 +44,7 @@ public class JwtTokenProvider {
 
         // AccessToken 생성
         Date accessTokenExt = new Date(now + 86400000); // 24시간 후
+//        Date accessTokenExt = new Date(now + 10000); // 테스트용 30초
         String accessToken = Jwts.builder()
                 .claim("auth", authorities)
                 .claim("userId", userId)
@@ -100,14 +100,17 @@ public class JwtTokenProvider {
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             log.info("Invalid JWT Token", e);
+            throw new CustomJwtException("Invalid JWT Token");
         } catch (ExpiredJwtException e) {
             log.info("Expired JWT Token", e);
+            throw new CustomJwtException("Expired JWT Token");
         } catch (UnsupportedJwtException e) {
             log.info("Unsupported JWT Token", e);
+            throw new CustomJwtException("Unsupported JWT Token");
         } catch (IllegalArgumentException e) {
             log.info("JWT claims string is empty.", e);
+            throw new CustomJwtException("JWT claims string is empty.");
         }
-        return false;
     }
 
     // AccessToken 파싱하여 JWT Claims 추출

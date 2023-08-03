@@ -1,5 +1,6 @@
 package com.ssafy.ssuk.exception.controller;
 
+import com.ssafy.ssuk.exception.dto.CustomJwtException;
 import com.ssafy.ssuk.exception.dto.CustomException;
 import com.ssafy.ssuk.exception.dto.ErrorResponseEntity;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestControllerAdvice
 public class ExceptionController {
@@ -33,5 +37,6 @@ public class ExceptionController {
         e.printStackTrace();
         return ResponseEntity.status(404).body(e.getMessage());
     }
+
 
 }
