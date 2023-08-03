@@ -40,7 +40,7 @@ public class UserController {
     private final RedisService redisService;
 
     // 회원가입시 이메일 인증코드 발송
-    @GetMapping("/email")
+    @PostMapping("/join/email")
     public ResponseEntity<?> sendEmailCode
             (@RequestBody @Validated CheckEmailRequestDto checkEmailRequestDto, BindingResult bindingResult) throws Exception {
         if(bindingResult.hasErrors()){
@@ -63,7 +63,7 @@ public class UserController {
     }
 
     // 회원가입시 이메일 인증코드 확인
-    @PostMapping("/email")
+    @PostMapping("/join/emailcheck")
     public ResponseEntity<?> verifyEmailCode
             (@RequestBody @Validated VerifyEmailCodeDto verifyEmailCodeDto, BindingResult bindingResult) throws Exception {
         if (bindingResult.hasErrors()) {
@@ -146,7 +146,7 @@ public class UserController {
     }
 
     // 비밀번호 재설정시 이메일 인증코드 발송
-    @GetMapping("/password")
+    @PostMapping("/password/email")
     public ResponseEntity<?> sendPasswordEmailCode
     (@RequestBody @Validated CheckEmailRequestDto checkEmailRequestDto, BindingResult bindingResult) throws Exception {
         if(bindingResult.hasErrors()){
@@ -164,7 +164,7 @@ public class UserController {
     }
 
     // 비밀번호 재설정시 이메일 인증코드 확인
-    @PostMapping("/password")
+    @PostMapping("/password/emailcheck")
     public ResponseEntity<?> verifyPasswordEmailCode
     (@RequestBody @Validated VerifyEmailCodeDto verifyEmailCodeDto, BindingResult bindingResult) throws Exception {
         if (bindingResult.hasErrors()) {
