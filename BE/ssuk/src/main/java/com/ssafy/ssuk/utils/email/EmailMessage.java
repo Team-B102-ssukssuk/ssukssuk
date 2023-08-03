@@ -2,6 +2,7 @@ package com.ssafy.ssuk.utils.email;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
@@ -18,7 +19,13 @@ public class EmailMessage {
     private static String randomCode;
     private final JavaMailSender javaMailSender;
 
+    @Value("${spring.mail.username}")
+    private String email;
+
     public String sendMail(String to) throws Exception{
+
+
+        log.debug("email={}", email);
         MimeMessage mimeMessage = createMessage(to);
         System.out.println(mimeMessage);
         try {
