@@ -38,6 +38,3 @@ out/
 
 #MacOs
 .DS_Store
-
-#aws
-aws.yml

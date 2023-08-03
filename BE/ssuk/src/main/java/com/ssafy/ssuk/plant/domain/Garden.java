@@ -50,6 +50,10 @@ public class Garden {
     private LocalDateTime secondDate;
     @Column(name = "THIRD_DATE")
     private LocalDateTime thirdDate;
+    @Column(name = "IS_DELETED")
+    private Boolean isDeleted;
+    @Column(name = "ORDERS")
+    private Integer orders = 0;
 
 
     public Garden(Integer userId, Plant plant, Pot pot, String nickname) {
@@ -67,4 +71,6 @@ public class Garden {
     public void rename(String nickname) {
         this.nickname = nickname;
     }
+
+    public void removeFromGarden() {this.isDeleted = true;}
 }

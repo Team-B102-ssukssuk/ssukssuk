@@ -72,8 +72,16 @@ public class GardenRepositoryImpl implements GardenRepository {
                         " join fetch g.plant plant" +
                         " join fetch plant.category pc" +
                         " join fetch g.pot pot" +
-                        " where g.userId = :userId", Garden.class)
+                        " where g.userId = :userId and g.isDeleted = false", Garden.class)
                 .setParameter("userId", userId)
                 .getResultList();
+    }
+
+    @Override
+    public void removeFromGarden(Integer gardenId) {
+        Garden garden = em.find(Garden.class, gardenId);
+        log.debug("garden delete {}", garden.getIsDeleted());
+        garden.removeFromGarden();
+        log.debug("garden delete {}", garden.getIsDeleted());
     }
 }

@@ -74,4 +74,11 @@ public class GardenServiceImpl implements GardenService {
     public List<Garden> findAllByUserId(Integer userId) {
         return gardenRepository.findAllByUserId(userId);
     }
+
+    @Override
+    @Transactional
+    public boolean deleteFromGarden(Integer gardenId) {
+        gardenRepository.removeFromGarden(gardenId);
+        return false;
+    }
 }

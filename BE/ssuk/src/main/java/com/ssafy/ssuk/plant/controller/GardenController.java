@@ -14,6 +14,7 @@ import com.ssafy.ssuk.pot.repository.PotRepository;
 import com.ssafy.ssuk.pot.service.PotService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.DynamicInsert;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/plant")
 @RequiredArgsConstructor
+@DynamicInsert
 @Slf4j
 public class GardenController {
 
@@ -140,5 +142,13 @@ public class GardenController {
     public ResponseEntity<ResponseDto> searchAll(@RequestAttribute(required = true) Integer userId) {
         List<GardenSearchOneResponseDto> collect = gardenService.findAllByUserId(userId).stream().map(g -> new GardenSearchOneResponseDto(g)).collect(Collectors.toList());
         return new ResponseEntity<>(new ResponseDto(SUCCESS, "gardens", collect), HttpStatus.OK);
+    }
+
+    @PutMapping("/delete/{gardenId}")
+    public ResponseEntity<ResponseDto> deleteFromGarden(
+            @RequestAttribute(required = true) Integer userId,
+            @PathVariable Integer gardenId) {
+        gardenService.deleteFromGarden(gardenId);
+        return new ResponseEntity<>(new ResponseDto(SUCCESS), HttpStatus.OK);
     }
 }

@@ -25,4 +25,6 @@ public interface GardenService {
     List<Garden> findAllByUserId(Integer userId, Boolean isUse);
 
     List<Garden> findAllByUserId(Integer userId);
+
+    boolean deleteFromGarden(Integer gardenId);
 }

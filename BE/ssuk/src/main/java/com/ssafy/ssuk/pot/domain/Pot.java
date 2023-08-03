@@ -45,4 +45,7 @@ public class Pot {
 
     @OneToMany(mappedBy = "pot")
     private List<Garden> garden;
+
+    @Column(name="ORDERS")
+    private Integer orders;
 }

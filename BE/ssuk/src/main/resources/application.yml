@@ -1,24 +1,23 @@
 spring:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/ssuk_ssuk?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
-    #url: jdbc:mysql://localhost:3306/ssuk_ssuk?useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
-    username: ssafy
-#    password: ssafy
-    password: b102ssuk
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/ssuk_ssuk?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
+#    #url: jdbc:mysql://localhost:3306/ssuk_ssuk?useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
+#    username: ssafy
+#    password: b102ssuk
 
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: ssukssuk102
-    password: bodxihtuxhwrzcfb
-    properties:
-      mail:
-        smtp:
-          auth: true
-          timeout: 5000
-          starttls:
-            enable: true
+#  mail:
+#    host: smtp.gmail.com
+#    port: 587
+#    username: ssukssuk102
+#    password: bodxihtuxhwrzcfb
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          timeout: 5000
+#          starttls:
+#            enable: true
 
   redis:
     lettuce:
@@ -45,7 +44,12 @@ spring:
       dialect: org.hibernate.dialect.MySQL8InnoDBDialect
 
   config:
-    import: port.yml
+    import:
+      - port.yml
+      - cloud.yml
+      - db.yml
+      - email.yml
+      - jwt.yml
 
 logging:
   level:
@@ -54,18 +58,6 @@ logging:
     # 일단 ssuk패키지 debug로 설정해놓을게요
     com.ssafy.ssuk: debug
 
-jwt:
-  secret: 6YCyHl8E+3j0FHz13dF4lNU6YFLx/8ZKdo/Z0rZzGps=
+#jwt:
+#  secret: 6YCyHl8E+3j0FHz13dF4lNU6YFLx/8ZKdo/Z0rZzGps=
 
-#cloud:
-#  aws:
-#    s3:
-#      bucket: ssook
-#      dir: image/
-#    region:
-#      static: ap-northeast-2
-#    stack:
-#      auto: false
-#    credentials:
-#      accessKey: ${ac}
-#      secretKey: ${sc}

@@ -1,6 +1,7 @@
 package com.ssafy.ssuk.user.dto.request;
 
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 
