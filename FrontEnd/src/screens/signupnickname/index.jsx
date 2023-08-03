@@ -11,11 +11,13 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import Icon2 from "react-native-vector-icons/AntDesign";
 import styles from "./style";
 
-const SignUpNicknameScreen = ({ navigation }) => {
+const SignUpNicknameScreen = ({ navigation, route }) => {
   const [nickname, setNickname] = useState("");
   const [errorOpacity, setErrorOpacity] = useState(0);
   const [showCheckcircle, setShowCheckcircle] = useState(0);
   const [nextButtonColor, setNextButtonColor] = useState("#CACACA");
+
+  const { SignUpData } = route.params;
 
   return (
     <ImageBackground
@@ -56,6 +58,7 @@ const SignUpNicknameScreen = ({ navigation }) => {
               setErrorOpacity(100);
               setNextButtonColor("#2DD0AF");
               setShowCheckcircle(100);
+              console.log(SignUpData);
             }}
             style={styles.verifyButton}
           >

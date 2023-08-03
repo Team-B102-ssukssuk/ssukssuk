@@ -6,7 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import styles from "./style";
 import CookieRunRegular from "../../components/common/CookieRunRegular";
@@ -38,6 +38,14 @@ const SignUpPasswordScreen = ({ route, navigation }) => {
       console.log(SignUpData);
     }
   };
+
+  useEffect(() => {
+    if (password === "" && PasswordRe === "") {
+      setNextButtonColor("#CACACA");
+    } else {
+      setNextButtonColor("#2DD0AF");
+    }
+  }, [password, PasswordRe]);
 
   return (
     <ImageBackground
@@ -81,7 +89,6 @@ const SignUpPasswordScreen = ({ route, navigation }) => {
           style={[styles.emailNextButton, { backgroundColor: nextButtonColor }]}
           activeOpacity={0.3}
           onPress={checkPassword}
-          // setNextButtonColor("#2DD0AF");
         >
           <CookieRunRegular style={styles.emailNextButtonText}>
             다음
