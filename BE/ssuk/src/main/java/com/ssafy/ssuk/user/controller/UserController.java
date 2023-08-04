@@ -76,8 +76,8 @@ public class UserController {
         log.debug("entryCode={}", entryCode);
         log.debug("authCode={}", authCode);
         if (entryCode.equals(authCode))
-            return new ResponseEntity<>("인증코드 일치", HttpStatus.OK);
-        return new ResponseEntity<>("인증코드 불일치", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("OK", HttpStatus.OK);
+        return new ResponseEntity<>("FALSE", HttpStatus.NOT_FOUND);
     }
 
     // 닉네임 중복 확인
@@ -88,7 +88,7 @@ public class UserController {
         if (findUser.isPresent())
             throw new CustomException(ErrorCode.DUPLICATE_USER_NICKNAME);
 //            return new ResponseEntity<>("중복된 닉네임", HttpStatus.CONFLICT);
-        return new ResponseEntity<>("사용 가능한 닉네임", HttpStatus.OK);
+        return new ResponseEntity<>("OK", HttpStatus.OK);
     }
 
     // 회원가입
@@ -163,7 +163,7 @@ public class UserController {
         // 인증코드 Redis 서버에 저장
         redisService.setEmailCode(userEmail, authCode);
         log.debug("인증코드 보냈어");
-        return new ResponseEntity<>("인증코드 발송 완료", HttpStatus.OK);
+        return new ResponseEntity<>("OK", HttpStatus.OK);
     }
 
     // 비밀번호 재설정시 이메일 인증코드 확인
@@ -180,8 +180,8 @@ public class UserController {
         log.debug("entryCode={}", entryCode);
         log.debug("authCode={}", authCode);
         if (entryCode.equals(authCode))
-            return new ResponseEntity<>("인증코드 일치", HttpStatus.OK);
-        return new ResponseEntity<>("인증코드 불일치", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("OK", HttpStatus.OK);
+        return new ResponseEntity<>("FALSE", HttpStatus.NOT_FOUND);
     }
 
     // 비밀번호 재설정
