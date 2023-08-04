@@ -18,9 +18,15 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     //public User findById(int userId);
 
-    // 비밀번호 업데이트
+    // 비밀번호 수정
     @Modifying
     @Query("UPDATE User u SET u.password = :newPassword WHERE u.email = :email")
     void updatePassword(@Param("email") String email, @Param("newPassword") String newPassword);
+
+    // 닉네임 수정
+    @Modifying
+    @Query("UPDATE User u SET u.nickname = :newNickname WHERE u.id = :id")
+    void updateNickname(@Param("id") Integer id, @Param("newNickname") String nickname);
+
 
 }

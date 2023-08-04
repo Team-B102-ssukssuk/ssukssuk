@@ -4,10 +4,7 @@ import com.ssafy.ssuk.exception.dto.CustomException;
 import com.ssafy.ssuk.exception.dto.ErrorCode;
 import com.ssafy.ssuk.user.domain.Role;
 import com.ssafy.ssuk.user.domain.User;
-import com.ssafy.ssuk.user.dto.request.CheckEmailRequestDto;
-import com.ssafy.ssuk.user.dto.request.LoginRequestDto;
-import com.ssafy.ssuk.user.dto.request.RegisterUserRequestDto;
-import com.ssafy.ssuk.user.dto.request.UpdatePasswordDto;
+import com.ssafy.ssuk.user.dto.request.*;
 import com.ssafy.ssuk.user.repository.RoleRepository;
 import com.ssafy.ssuk.user.repository.UserRepository;
 import com.ssafy.ssuk.utils.jwt.JwtTokenProvider;
@@ -97,11 +94,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findById(Integer userId) {
-        Optional<User> user = userRepository.findById(userId);
-
-        if (user.isPresent()) {
-            log.info("service : " + user.get().getId());
-            return user.get();
+        Optional<User> findUser = userRepository.findById(userId);
+        if (findUser.isPresent()) {
+            log.info("service : " + findUser.get().getId());
+            return findUser.get();
         } else
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
     }
@@ -111,6 +107,17 @@ public class UserServiceImpl implements UserService {
     public void updatePassword(UpdatePasswordDto updatePasswordDto) {
         String encodePassword = passwordEncoder.encode(updatePasswordDto.getPassword());
         userRepository.updatePassword(updatePasswordDto.getEmail(), encodePassword);
+    }
+
+    @Override
+    @Transactional
+    public void updateNickname(Integer userId, String newNickname) {
+        log.debug("newNickname={}",newNickname);
+        Optional<User> findUser = userRepository.findByNickname(newNickname);
+        if (findUser.isPresent() && userId!=findUser.get().getId()) {
+            throw new CustomException(ErrorCode.DUPLICATE_USER_NICKNAME);
+        }
+        userRepository.updateNickname(userId, newNickname);
     }
 
 }

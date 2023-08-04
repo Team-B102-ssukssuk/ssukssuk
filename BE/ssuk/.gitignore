@@ -38,3 +38,8 @@ out/
 
 #MacOs
 .DS_Store
+
+cloud.yml
+db.yml
+email.yml
+jwt.yml

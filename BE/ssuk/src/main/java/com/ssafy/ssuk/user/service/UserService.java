@@ -1,10 +1,7 @@
 package com.ssafy.ssuk.user.service;
 
 import com.ssafy.ssuk.user.domain.User;
-import com.ssafy.ssuk.user.dto.request.CheckEmailRequestDto;
-import com.ssafy.ssuk.user.dto.request.LoginRequestDto;
-import com.ssafy.ssuk.user.dto.request.RegisterUserRequestDto;
-import com.ssafy.ssuk.user.dto.request.UpdatePasswordDto;
+import com.ssafy.ssuk.user.dto.request.*;
 import com.ssafy.ssuk.utils.jwt.TokenInfo;
 
 import java.util.Optional;
@@ -27,5 +24,8 @@ public interface UserService {
 
     // 비밀번호 재설정
     void updatePassword(UpdatePasswordDto updatePasswordDto);
+
+    // 닉네임 재설정
+    void updateNickname(Integer userId, String newNickname);
 
 }
