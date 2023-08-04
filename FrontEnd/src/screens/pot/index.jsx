@@ -10,7 +10,7 @@ import * as Animatable from "react-native-animatable";
 import { useNavigation } from "@react-navigation/native";
 import customAxios from "../../utils/axios";
 import { connect } from "react-redux";
-import { storePotID } from "../../redux/action";
+import { storePotID, setGardenID } from "../../redux/action";
 
 const PotScreen = (props) => {
   const navigation = useNavigation();
@@ -23,6 +23,7 @@ const PotScreen = (props) => {
 
   const getPotData = () => {
     customAxios.get("/pot").then((res) => {
+      console.log(res.data);
       setPotData(res.data);
     });
   };
@@ -44,9 +45,10 @@ const PotScreen = (props) => {
     setDeleteIconVisible(!isDeleteIconVisible);
   };
 
-  const GoMain = (potId) => {
+  const GoMain = (potId, gardenId) => {
     // Store the potID in Redux using the action
     props.storePotID(potId);
+    props.setGardenID(gardenId);
     navigation.push("Slider");
   };
 
@@ -105,7 +107,9 @@ const PotScreen = (props) => {
                   >
                     <TouchableOpacity
                       style={styles.potSign}
-                      onPress={() => toggleDeleteModal(plant.potId)}
+                      onPress={() =>
+                        toggleDeleteModal(plant.potId, plant.gardenId)
+                      }
                     >
                       <View style={styles.potEmptyDelete}>
                         <View>
@@ -121,7 +125,7 @@ const PotScreen = (props) => {
             {plant.isUse ? (
               <TouchableOpacity
                 style={styles.gardenCharacter}
-                onPress={() => GoMain(potId)}
+                onPress={() => GoMain(potId, plant.gardenId)}
               >
                 <Image
                   source={require("../../assets/img/characterBaechoo.png")}
@@ -132,7 +136,7 @@ const PotScreen = (props) => {
             ) : (
               <TouchableOpacity
                 style={styles.gardenCharacter}
-                onPress={() => GoMain(potId)}
+                onPress={() => GoMain(potId, plant.gardenId)}
               >
                 <Image
                   source={require("../../assets/img/pot.png")}
@@ -194,7 +198,7 @@ const PotScreen = (props) => {
         getPotData();
       })
       .catch((err) => {
-        console.log(err.message);
+        console.log(err);
       });
   };
 
@@ -265,4 +269,11 @@ const PotScreen = (props) => {
   );
 };
 
-export default connect(null, { storePotID })(PotScreen);
+const mapStateToProps = (state) => {
+  return {
+    potID: state.potID,
+    gardenID: state.gardenID,
+  };
+};
+
+export default connect(mapStateToProps, { storePotID, setGardenID })(PotScreen);

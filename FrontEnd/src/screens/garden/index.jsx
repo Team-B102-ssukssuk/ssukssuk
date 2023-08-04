@@ -17,6 +17,7 @@ const GardenScreen = () => {
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
   const [isDeleteIconVisible, setDeleteIconVisible] = useState(false);
   const [isCharacterModalVisible, setCharacterModalVisible] = useState(false);
+  const [isDeleteGardenId, setDeleteGardenId] = useState(0);
   const [isPlantData, setPlantData] = useState([]);
 
   const handleSeedPlant = (nickname, option) => {
@@ -43,13 +44,18 @@ const GardenScreen = () => {
     setCharacterModalVisible(!isCharacterModalVisible);
   };
 
-  const toggleDeleteModal = () => {
+  const toggleDeleteModal = (garden) => {
     setDeleteModalVisible(!isDeleteModalVisible);
+    setDeleteGardenId(garden.gardenId);
   };
 
   const handleDelete = () => {
     // 삭제 관련 로직
     console.log("식물 삭제 인덱스 넣으면 바로 작동");
+    customAxios.put(`plant/delete/${isDeleteGardenId}`).then(() => {
+      console.log("삭제성공");
+      getPotData();
+    });
     setDeleteModalVisible(false);
   };
 
@@ -93,15 +99,15 @@ const GardenScreen = () => {
           <View style={styles.alignCenterContainer}>
             {/* Map through the rows */}
             {rows.map((row, rowIndex) => (
-              <View style={styles.reContainer} key={rowIndex}>
+              <View style={styles.reContainer} key={`row_${rowIndex}`}>
                 {/* Map through the pots in each row */}
                 {row.map((garden, potIndex) => (
-                  <View style={styles.gardenContainer} key={potIndex}>
+                  <View
+                    style={styles.gardenContainer}
+                    key={`garden_${potIndex}`}
+                  >
                     {isDeleteIconVisible ? (
-                      <View
-                        style={styles.absoultPosition}
-                        onPress={toggleDeleteModal}
-                      >
+                      <View style={styles.absoultPosition}>
                         <Animatable.View
                           animation="pulse"
                           duration={700}
@@ -109,7 +115,7 @@ const GardenScreen = () => {
                         >
                           <TouchableOpacity
                             style={styles.gardenCharacterSign}
-                            onPress={toggleDeleteModal}
+                            onPress={() => toggleDeleteModal(garden)}
                           >
                             <View style={styles.gardenCharacterName}>
                               <CookieRunBold
@@ -134,10 +140,7 @@ const GardenScreen = () => {
                         </View>
                       </View>
                     ) : (
-                      <View
-                        style={styles.absoultPosition}
-                        onPress={toggleDeleteModal}
-                      >
+                      <View style={styles.absoultPosition}>
                         <View style={styles.gardenCharacterSign}>
                           <View style={styles.gardenCharacterName}>
                             <CookieRunBold
@@ -173,7 +176,10 @@ const GardenScreen = () => {
                 {Array(3 - row.length)
                   .fill()
                   .map((_, emptyIndex) => (
-                    <View style={styles.gardenContainer} key={emptyIndex}>
+                    <View
+                      style={styles.gardenContainer}
+                      key={`empty_${emptyIndex}`}
+                    >
                       <View style={styles.absoultPosition}>
                         {rowIndex === lastRowWithCharacter - 1 ? (
                           emptyIndex === 0 ? (
@@ -208,7 +214,10 @@ const GardenScreen = () => {
               {Array(3)
                 .fill()
                 .map((_, emptyIndex) => (
-                  <View style={styles.gardenContainer} key={emptyIndex}>
+                  <View
+                    style={styles.gardenContainer}
+                    key={`empty_garden_${emptyIndex}`}
+                  >
                     <View style={styles.absoultPosition}>
                       <View style={styles.gardenCharacter}>
                         {/* Transparent character image */}

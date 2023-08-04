@@ -166,7 +166,10 @@ const ModalDictionary = ({ isVisible, onClose }) => {
     const gapSize = 5; // Define the gap between emptyImage elements
 
     return plants.map((plant, index) => (
-      <View key={plant.plantId} style={styles.emptyImageContainer}>
+      <View
+        key={`plant_main_${plant.plantId}`}
+        style={styles.emptyImageContainer}
+      >
         <TouchableOpacity onPress={() => toggleContentModal(plant)}>
           <Image
             source={require("../../assets/img/silhouette.png")}
@@ -250,9 +253,9 @@ const ModalDictionary = ({ isVisible, onClose }) => {
         <ScrollView>
           {response.data.categories.map((category) =>
             category.categoryName === selectedCategory ? (
-              <View key={category.categoryId}>
+              <View key={`category_${category.categoryId}`}>
                 {category.plants.map((plant) => (
-                  <View key={plant.plantId}>
+                  <View key={`category_plant_${plant.plantId}`}>
                     <View style={styles.content}>
                       <CookieRunBold style={styles.dictionaryText}>
                         {plant.plantName}

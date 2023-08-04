@@ -20,7 +20,11 @@ const ModalPlantSeed = ({ isVisible, onClose, onSeedPlant }) => {
 
   const handleSeedPlant = () => {
     // Call the onSeedPlant function and pass the selected option as a parameter
-    onSeedPlant(selectedOption, selectedNickname);
+    onSeedPlant(
+      selectedOption?.plantId,
+      selectedOption?.plantName,
+      selectedNickname
+    );
     onClose();
   };
 
@@ -28,15 +32,34 @@ const ModalPlantSeed = ({ isVisible, onClose, onSeedPlant }) => {
   const categories = [
     {
       name: "채소",
-      subcategories: ["상추", "배추", "당근", "브로콜리"],
+      subcategories: [
+        {
+          plantId: 1,
+          plantName: "상추",
+        },
+        {
+          plantId: 4,
+          plantName: "배추",
+        },
+      ],
     },
     {
       name: "꽃",
-      subcategories: ["장미"],
+      subcategories: [
+        {
+          plantId: 2,
+          plantName: "장미",
+        },
+      ],
     },
     {
       name: "선인장",
-      subcategories: ["미니 선인장"],
+      subcategories: [
+        {
+          plantId: 3,
+          plantName: "미니 선인장",
+        },
+      ],
     },
   ];
 
@@ -67,7 +90,9 @@ const ModalPlantSeed = ({ isVisible, onClose, onSeedPlant }) => {
           {!selectedSubcategory ? (
             <CustomDropdown
               options={categories}
-              onSelect={(subcategory) => setSelectedOption(subcategory)}
+              onSelect={(plantId, plantName) =>
+                setSelectedOption({ plantId, plantName })
+              }
             />
           ) : (
             <TextInput

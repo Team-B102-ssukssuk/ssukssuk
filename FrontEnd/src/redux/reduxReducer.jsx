@@ -1,16 +1,23 @@
 // reduxReducer.js
-import { STORE_POT_ID } from "./action";
+
+import { SAVE_POT_ID, SAVE_GARDEN_ID } from "./action";
 
 const initialState = {
-  potID: 0,
+  potID: null,
+  gardenID: null,
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case STORE_POT_ID:
+    case SAVE_POT_ID:
       return {
         ...state,
-        potID: action.payload,
+        potID: action.potID,
+      };
+    case SAVE_GARDEN_ID:
+      return {
+        ...state,
+        gardenID: action.gardenID,
       };
     default:
       return state;

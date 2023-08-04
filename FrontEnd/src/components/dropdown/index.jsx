@@ -23,8 +23,8 @@ const CustomDropdown = ({ options, onSelect }) => {
   };
 
   const handleSubcategoryPress = (subcategory) => {
-    setSelectedSubcategory(subcategory);
-    onSelect(subcategory);
+    setSelectedSubcategory(subcategory.plantName);
+    onSelect(subcategory.plantId, subcategory.plantName);
     toggleModal();
   };
 
@@ -58,7 +58,7 @@ const CustomDropdown = ({ options, onSelect }) => {
               />
             </TouchableOpacity>
             <CookieRunBold style={{ textAlign: "center", color: "#4D0C0C" }}>
-              {subcategory}
+              {subcategory.plantName}
             </CookieRunBold>
           </View>
         ))}

@@ -35,6 +35,7 @@ const ProfileScreen = ({ navigation }) => {
       badges: [],
     },
   });
+  const [badgeIndex, setBadgeIndex] = useState(0);
 
   const getUserData = () => {
     customAxios.get("/user/info").then((res) => {
@@ -51,8 +52,28 @@ const ProfileScreen = ({ navigation }) => {
     setEditModalVisible(!isEditModalVisible);
   };
 
-  const handleEdit = () => {
-    // 삭제 관련 로직
+  const badgeImages = {
+    ActiveBadge1: require("../../assets/img/ActiveBadge1.png"),
+    ActiveBadge2: require("../../assets/img/ActiveBadge2.png"),
+    ActiveBadge3: require("../../assets/img/ActiveBadge3.png"),
+    ActiveBadge4: require("../../assets/img/ActiveBadge4.png"),
+    ActiveBadge5: require("../../assets/img/ActiveBadge5.png"),
+    ActiveBadge6: require("../../assets/img/ActiveBadge6.png"),
+    ActiveBadge7: require("../../assets/img/ActiveBadge7.png"),
+    ActiveBadge8: require("../../assets/img/ActiveBadge8.png"),
+    ActiveBadge9: require("../../assets/img/ActiveBadge9.png"),
+    Badge: require("../../assets/img/Badge.png"),
+  };
+
+  const handleEdit = (inputValue) => {
+    customAxios
+      .put("/user/nickname", {
+        nickname: inputValue,
+      })
+      .then((res) => {
+        console.log(res.data);
+        getUserData();
+      });
     console.log("닉네임 수정 관련 로직 넣어야 함");
     setEditModalVisible(false);
   };
@@ -60,12 +81,18 @@ const ProfileScreen = ({ navigation }) => {
   const bs = useRef(null);
   const window = Dimensions.get("window");
 
+  const badgeImageName = `ActiveBadge${badgeIndex}`;
+
   const renderInner = () => (
     <View style={styles.panel}>
-      <Image
-        source={require("../../assets/img/Badge.png")}
-        style={styles.badge}
-      />
+      {clickedBadge.isDone ? (
+        <Image source={badgeImages[badgeImageName]} style={styles.badge} />
+      ) : (
+        <Image
+          source={require("../../assets/img/Badge.png")}
+          style={styles.badge}
+        />
+      )}
       <CookieRunBold style={styles.panelTitle}>
         {clickedBadge.badgeName}
       </CookieRunBold>
@@ -141,8 +168,9 @@ const ProfileScreen = ({ navigation }) => {
   const badges = isUserData.information.badges; // Use all the badge data from the response
   const rows = divideIntoRowsAndColumns(badges, 3, 3);
 
-  const handleBadgeClick = (badge) => {
+  const handleBadgeClick = (badge, index) => {
     setClickedBadge(badge);
+    setBadgeIndex(index);
     onOpen();
   };
 
@@ -232,17 +260,22 @@ const ProfileScreen = ({ navigation }) => {
           {rows.map((row, rowIndex) => (
             <View key={rowIndex} style={styles.badgeContent}>
               {/* Map through the badges in each row */}
-              {row.map((badge, colIndex) => (
-                <TouchableOpacity
-                  key={colIndex}
-                  onPress={() => handleBadgeClick(badge)}
-                >
-                  <Image
-                    source={require("../../assets/img/Badge.png")} // Replace this with the badge image source from the `badge` object
-                    style={styles.badge}
-                  />
-                </TouchableOpacity>
-              ))}
+              {row.map((badge, colIndex) => {
+                const badgeImageName = badge.isDone
+                  ? `ActiveBadge${badge.badgeId}`
+                  : "Badge";
+                return (
+                  <TouchableOpacity
+                    key={colIndex}
+                    onPress={() => handleBadgeClick(badge, badge.badgeId)}
+                  >
+                    <Image
+                      source={badgeImages[badgeImageName]}
+                      style={styles.badge}
+                    />
+                  </TouchableOpacity>
+                );
+              })}
             </View>
           ))}
         </View>

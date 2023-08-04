@@ -19,7 +19,7 @@ const ModalPlantRegist = ({
   };
 
   const handleSubmit = () => {
-    if (inputValue.length === 8) {
+    if (inputValue.length > 0) {
       onRegist(inputValue);
       setInputValue("");
       setTrueMessage(false);
@@ -60,7 +60,7 @@ const ModalPlantRegist = ({
             onPress={handleSubmit}
             style={[
               styles.RegistButton,
-              inputValue.length === 8
+              inputValue.length > 0
                 ? styles.buttonActive
                 : styles.buttonInactive,
             ]}
