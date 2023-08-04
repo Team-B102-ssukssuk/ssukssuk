@@ -42,8 +42,8 @@ public class UserController {
     // 회원가입시 이메일 인증코드 발송
     @PostMapping("/join/email")
     public ResponseEntity<?> sendEmailCode
-            (@RequestBody @Validated CheckEmailRequestDto checkEmailRequestDto, BindingResult bindingResult) throws Exception {
-        if(bindingResult.hasErrors()){
+    (@RequestBody @Validated CheckEmailRequestDto checkEmailRequestDto, BindingResult bindingResult) throws Exception {
+        if (bindingResult.hasErrors()) {
             return new ResponseEntity<>("요청값 검증 실패", HttpStatus.FORBIDDEN);
         }
         Optional<User> findUser = userService.findByEmail(checkEmailRequestDto);
@@ -65,37 +65,37 @@ public class UserController {
     // 회원가입시 이메일 인증코드 확인
     @PostMapping("/join/emailcheck")
     public ResponseEntity<?> verifyEmailCode
-            (@RequestBody @Validated VerifyEmailCodeDto verifyEmailCodeDto, BindingResult bindingResult) throws Exception {
+    (@RequestBody @Validated VerifyEmailCodeDto verifyEmailCodeDto, BindingResult bindingResult) throws Exception {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>("요청값 검증 실패", HttpStatus.FORBIDDEN);
         }
         String userEmail = verifyEmailCodeDto.getEmail();
         String entryCode = verifyEmailCodeDto.getCode();
         String authCode = redisService.getEmailCode(userEmail);
-        log.debug("userEmail={}",userEmail);
-        log.debug("entryCode={}",entryCode);
-        log.debug("authCode={}",authCode);
+        log.debug("userEmail={}", userEmail);
+        log.debug("entryCode={}", entryCode);
+        log.debug("authCode={}", authCode);
         if (entryCode.equals(authCode))
-            return new ResponseEntity<>("인증코드 일치", HttpStatus.OK);
-        return new ResponseEntity<>("인증코드 불일치", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("OK", HttpStatus.OK);
+        return new ResponseEntity<>("FALSE", HttpStatus.NOT_FOUND);
     }
 
     // 닉네임 중복 확인
     @GetMapping("/nickname/{nickname}")
     public ResponseEntity<?> verifyNickname(@PathVariable String nickname) {
-        log.debug("nickname={}",nickname);
+        log.debug("nickname={}", nickname);
         Optional<User> findUser = userService.findByNickname(nickname);
         if (findUser.isPresent())
             throw new CustomException(ErrorCode.DUPLICATE_USER_NICKNAME);
 //            return new ResponseEntity<>("중복된 닉네임", HttpStatus.CONFLICT);
-        return new ResponseEntity<>("사용 가능한 닉네임", HttpStatus.OK);
+        return new ResponseEntity<>("OK", HttpStatus.OK);
     }
 
     // 회원가입
     @PostMapping("/join")
     public ResponseEntity<?> registerUser
     (@RequestBody @Validated RegisterUserRequestDto registerUserRequestDto, BindingResult bindingResult) throws Exception {
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return new ResponseEntity<>("error", HttpStatus.FORBIDDEN);
         }
         userService.createUser(registerUserRequestDto);
@@ -105,7 +105,7 @@ public class UserController {
     // 로그인
     @PostMapping
     public ResponseEntity<?> login(@RequestBody @Validated LoginRequestDto loginRequestDto, BindingResult bindingResult) throws Exception {
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return new ResponseEntity<>("error", HttpStatus.FORBIDDEN);
         }
         log.debug("before token");
@@ -115,9 +115,9 @@ public class UserController {
         // refreshToken Redis 서버에 저장
         redisService.setRefreshToken(userEmail, refreshToken);
         String token = redisService.getRefreshToken(userEmail);
-        log.debug("token={}",token);
+        log.debug("token={}", token);
 //        log.debug("refreshToken={}",refreshToken);
-        return new ResponseEntity<>(tokenInfo,HttpStatus.OK);
+        return new ResponseEntity<>(tokenInfo, HttpStatus.OK);
     }
 
     @GetMapping("/info")
@@ -133,7 +133,7 @@ public class UserController {
         infoResponseDto.setNickname(userNickname);
 
         gardenService.findAllByUserId(userId).forEach(g -> {
-            if(g.getIsUse()) infoResponseDto.addMyPlantCount();
+            if (g.getIsUse()) infoResponseDto.addMyPlantCount();
             else infoResponseDto.addGardenCount();
         });
 
@@ -150,7 +150,7 @@ public class UserController {
     @PostMapping("/password/email")
     public ResponseEntity<?> sendPasswordEmailCode
     (@RequestBody @Validated CheckEmailRequestDto checkEmailRequestDto, BindingResult bindingResult) throws Exception {
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return new ResponseEntity<>("요청값 검증 실패", HttpStatus.FORBIDDEN);
         }
         Optional<User> findUser = userService.findByEmail(checkEmailRequestDto);
@@ -163,7 +163,7 @@ public class UserController {
         // 인증코드 Redis 서버에 저장
         redisService.setEmailCode(userEmail, authCode);
         log.debug("인증코드 보냈어");
-        return new ResponseEntity<>("인증코드 발송 완료", HttpStatus.OK);
+        return new ResponseEntity<>("OK", HttpStatus.OK);
     }
 
     // 비밀번호 재설정시 이메일 인증코드 확인
@@ -176,23 +176,33 @@ public class UserController {
         String userEmail = verifyEmailCodeDto.getEmail();
         String entryCode = verifyEmailCodeDto.getCode();
         String authCode = redisService.getEmailCode(userEmail);
-        log.debug("userEmail={}",userEmail);
-        log.debug("entryCode={}",entryCode);
-        log.debug("authCode={}",authCode);
+        log.debug("userEmail={}", userEmail);
+        log.debug("entryCode={}", entryCode);
+        log.debug("authCode={}", authCode);
         if (entryCode.equals(authCode))
-            return new ResponseEntity<>("인증코드 일치", HttpStatus.OK);
-        return new ResponseEntity<>("인증코드 불일치", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("OK", HttpStatus.OK);
+        return new ResponseEntity<>("FALSE", HttpStatus.NOT_FOUND);
     }
 
     // 비밀번호 재설정
     @PostMapping("/password")
     public ResponseEntity<?> updatePassword
     (@RequestBody @Validated UpdatePasswordDto updatePasswordDto, BindingResult bindingResult) throws Exception {
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return new ResponseEntity<>("error", HttpStatus.FORBIDDEN);
         }
         userService.updatePassword(updatePasswordDto);
         return new ResponseEntity<>("OK", HttpStatus.OK);
     }
 
+    // 닉네임 수정
+    @PutMapping("/nickname")
+    public ResponseEntity<?> updateNickname
+    (@RequestAttribute Integer userId, @RequestBody @Validated UpdateNicknameDto updateNicknameDto, BindingResult bindingResult) throws Exception {
+        if (bindingResult.hasErrors())
+            throw new CustomException(ErrorCode.INPUT_EXCEPTION);
+        log.debug("userId={}",userId);
+        userService.updateNickname(userId, updateNicknameDto.getNickname());
+        return new ResponseEntity<>("OK", HttpStatus.OK);
+    }
 }
