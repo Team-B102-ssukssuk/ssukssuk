@@ -48,7 +48,7 @@ const PasswordFindScreen = ({ navigation }) => {
   };
 
   const goToSignUpPassword = () => {
-    if (!isCodeVerified) {
+    if (isCodeVerified === false) {
       setErrorOpacity(100);
       setVerifyError("인증번호가 일치하지 않습니다.");
       console.log("인증번호가 일치하지 않습니다.");
@@ -63,7 +63,7 @@ const PasswordFindScreen = ({ navigation }) => {
     try {
       const requestData = {
         email: email,
-        verificationCode: verifyNumber,
+        code: verifyNumber,
       };
       const response = await axios.post(
         "http://i9b102.p.ssafy.io:8080/user/password/emailcheck",

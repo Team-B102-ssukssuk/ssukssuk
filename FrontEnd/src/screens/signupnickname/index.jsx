@@ -59,28 +59,6 @@ const SignUpNicknameScreen = ({ navigation, route }) => {
     }
   };
 
-  // const checkNickname = () => {
-  //   let isNicknameAvailable = true;
-  //   for (let i = 0; i < response.data.length; i++) {
-  //     if (nickname === response.data[i].nickname) {
-  //       isNicknameAvailable = false;
-  //       break;
-  //     }
-  //   }
-
-  //   if (isNicknameAvailable && nickname !== "") {
-  //     setErrorOpacity(0);
-  //     setShowCheckcircle(100);
-  //     setNicknameVerify(true);
-  //     setNextButtonColor("#2DD0AF");
-  //   } else {
-  //     setErrorOpacity(100);
-  //     setShowCheckcircle(0);
-  //     setNicknameVerify(false);
-  //     setNextButtonColor("#CACACA");
-  //   }
-  // };
-
   const signUpSuccess = async () => {
     try {
       if (nicknameVerify) {

@@ -30,6 +30,7 @@ const PasswordMakeScreen = ({ navigation, route }) => {
           "http://i9b102.p.ssafy.io:8080/user/password",
           requestData
         );
+        console.log(requestData);
         navigation.navigate("Login");
         console.log(response);
       } else {

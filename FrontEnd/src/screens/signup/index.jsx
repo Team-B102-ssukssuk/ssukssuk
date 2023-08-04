@@ -91,30 +91,6 @@ const SignUpScreen = ({ navigation }) => {
     }
   };
 
-  // // 비밀번호 설정으로 가기 위한 페이지
-  // const goToSignUpPassword = () => {
-  //   const SignUpData = {
-  //     email: email,
-  //     password: password,
-  //     nickname: nickname,
-  //   };
-  //   // 인증완료 & 인증번호가 데이터와 같다면
-  //   if (
-  //     isCodeVerified &&
-  //     verifyNumber === verificationResponse?.data[0]?.code
-  //   ) {
-  //     // 페이지 이동
-  //     navigation.navigate("SignUpPassword", {
-  //       SignUpData: SignUpData,
-  //     });
-  //   } else {
-  //     // 오류 메세지
-  //     setErrorOpacity(100);
-  //     setVerifyError("인증번호가 일치하지 않습니다.");
-  //     console.log("인증번호가 일치하지 않습니다.");
-  //   }
-  // };
-
   // 이메일을 작성하고 바꿀 수도 있으므로
   useEffect(() => {
     // 작성한 이메일 변경시 인증번호 상태가 false
