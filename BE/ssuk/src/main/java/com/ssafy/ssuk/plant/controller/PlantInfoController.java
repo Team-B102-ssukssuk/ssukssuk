@@ -1,7 +1,6 @@
 package com.ssafy.ssuk.plant.controller;
 
 import com.ssafy.ssuk.plant.dto.response.ResponseDto;
-import com.ssafy.ssuk.plant.dto.request.TotalCategoryRequestDto;
 import com.ssafy.ssuk.plant.dto.response.TotalCategoryResponseDto;
 import com.ssafy.ssuk.plant.domain.Info;
 import com.ssafy.ssuk.plant.dto.request.InfoRegisterRequestDto;
@@ -18,6 +17,7 @@ import com.ssafy.ssuk.plant.dto.response.PlantSearchResponseDto;
 import com.ssafy.ssuk.plant.dto.request.PlantUpdateRequestDto;
 import com.ssafy.ssuk.plant.service.CategoryService;
 import com.ssafy.ssuk.plant.service.PlantService;
+//import com.ssafy.ssuk.utils.response.CommonResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -48,6 +48,12 @@ public class PlantInfoController {
                 .stream()
                 .map(pc -> new CategorySearchResponseDto(pc.getName(), pc.getPlants()))
                 .collect(Collectors.toList());
+//        CommonResponseDto<List<CategorySearchResponseDto>> result =
+//                CommonResponseDto.<List<CategorySearchResponseDto>>builder()
+//                .data(collect)
+//                .status(2)
+//                .message("이게 맞네")
+//                .build();
         return new ResponseEntity<>(new ResponseDto(SUCCESS, "categories", collect), HttpStatus.OK);
     }
 
