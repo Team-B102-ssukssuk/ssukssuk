@@ -10,6 +10,7 @@ import React, { useState, useEffect } from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import styles from "./style";
 import CookieRunRegular from "../../components/common/CookieRunRegular";
+import axios from "axios";
 // import axios from "axios";
 
 // navigation 등록
@@ -23,60 +24,96 @@ const SignUpScreen = ({ navigation }) => {
   const [nextButtonColor, setNextButtonColor] = useState("#CACACA");
   const [isCodeVerified, setIsCodeVerified] = useState(false);
   const [verifyError, setVerifyError] = useState("이미 존재하는 이메일입니다.");
+  const [verificationResponse, setVerificationResponse] = useState(null);
 
-  // 더미데이터
-  const response = {
-    // const url = "http://i9b102.p.ssafy.io:8080/user/email";
-    // const response = await axios.get(url);
-    // console.log(response);
-    message: "OK",
-    status: "200",
-    data: [
-      {
-        email: "ssuk@gmail.com",
-        code: "abc123", // 6자리 문자열
-      },
-    ],
-  };
-
-  // 인증번호 보내기
-  const sendVerificationCode = () => {
-    // 이메일과 데이터의 이메일이 같다면..
-    for (let i = 0; i < response.data.length; i++) {
-      if (email === response.data[i].email) {
-        // 인증 상태를 false로 변경
-        setIsCodeVerified(false);
-        // 에러 메시지 나타남
-        setErrorOpacity(100);
-        setVerifyError("이미 존재하는 이메일입니다.");
-      } else {
-        // 인증 상태 true
-        setIsCodeVerified(true);
-        setErrorOpacity(0);
-      }
+  const sendVerificationCode = async () => {
+    try {
+      const requestData = {
+        email: email,
+      };
+      const response = await axios.post(
+        "http://i9b102.p.ssafy.io:8080/user/join/email",
+        requestData
+      );
+      console.log("인증번호 전송 성공:", response.data);
+      setVerificationResponse(response.data);
+      setIsCodeVerified(true);
+      setErrorOpacity(0);
+    } catch (error) {
+      console.error("인증번호 전송 실패", error);
+      setIsCodeVerified(false);
+      setErrorOpacity(100);
+      setVerifyError("이미 존재하는 이메일입니다.");
     }
   };
 
-  // 비밀번호 설정으로 가기 위한 페이지
   const goToSignUpPassword = () => {
-    const SignUpData = {
-      email: email,
-      password: password,
-      nickname: nickname,
-    };
-    // 인증완료 & 인증번호가 데이터와 같다면
-    if (isCodeVerified && verifyNumber === response.data[0].code) {
-      // 페이지 이동
-      navigation.navigate("SignUpPassword", {
-        SignUpData: SignUpData,
-      });
-    } else {
-      // 오류 메세지
+    if (!isCodeVerified) {
       setErrorOpacity(100);
       setVerifyError("인증번호가 일치하지 않습니다.");
       console.log("인증번호가 일치하지 않습니다.");
+      return;
+    }
+
+    // 인증되었으면 인증번호 확인 요청 보내기
+    checkVerificationCode();
+  };
+
+  const checkVerificationCode = async () => {
+    try {
+      console.log(verificationResponse);
+      console.log(email);
+      const requestData = {
+        email: email,
+        code: verifyNumber,
+      };
+      console.log(requestData.verificationCode);
+      console.log("222");
+      const response = await axios.post(
+        "http://i9b102.p.ssafy.io:8080/user/join/emailcheck",
+        requestData
+      );
+      console.log("인증번호 확인 성공:", response.data);
+
+      // 서버에서 인증번호 확인이 성공한 경우 다음 페이지로 이동하도록 수정
+      navigation.navigate("SignUpPassword", {
+        SignUpData: {
+          email: email,
+          password: password,
+          nickname: nickname,
+        },
+      });
+      // console.log(SignUpData);
+    } catch (error) {
+      console.error("인증번호 확인 실패", error);
+      setErrorOpacity(100);
+      setVerifyError("인증번호가 일치하지 않습니다.");
     }
   };
+
+  // // 비밀번호 설정으로 가기 위한 페이지
+  // const goToSignUpPassword = () => {
+  //   const SignUpData = {
+  //     email: email,
+  //     password: password,
+  //     nickname: nickname,
+  //   };
+  //   // 인증완료 & 인증번호가 데이터와 같다면
+  //   if (
+  //     isCodeVerified &&
+  //     verifyNumber === verificationResponse?.data[0]?.code
+  //   ) {
+  //     // 페이지 이동
+  //     navigation.navigate("SignUpPassword", {
+  //       SignUpData: SignUpData,
+  //     });
+  //   } else {
+  //     // 오류 메세지
+  //     setErrorOpacity(100);
+  //     setVerifyError("인증번호가 일치하지 않습니다.");
+  //     console.log("인증번호가 일치하지 않습니다.");
+  //   }
+  // };
 
   // 이메일을 작성하고 바꿀 수도 있으므로
   useEffect(() => {
