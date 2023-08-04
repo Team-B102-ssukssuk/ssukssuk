@@ -86,8 +86,8 @@ public class UserController {
         log.debug("nickname={}", nickname);
         Optional<User> findUser = userService.findByNickname(nickname);
         if (findUser.isPresent())
-            throw new CustomException(ErrorCode.DUPLICATE_USER_NICKNAME);
-//            return new ResponseEntity<>("중복된 닉네임", HttpStatus.CONFLICT);
+            return new ResponseEntity<>("FALSE", HttpStatus.CONFLICT);
+//            throw new CustomException(ErrorCode.DUPLICATE_USER_NICKNAME);
         return new ResponseEntity<>("OK", HttpStatus.OK);
     }
 
@@ -185,7 +185,7 @@ public class UserController {
     }
 
     // 비밀번호 재설정
-    @PostMapping("/password")
+    @PutMapping("/password")
     public ResponseEntity<?> updatePassword
     (@RequestBody @Validated UpdatePasswordDto updatePasswordDto, BindingResult bindingResult) throws Exception {
         if (bindingResult.hasErrors()) {
