@@ -1,4 +1,4 @@
-package com.ssafy.ssuk.utils.jwt;
+package com.ssafy.ssuk.utils.auth.jwt;
 
 import com.ssafy.ssuk.exception.dto.CustomJwtException;
 import io.jsonwebtoken.*;

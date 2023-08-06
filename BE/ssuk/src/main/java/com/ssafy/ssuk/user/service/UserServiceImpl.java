@@ -7,8 +7,8 @@ import com.ssafy.ssuk.user.domain.User;
 import com.ssafy.ssuk.user.dto.request.*;
 import com.ssafy.ssuk.user.repository.RoleRepository;
 import com.ssafy.ssuk.user.repository.UserRepository;
-import com.ssafy.ssuk.utils.jwt.JwtTokenProvider;
-import com.ssafy.ssuk.utils.jwt.TokenInfo;
+import com.ssafy.ssuk.utils.auth.jwt.JwtTokenProvider;
+import com.ssafy.ssuk.utils.auth.jwt.TokenInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -46,7 +46,6 @@ public class UserServiceImpl implements UserService {
         Role userRole = roleRepository.findByRolename("USER");
         newUser.addRole(userRole);
         userRepository.save(newUser);
-
     }
 
     @Override
