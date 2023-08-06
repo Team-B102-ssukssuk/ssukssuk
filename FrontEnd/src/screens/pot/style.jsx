@@ -5,6 +5,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  scanButton: {
+    alignSelf: "center",
+    marginTop: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    elevation: 4,
+  },
+  scanButtonText: {
+    fontSize: 18,
+    color: "#000",
+  },
   potWood: {
     flexDirection: "row",
     justifyContent: "center",
@@ -16,6 +29,7 @@ const styles = StyleSheet.create({
   },
   PotWoodText: {
     position: "absolute",
+    alignItems: "center",
     marginTop: 15,
     color: COLORS.brown,
     fontSize: 18,

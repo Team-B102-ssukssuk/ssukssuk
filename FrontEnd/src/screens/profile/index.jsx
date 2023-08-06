@@ -96,7 +96,10 @@ const ProfileScreen = ({ navigation }) => {
       <CookieRunBold style={styles.panelTitle}>
         {clickedBadge.badgeName}
       </CookieRunBold>
-      <CookieRunBold style={styles.panelSubtitle}>달성조건</CookieRunBold>
+      {!clickedBadge.isDone && (
+        <CookieRunBold style={styles.panelSubtitle}>달성조건</CookieRunBold>
+      )}
+
       {clickedBadge.isDone ? (
         <CookieRunBold style={styles.panelSubtitle}>
           {clickedBadge.description}

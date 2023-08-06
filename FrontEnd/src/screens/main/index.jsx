@@ -159,7 +159,7 @@ const MainScreen = (props) => {
                 style={styles.sensorSize}
               />
               <CookieRunRegular style={styles.tmpText}>
-                {humidity} C°
+                {humidity} %
               </CookieRunRegular>
             </View>
             <View style={styles.tmp}>
@@ -169,7 +169,7 @@ const MainScreen = (props) => {
                 style={styles.sensorSize}
               />
               <CookieRunRegular style={styles.tmpText}>
-                {moisture} C°
+                {moisture} %
               </CookieRunRegular>
             </View>
             <TouchableOpacity onPress={toggleOpenMap}>

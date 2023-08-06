@@ -1,16 +1,17 @@
 {
   "expo": {
     "name": "쑥쑥",
-    "icon": "./src/assets/img/logo.png",
+    "icon": "./src/assets/img/ActiveBadge.png",
     "version": "2.0.0",
     "slug": "SSOOK-SSOOK",
     "ios": {
-      "bundleIdentifier": "com.ssookssook.ssookssook",
+      "bundleIdentifier": "com.ssafy.ssuk",
       "buildNumber": "2.0.0"
     },
     "android": {
-      "package": "com.ssookssook.ssookssook",
-      "versionCode": 3,
+      "package": "com.ssafy.ssuk",
+      "googleServicesFile": "./google-services.json",
+      "versionCode": 4,
       "permissions": []
     },
     "extra": {

@@ -1,155 +1,29 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { View, TouchableOpacity, Image } from "react-native";
 import Modal from "react-native-modal";
 import CookieRunBold from "../common/CookieRunBold";
 import ModalInfo from "../modalInfo";
 import styles from "./style";
 import { ScrollView } from "react-native-gesture-handler";
+import customAxios from "../../utils/axios";
 
 const ModalDictionary = ({ isVisible, onClose }) => {
   const [isContentModalVisible, setContentModalVisible] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("채소");
   const [selectedPlant, setSelectedPlant] = useState(null);
+  const [isDictionaryData, setDictionaryData] = useState({ categories: [] });
 
-  const response = {
-    message: "OK",
-    data: {
-      categories: [
-        {
-          categoryId: 1,
-          categoryName: "채소",
-          plants: [
-            {
-              plantId: 1,
-              plantName: "상추",
-              tempMax: 11.1,
-              tempMin: 11.0,
-              moistureMax: 111.1,
-              moistureMin: 111.0,
-              plantInfos: [
-                {
-                  level: 1,
-                  plantGuide: "잘 키워 주세요11",
-                  waterTerm: 1,
-                  waterAmount: 110,
-                  characterName: "상추1",
-                  characterComment: "안녕하세요1",
-                  characterImage: "img......",
-                  createdDate: "2023-08-01T03:52:50",
-                },
-                {
-                  level: 2,
-                  plantGuide: "잘 키워 주세요",
-                  waterTerm: 2,
-                  waterAmount: 220,
-                  characterName: "상추2",
-                  characterComment: "안녕하세요",
-                  characterImage: "img......",
-                  createdDate: "2023-08-01T03:57:03",
-                },
-                {
-                  level: 3,
-                  plantGuide: "잘 키워 주세요33",
-                  waterTerm: 3,
-                  waterAmount: 130,
-                  characterName: "상추3",
-                  characterComment: "안녕하세요1",
-                  characterImage: "img......",
-                  createdDate: null,
-                },
-              ],
-            },
-            {
-              plantId: 4,
-              plantName: "배추",
-              tempMax: 11.3,
-              tempMin: 11.0,
-              moistureMax: 123.3,
-              moistureMin: 113.0,
-              plantInfos: [
-                {
-                  level: 1,
-                  plantGuide: "잘 키워 주세요23",
-                  waterTerm: 1,
-                  waterAmount: 110,
-                  characterName: "아기 배추",
-                  characterComment: "안녕하세요1",
-                  characterImage: "img......",
-                  createdDate: null,
-                },
-                {
-                  level: 2,
-                  plantGuide: "잘 키워 주세요23",
-                  waterTerm: 2,
-                  waterAmount: 220,
-                  characterName: "그냥 배추",
-                  characterComment: "안녕하세요1",
-                  characterImage: "img......",
-                  createdDate: null,
-                },
-                {
-                  level: 3,
-                  plantGuide: "잘 키웠다",
-                  waterTerm: 3,
-                  waterAmount: 330,
-                  characterName: "김장 배추",
-                  characterComment: "안녕히계세요1",
-                  characterImage: "img......",
-                  createdDate: null,
-                },
-              ],
-            },
-          ],
-        },
-        {
-          categoryId: 3,
-          categoryName: "선인장",
-          plants: [
-            {
-              plantId: 3,
-              plantName: "미니 선인장",
-              tempMax: 33.7,
-              tempMin: 33.0,
-              moistureMax: 333.3,
-              moistureMin: 333.0,
-              plantInfos: [
-                {
-                  level: 1,
-                  plantGuide: "잘 키워 주세요11",
-                  waterTerm: 1,
-                  waterAmount: 310,
-                  characterName: "선인장1",
-                  characterComment: "안녕하세요1",
-                  characterImage: "img......",
-                  createdDate: "2023-08-01T03:57:28",
-                },
-                {
-                  level: 2,
-                  plantGuide: "선인장 2222",
-                  waterTerm: 2,
-                  waterAmount: 200,
-                  characterName: "선인장2",
-                  characterComment: "22222",
-                  characterImage: "사진...",
-                  createdDate: "2023-08-01T03:57:28",
-                },
-                {
-                  level: 3,
-                  plantGuide: "잘 키워 주세요23",
-                  waterTerm: 3,
-                  waterAmount: 330,
-                  characterName: "선인장3",
-                  characterComment: "안녕하세요1",
-                  characterImage: "img......",
-                  createdDate: "2023-08-01T03:57:29",
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
+  const getDictionaryData = () => {
+    customAxios.get("/plantinfo").then((res) => {
+      console.log(res.data);
+      setDictionaryData(res.data.data);
+    });
   };
+
+  useEffect(() => {
+    // 컴포넌트가 마운트될 때 getUserData 함수 호출
+    getDictionaryData();
+  }, []);
 
   const toggleContentModal = (plant) => {
     setSelectedPlant(plant);
@@ -167,24 +41,41 @@ const ModalDictionary = ({ isVisible, onClose }) => {
 
     return plants.map((plant, index) => (
       <View
-        key={`plant_main_${plant.plantId}`}
+        key={`${plant.level}_${plant.plantId}`}
         style={styles.emptyImageContainer}
       >
         <TouchableOpacity onPress={() => toggleContentModal(plant)}>
-          <Image
-            source={require("../../assets/img/silhouette.png")}
-            resizeMode="contain"
-            style={[
-              styles.emptyImg,
-              {
-                marginLeft: index % numColumns !== 0 ? gapSize : 0,
-                marginRight:
-                  index % numColumns !== numColumns - 1 ? gapSize : 0,
-                width: emptyImageSize,
-                height: emptyImageSize,
-              },
-            ]}
-          />
+          {plant.createdDate != null ? (
+            <Image
+              source={require("../../assets/img/404.png")}
+              resizeMode="contain"
+              style={[
+                styles.emptyImg,
+                {
+                  marginLeft: index % numColumns !== 0 ? gapSize : 0,
+                  marginRight:
+                    index % numColumns !== numColumns - 1 ? gapSize : 0,
+                  width: emptyImageSize,
+                  height: emptyImageSize,
+                },
+              ]}
+            />
+          ) : (
+            <Image
+              source={require("../../assets/img/silhouette.png")}
+              resizeMode="contain"
+              style={[
+                styles.emptyImg,
+                {
+                  marginLeft: index % numColumns !== 0 ? gapSize : 0,
+                  marginRight:
+                    index % numColumns !== numColumns - 1 ? gapSize : 0,
+                  width: emptyImageSize,
+                  height: emptyImageSize,
+                },
+              ]}
+            />
+          )}
         </TouchableOpacity>
       </View>
     ));
@@ -251,7 +142,7 @@ const ModalDictionary = ({ isVisible, onClose }) => {
         {/* 모달 내용 */}
         <CookieRunBold style={styles.modalText}>도감</CookieRunBold>
         <ScrollView>
-          {response.data.categories.map((category) =>
+          {isDictionaryData.categories.map((category) =>
             category.categoryName === selectedCategory ? (
               <View key={`category_${category.categoryId}`}>
                 {category.plants.map((plant) => (

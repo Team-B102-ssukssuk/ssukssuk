@@ -142,6 +142,7 @@ const styles = StyleSheet.create({
   panelTitle: {
     fontSize: 27,
     height: 35,
+    marginTop: 30,
     color: COLORS.Mint,
   },
   panelSubtitle: {
@@ -149,6 +150,7 @@ const styles = StyleSheet.create({
     color: "gray",
     height: 30,
     marginBottom: 10,
+    marginTop: 10,
   },
   panelButton: {
     padding: 20,

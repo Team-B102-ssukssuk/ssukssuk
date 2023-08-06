@@ -11,14 +11,15 @@ import { useNavigation } from "@react-navigation/native";
 import customAxios from "../../utils/axios";
 import { connect } from "react-redux";
 import { storePotID, setGardenID } from "../../redux/action";
+import QRCodeScanner from "../../components/qrCode";
 
 const PotScreen = (props) => {
   const navigation = useNavigation();
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
   const [isRegistModalVisible, setRegistModalVisible] = useState(false);
   const [isDeleteIconVisible, setDeleteIconVisible] = useState(false);
+  const [isQRcodeVisible, setQRcodeVisible] = useState(false);
   const [isPotId, setPotID] = useState(0);
-
   const [isPotData, setPotData] = useState([]);
 
   const getPotData = () => {
@@ -32,13 +33,35 @@ const PotScreen = (props) => {
     getPotData();
   }, []);
 
+  const handleScannedData = (data) => {
+    console.log(data);
+
+    customAxios
+      .post("/pot", {
+        serialNumber: data,
+      })
+      .then(() => {
+        console.log("등록 성공");
+        getPotData();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    toggleQRCodeScanner();
+  };
+
+  const toggleQRCodeScanner = () => {
+    setQRcodeVisible(!isQRcodeVisible);
+  };
+
+  const toggleInputModal = () => {
+    setQRcodeVisible(!isQRcodeVisible);
+    setRegistModalVisible(!isRegistModalVisible);
+  };
+
   const toggleDeleteModal = (potId) => {
     setPotID(potId);
     setDeleteModalVisible(!isDeleteModalVisible);
-  };
-
-  const toggleRegistModal = () => {
-    setRegistModalVisible(!isRegistModalVisible);
   };
 
   const visibleIcon = () => {
@@ -157,7 +180,7 @@ const PotScreen = (props) => {
           <View key={`empty_pot_${endIndex}`} style={transparentPotStyle}>
             <TouchableOpacity
               style={styles.gardenCharacter}
-              onPress={toggleRegistModal}
+              onPress={toggleQRCodeScanner}
             >
               <Image
                 source={require("../../assets/img/pot.png")}
@@ -265,6 +288,13 @@ const PotScreen = (props) => {
         title="화분 등록"
         placeholder="화분 고유 ID를 입력해주세요"
       />
+      {isQRcodeVisible && (
+        <QRCodeScanner
+          onScannedData={handleScannedData}
+          onCloseQRCodeScanner={toggleQRCodeScanner}
+          onOpenInputModal={toggleInputModal}
+        />
+      )}
     </View>
   );
 };
