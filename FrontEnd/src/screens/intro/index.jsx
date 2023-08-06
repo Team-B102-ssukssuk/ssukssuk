@@ -8,6 +8,8 @@ import { SafeAreaView, View, Text, Image, Button } from "react-native";
 //import AppIntroSlider to use it
 import AppIntroSlider from "react-native-app-intro-slider";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import CookieRunBold from "../../components/common/CookieRunBold";
+import CookieRunRegular from "../../components/common/CookieRunRegular";
 
 const IntroScreen = ({ navigation }) => {
   const [showRealApp, setShowRealApp] = useState(false);
@@ -97,22 +99,34 @@ const IntroScreen = ({ navigation }) => {
 const slides = [
   {
     key: "s1",
-    text: "시리얼 번호를 통해 화분을 등록하세요.",
-    title: "나만의 화분을 배치!",
-    image: require("../../assets/img/토양1.png"),
+    text: (
+      <CookieRunRegular style={styles.subfontcolor}>
+        시리얼 번호를 통해 화분을 등록하세요.
+      </CookieRunRegular>
+    ),
+    title: <CookieRunBold>&quot;나만의 화분을 배치!&quot;</CookieRunBold>,
+    image: require("../../assets/img/slideMockUp1.png"),
     backgroundColor: "white",
   },
   {
     key: "s2",
-    title: "내 식물이 캐릭터로!",
-    text: "식물과 함께 캐릭터를 성장시켜 보세요.",
+    title: <CookieRunBold>&quot;내 식물이 캐릭터로!&quot;</CookieRunBold>,
+    text: (
+      <CookieRunRegular style={styles.subfontcolor}>
+        식물과 함께 캐릭터를 성장시켜 보세요.
+      </CookieRunRegular>
+    ),
     image: require("../../assets/img/토양1.png"),
     backgroundColor: "white",
   },
   {
     key: "s3",
-    title: "나만의 정원에서 함께!",
-    text: "키우고 있는 식물을 정원에서 확인해 보세요.",
+    title: <CookieRunBold>&quot;나만의 정원에서 함께!&quot;</CookieRunBold>,
+    text: (
+      <CookieRunRegular style={styles.subfontcolor}>
+        키우고 있는 식물을 정원에서 확인해 보세요.
+      </CookieRunRegular>
+    ),
     image: require("../../assets/img/토양1.png"),
     backgroundColor: "white",
   },

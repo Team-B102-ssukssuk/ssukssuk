@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { COLORS } from "../../constants/theme";
 
 const styles = StyleSheet.create({
   container: {
@@ -18,7 +19,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 16,
   },
-  introImageStyle: { height: 500 },
+  introImageStyle: { height: 500, marginTop: 40 },
   introTextStyle: {
     fontSize: 18,
     color: "#2B2B2B",
@@ -35,6 +36,13 @@ const styles = StyleSheet.create({
     textAlign: "right",
     fontSize: 18,
     justifyContent: "flex-end",
+  },
+  subfontcolor: {
+    color: COLORS.Grey,
+  },
+  imageStyle: {
+    width: 200,
+    height: 200,
   },
 });
 
