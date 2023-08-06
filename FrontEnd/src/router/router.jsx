@@ -15,6 +15,7 @@ import ProfileScreen from "../screens/profile";
 import ErrorScreen from "../screens/main";
 
 import Swiper from "react-native-swiper";
+import KakaoLoginScreen from "../screens/kakaologin";
 
 const Stack = createStackNavigator();
 
@@ -61,6 +62,11 @@ const Router = () => {
           options={{ headerShown: false }}
           name="Login"
           component={LoginScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="KakaoLogin"
+          component={KakaoLoginScreen}
         />
         <Stack.Screen
           options={{ headerShown: false }}

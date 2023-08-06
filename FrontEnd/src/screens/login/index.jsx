@@ -115,7 +115,7 @@ const LoginScreen = ({ navigation }) => {
           style={styles.kakaoLoginButton}
           activeOpacity={0.3}
           onPress={() => {
-            setErrorOpacity(100);
+            navigation.navigate("KakaoLogin");
           }}
         >
           <Text style={styles.kakaoLoginButtonText}>카카오 로그인</Text>
