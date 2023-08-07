@@ -100,7 +100,7 @@ public class KakaoAuthService {
     @Transactional
     public User saveOrGetUser(String accessToken) {
         KakaoProfile profile = getUserInfo(accessToken);
-        Optional<User> findUser = userRepository.findByEmail(profile.getKakaoAccount().email);
+        Optional<User> findUser = userRepository.findByEmail(profile.getKakaoAccount().email+".kakao");
         if (findUser.isPresent()) return findUser.get();
         // 사용자가 프로필 사진, 닉네임 동의했는지 체크
         // 동의안했으면 디폴트값이나 임시 닉네임 지어줘야함
@@ -130,8 +130,8 @@ public class KakaoAuthService {
                 profileImage = "default";
         }
         User newUser = new User(
-                profile.getKakaoAccount().getEmail(),
-                passwordEncoder.encode("password"),
+                profile.getKakaoAccount().getEmail()+".kakao",
+                passwordEncoder.encode("b102ssuktmppassword"),
                 nickname,
                 profileImage);
         Role userRole = roleRepository.findByRolename("USER");
@@ -144,7 +144,7 @@ public class KakaoAuthService {
     public TokenInfo login(String email) {
         // 1. Login email/password를 기반으로 Authentication 객체 생성
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(email, "password");
+                new UsernamePasswordAuthenticationToken(email, "b102ssuktmppassword");
 
         // 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
         try {
