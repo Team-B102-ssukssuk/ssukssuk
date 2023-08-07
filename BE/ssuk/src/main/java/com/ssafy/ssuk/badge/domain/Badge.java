@@ -36,6 +36,10 @@ public class Badge {
         this.badgeImage = badgeRegisterRequestDto.getBadgeImage();
     }
 
+    public Badge(int badgeId) {
+        this.id = badgeId;
+    }
+
     @Override
     public String toString() {
         return "Badge{" +
