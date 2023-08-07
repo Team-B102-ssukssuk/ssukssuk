@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "783105738433",
+    "project_id": "ssuk-ssuk-push-server",
+    "storage_bucket": "ssuk-ssuk-push-server.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:783105738433:android:bd820624315dcbe19db640",
+        "android_client_info": {
+          "package_name": "com.ssafy.ssuk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "783105738433-6vejale6s3mq9cucbn9het8l0vbh6cid.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGemXXYQceXFYgFbiDY5LcG5n3T53Ei24"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "783105738433-6vejale6s3mq9cucbn9het8l0vbh6cid.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
