@@ -5,7 +5,6 @@ import com.ssafy.ssuk.badge.service.BadgeService;
 import com.ssafy.ssuk.collection.service.CollectionService;
 import com.ssafy.ssuk.exception.dto.CustomException;
 import com.ssafy.ssuk.exception.dto.ErrorCode;
-import com.ssafy.ssuk.plant.dto.response.ResponseDto;
 import com.ssafy.ssuk.plant.service.GardenService;
 import com.ssafy.ssuk.redis.service.RedisService;
 import com.ssafy.ssuk.user.domain.User;
@@ -13,9 +12,10 @@ import com.ssafy.ssuk.user.dto.request.*;
 import com.ssafy.ssuk.user.dto.response.InfoResponseDto;
 import com.ssafy.ssuk.user.service.UserService;
 import com.ssafy.ssuk.utils.auth.oauth.kakao.KakaoAuthService;
-import com.ssafy.ssuk.utils.auth.oauth.kakao.dto.KakaoProfile;
-import com.ssafy.ssuk.utils.auth.oauth.kakao.dto.KakaoToken;
 import com.ssafy.ssuk.utils.email.EmailMessage;
+import com.ssafy.ssuk.utils.image.S3Uploader;
+import com.ssafy.ssuk.utils.response.CommonResponseEntity;
+import com.ssafy.ssuk.utils.response.SuccessCode;
 import com.ssafy.ssuk.utils.auth.jwt.TokenInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -124,16 +124,16 @@ public class UserController {
     }
 
     @GetMapping("/info")
-    public ResponseEntity<ResponseDto> searchUserInfo(@RequestAttribute Integer userId, @RequestAttribute String userNickname) {
-        // 닉네임이 토큰에 없다고 가정
-//        User user = userService.findById(userId);
-//        if(user == null){
-//            return new ResponseEntity<>(new ResponseDto("유저가 없어용"), HttpStatus.NOT_FOUND);
-//        }
+    public ResponseEntity<CommonResponseEntity> searchUserInfo(@RequestAttribute Integer userId, @RequestAttribute String userNickname) {
+        User user = userService.findById(userId);
+        if(user == null){
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        }
 
         InfoResponseDto infoResponseDto = new InfoResponseDto();
 
-        infoResponseDto.setNickname(userNickname);
+        infoResponseDto.setNickname(user.getNickname());
+        infoResponseDto.setImageUrl(S3Uploader.imageUrl(user.getProfileImage()));
 
         gardenService.findAllByUserId(userId).forEach(g -> {
             if (g.getIsUse()) infoResponseDto.addMyPlantCount();
@@ -146,7 +146,7 @@ public class UserController {
         int collectionCount = collectionService.findAllByUserId(userId).size();
         infoResponseDto.setCollectionCount(collectionCount);
 
-        return new ResponseEntity<>(new ResponseDto("ok", "information", infoResponseDto), HttpStatus.OK);
+        return CommonResponseEntity.getResponseEntity(SuccessCode.OK, infoResponseDto);
     }
 
     // 비밀번호 재설정시 이메일 인증코드 발송
@@ -210,7 +210,7 @@ public class UserController {
         userService.updateNickname(userId, updateNicknameDto.getNickname());
         return new ResponseEntity<>("OK", HttpStatus.OK);
     }
-    
+
     // 카카오 인가코드 받아서 카카오서버 accesstoken 발급
     // accesstoken으로 사용자 정보 확인 후 쑥쑥 로그인 accesstoken 발급
     @GetMapping("/kakao/callback")

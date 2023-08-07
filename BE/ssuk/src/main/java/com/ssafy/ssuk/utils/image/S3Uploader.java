@@ -2,7 +2,6 @@ package com.ssafy.ssuk.utils.image;
 
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,8 +14,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -31,6 +28,8 @@ import java.util.UUID;
 public class S3Uploader {
 
     private final AmazonS3Client amazonS3Client;
+
+    private final static String IMAGE_URL = "https://ssook.s3.ap-northeast-2.amazonaws.com/image/";
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -74,6 +73,11 @@ public class S3Uploader {
     public ImageInfo upload(String url) throws IOException {
         File tempFile = extracted(url);
         return upload(tempFile);
+    }
+
+    public static String imageUrl(String fileName) {
+
+        return IMAGE_URL + fileName;
     }
 
     private static File extracted(String url) throws IOException {
