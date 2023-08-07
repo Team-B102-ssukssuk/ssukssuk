@@ -3,6 +3,7 @@ package com.ssafy.ssuk.plant.controller;
 import com.ssafy.ssuk.plant.domain.Garden;
 import com.ssafy.ssuk.plant.domain.Plant;
 import com.ssafy.ssuk.plant.dto.request.GardenDeleteRequestDto;
+import com.ssafy.ssuk.plant.dto.request.GardenOrdersRequestDto;
 import com.ssafy.ssuk.plant.dto.request.GardenRegisterRequestDto;
 import com.ssafy.ssuk.plant.dto.request.GardenRenameRequestDto;
 import com.ssafy.ssuk.plant.dto.response.GardenSearchOneResponseDto;
@@ -12,6 +13,8 @@ import com.ssafy.ssuk.plant.service.PlantService;
 import com.ssafy.ssuk.pot.domain.Pot;
 import com.ssafy.ssuk.pot.repository.PotRepository;
 import com.ssafy.ssuk.pot.service.PotService;
+import com.ssafy.ssuk.user.domain.User;
+import com.ssafy.ssuk.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.DynamicInsert;
@@ -36,6 +39,7 @@ public class GardenController {
     private final PlantService plantService;
     private final PotService potService;
     private final PotRepository potRepository;
+    private final UserService userService;
 
     private final String SUCCESS = "OK";
     private final String FAIL = "false";
@@ -74,7 +78,8 @@ public class GardenController {
         }
 
         String nickname = gardenRegisterRequestDto.getNickname();
-        Garden newGarden = gardenService.save(userId, plant, pot, nickname);
+        User user = userService.findById(userId);
+        Garden newGarden = gardenService.save(user, plant, pot, nickname);
 
         /**
          * user의 plantcount 늘리는 메소드 추가해야함
@@ -151,4 +156,13 @@ public class GardenController {
         gardenService.deleteFromGarden(gardenId);
         return new ResponseEntity<>(new ResponseDto(SUCCESS), HttpStatus.OK);
     }
+
+    @PutMapping("/orders")
+    public ResponseEntity<ResponseDto> ordersSave(
+            @RequestAttribute Integer userId,
+            @RequestBody @Validated GardenOrdersRequestDto gardenOrdersRequestDto) {
+        gardenService.modifyOrders(userId, gardenOrdersRequestDto.getGardenIdsOrderBy());
+        return new ResponseEntity<>(new ResponseDto(SUCCESS), HttpStatus.OK);
+    }
+
 }

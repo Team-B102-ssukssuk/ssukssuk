@@ -43,7 +43,7 @@ public class GardenRepositoryImpl implements GardenRepository {
                         " join fetch g.plant plant" +
                         " join fetch plant.category pc" +
                         " join fetch g.pot pot" +
-                        " where g.id = :gardenId and g.userId = :userId and g.isUse = true", Garden.class)
+                        " where g.id = :gardenId and g.user.id = :userId and g.isUse = true", Garden.class)
                 .setParameter("gardenId", gardenId)
                 .setParameter("userId", userId)
                 .getResultList();
@@ -60,7 +60,7 @@ public class GardenRepositoryImpl implements GardenRepository {
                         " join fetch g.plant plant" +
                         " join fetch plant.category pc" +
                         " join fetch g.pot pot" +
-                        " where g.userId = :userId and g.isUse = :isUse", Garden.class)
+                        " where g.user.id = :userId and g.isUse = :isUse", Garden.class)
                 .setParameter("userId", userId)
                 .setParameter("isUse", isUse)
                 .getResultList();
@@ -72,7 +72,7 @@ public class GardenRepositoryImpl implements GardenRepository {
                         " join fetch g.plant plant" +
                         " join fetch plant.category pc" +
                         " join fetch g.pot pot" +
-                        " where g.userId = :userId and g.isDeleted = false", Garden.class)
+                        " where g.user.id = :userId and g.isDeleted = false", Garden.class)
                 .setParameter("userId", userId)
                 .getResultList();
     }
@@ -80,8 +80,17 @@ public class GardenRepositoryImpl implements GardenRepository {
     @Override
     public void removeFromGarden(Integer gardenId) {
         Garden garden = em.find(Garden.class, gardenId);
-        log.debug("garden delete {}", garden.getIsDeleted());
         garden.removeFromGarden();
-        log.debug("garden delete {}", garden.getIsDeleted());
+    }
+
+    @Override
+    public List<Garden> findAllByUserIdAndIds(Integer userId, List<Integer> gardenIds) {
+        return em.createQuery("select g from Garden g" +
+                " join fetch g.user u" +
+                " where u.id=:userId" +
+                " and g.id in :gardenIds", Garden.class)
+                .setParameter("userId", userId)
+                .setParameter("gardenIds", gardenIds)
+                .getResultList();
     }
 }

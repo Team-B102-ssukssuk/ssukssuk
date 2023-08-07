@@ -2,9 +2,11 @@ package com.ssafy.ssuk.plant.service;
 
 import com.ssafy.ssuk.plant.domain.Garden;
 import com.ssafy.ssuk.plant.domain.Plant;
+import com.ssafy.ssuk.plant.dto.request.GardenOrdersRequestDto;
 import com.ssafy.ssuk.plant.dto.request.GardenRenameRequestDto;
 import com.ssafy.ssuk.plant.dto.response.GardenSearchOneResponseDto;
 import com.ssafy.ssuk.pot.domain.Pot;
+import com.ssafy.ssuk.user.domain.User;
 
 import java.util.Collection;
 import java.util.List;
@@ -12,7 +14,7 @@ import java.util.List;
 public interface GardenService {
     Garden findUsingByPotId(Integer potId);
 
-    Garden save(Integer userId, Plant plant, Pot pot, String nickname);
+    Garden save(User user, Plant plant, Pot pot, String nickname);
 
     Garden findOndById(Integer id);
 
@@ -27,4 +29,6 @@ public interface GardenService {
     List<Garden> findAllByUserId(Integer userId);
 
     boolean deleteFromGarden(Integer gardenId);
+
+    void modifyOrders(Integer userId, List<Integer> gardenIdsOrderBy);
 }
