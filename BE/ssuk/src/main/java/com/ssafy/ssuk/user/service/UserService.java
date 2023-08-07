@@ -2,7 +2,7 @@ package com.ssafy.ssuk.user.service;
 
 import com.ssafy.ssuk.user.domain.User;
 import com.ssafy.ssuk.user.dto.request.*;
-import com.ssafy.ssuk.utils.jwt.TokenInfo;
+import com.ssafy.ssuk.utils.auth.jwt.TokenInfo;
 
 import java.util.Optional;
 

@@ -1,4 +1,4 @@
-package com.ssafy.ssuk.utils.jwt;
+package com.ssafy.ssuk.utils.auth.jwt;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

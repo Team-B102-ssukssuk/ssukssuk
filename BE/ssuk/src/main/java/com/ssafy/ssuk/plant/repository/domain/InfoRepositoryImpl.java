@@ -1,5 +1,7 @@
 package com.ssafy.ssuk.plant.repository.domain;
 
+import com.ssafy.ssuk.exception.dto.CustomException;
+import com.ssafy.ssuk.exception.dto.ErrorCode;
 import com.ssafy.ssuk.plant.domain.Info;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -15,8 +17,6 @@ public class InfoRepositoryImpl implements InfoRepository {
 
     @Override
     public Info findOneById(Integer plantId, Integer level) {
-        System.out.println("plantId = " + plantId);
-        System.out.println("level = " + level);
         List<Info> resultList = em.createQuery("select pi from Info pi where pi.plant.id = :plantId and pi.level = :level", Info.class)
                 .setParameter("plantId", plantId)
                 .setParameter("level", level)

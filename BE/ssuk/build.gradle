@@ -56,9 +56,20 @@ dependencies {
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 	// redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-
 	// s3
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+	// 쿼리 ? 표시해주는거
+	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.6'
+	//fcm
+	implementation 'com.google.firebase:firebase-admin:6.8.1'
+	implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.2.2'
+	implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5'
+	// http 요청, 응답
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux', version: '2.7.7'
+	// 설정파일 어노테이션
+	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
 }
 
 tasks.named('test') {

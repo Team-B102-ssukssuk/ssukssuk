@@ -1,6 +1,7 @@
 package com.ssafy.ssuk.plant.domain;
 
 import com.ssafy.ssuk.pot.domain.Pot;
+import com.ssafy.ssuk.user.domain.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
@@ -28,12 +29,10 @@ public class Garden {
     // 근데 그러면 왜 굳이 복합키를 쓰는거지? jpa에서 굳이 그럴필요가있나?
     // autoincrement가 있는 거는 대리키인거같음
     ///////////////////////////////
-//    @ManyToOne(fetch = LAZY)
-//    @JoinColumn(name = "user_id")
-//    private User user;
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "USER_ID")
+    private User user;
     //////////////////
-    @Column(name = "USER_ID")
-    private Integer userId;
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "POT_ID")
     private Pot pot;
@@ -53,18 +52,19 @@ public class Garden {
     @Column(name = "IS_DELETED")
     private Boolean isDeleted;
     @Column(name = "ORDERS")
-    private Integer orders = 0;
+    private Integer orders;
 
 
-    public Garden(Integer userId, Plant plant, Pot pot, String nickname) {
+    public Garden(User user, Plant plant, Pot pot, String nickname, Integer orders) {
         this.plant = plant;
-        this.userId = userId;
+        this.user = user;
         this.pot = pot;
         this.nickname = nickname;
+        this.orders = orders;
     }
 
     // 비즈니스 로직
-    public void unUseGarden() {
+    public void unUsePot() {
         this.isUse = false;
     }
 
@@ -72,5 +72,13 @@ public class Garden {
         this.nickname = nickname;
     }
 
-    public void removeFromGarden() {this.isDeleted = true;}
+    public void removeFromGarden() {
+        this.isUse = false;
+        this.isDeleted = true;
+        this.orders = 0;
+    }
+
+    public void modifyOrders(Integer order) {
+        this.orders = order;
+    }
 }

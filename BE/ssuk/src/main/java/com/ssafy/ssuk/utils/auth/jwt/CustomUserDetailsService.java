@@ -1,4 +1,4 @@
-package com.ssafy.ssuk.utils.jwt;
+package com.ssafy.ssuk.utils.auth.jwt;
 
 import com.ssafy.ssuk.user.domain.User;
 import com.ssafy.ssuk.user.repository.UserRepository;

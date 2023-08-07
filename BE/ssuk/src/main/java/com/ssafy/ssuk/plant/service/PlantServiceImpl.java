@@ -1,5 +1,7 @@
 package com.ssafy.ssuk.plant.service;
 
+import com.ssafy.ssuk.exception.dto.CustomException;
+import com.ssafy.ssuk.exception.dto.ErrorCode;
 import com.ssafy.ssuk.plant.domain.Plant;
 import com.ssafy.ssuk.plant.domain.Category;
 import com.ssafy.ssuk.plant.dto.request.PlantRegisterRequestDto;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -39,17 +42,15 @@ public class PlantServiceImpl implements PlantService{
 
     @Override
     public Plant findOneById(Integer id) {
-        return plantRepository.findOneById(id);
+        return Optional.ofNullable(plantRepository.findOneById(id)).orElseThrow(() -> new CustomException(ErrorCode.PLANT_NOT_FOUND));
     }
 
 
     @Override
     @Transactional
-    public boolean modifyPlant(PlantUpdateRequestDto plantUpdateRequestDto, Category category) {
-        Plant plant = plantRepository.findOneById(plantUpdateRequestDto.getPlantId());
-        if(plant == null)
-            return false;
+    public void modifyPlant(PlantUpdateRequestDto plantUpdateRequestDto, Category category) {
+        Plant plant = Optional.ofNullable(plantRepository.findOneById(plantUpdateRequestDto.getPlantId()))
+                .orElseThrow(() -> new CustomException(ErrorCode.PLANT_NOT_FOUND));
         plant.updateInfo(plantUpdateRequestDto, category);
-        return true;
     }
 }

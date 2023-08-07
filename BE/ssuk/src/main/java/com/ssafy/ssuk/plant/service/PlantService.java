@@ -14,5 +14,5 @@ public interface PlantService {
 
     Plant findOneById(Integer id);
 
-    boolean modifyPlant(PlantUpdateRequestDto plantUpdateRequestDto, Category category);
+    void modifyPlant(PlantUpdateRequestDto plantUpdateRequestDto, Category category);
 }

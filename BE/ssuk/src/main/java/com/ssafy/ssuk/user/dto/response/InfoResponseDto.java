@@ -8,6 +8,7 @@ import java.util.List;
 @Data
 public class InfoResponseDto {
     private String nickname;
+    private String imageUrl;
     private int myPlantCount;
     private int gardenCount;
     private int collectionCount;
