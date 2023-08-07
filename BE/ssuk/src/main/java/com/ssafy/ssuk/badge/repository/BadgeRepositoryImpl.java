@@ -28,7 +28,11 @@ public class BadgeRepositoryImpl implements BadgeRepository {
 
     @Override
     public List<UserBadge> findAllWithUserId(Integer userId) {
-        return em.createQuery("select ub from UserBadge ub", UserBadge.class).getResultList();
+        return em.createQuery("select ub from UserBadge ub" +
+                        " join fetch ub.user u" +
+                        " where u.id=:userId", UserBadge.class)
+                .setParameter("userId", userId)
+                .getResultList();
     }
 
     @Override
