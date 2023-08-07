@@ -22,6 +22,11 @@ public enum ErrorCode {
     //화분
     INVALID_SERIAL_NUMBER(HttpStatus.BAD_REQUEST, "유효하지 않은 시리얼 넘버입니다."),
     POT_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 화분이 유효하지 않습니다."),
+    POT_NOT_MATCH_USER(HttpStatus.FORBIDDEN, "해당 화분을 소유하지 않습니다."),
+
+    //정원
+    GARDEN_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 심은 식물이 유효하지 않습니다."),
+    GARDEN_NOT_MATCH_USER(HttpStatus.FORBIDDEN, "해당 식물을 소유하지 않습니다."),
 
     //식물 정보
     CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 카테고리가 유효하지 않습니다."),

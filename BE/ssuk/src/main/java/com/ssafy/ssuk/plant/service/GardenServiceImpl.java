@@ -14,10 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -30,7 +27,7 @@ public class GardenServiceImpl implements GardenService {
 
     @Override
     public Garden findUsingByPotId(Integer potId) {
-        return gardenRepository.findUsingByPotId(potId);
+        return Optional.ofNullable(gardenRepository.findUsingByPotId(potId)).orElseThrow(() -> new CustomException(ErrorCode.GARDEN_NOT_FOUND));
     }
 
     @Override
@@ -49,31 +46,29 @@ public class GardenServiceImpl implements GardenService {
 
     @Override
     @Transactional
-    public boolean deleteGarden(Integer userId, Integer gardenId) {
+    public void deleteFromPot(Integer userId, Integer gardenId) {
         // 정원 확인(해당 심은 식물의 소유자가 맞는지)
-        Garden garden = gardenRepository.findOneById(gardenId);
-        if(garden == null || garden.getUser().getId() != userId) {
-            return false;
+        Garden garden = Optional.ofNullable(gardenRepository.findOneById(gardenId)).orElseThrow(() -> new CustomException(ErrorCode.GARDEN_NOT_FOUND));
+        if (garden.getUser().getId() != userId) {
+            throw new CustomException(ErrorCode.GARDEN_NOT_MATCH_USER);
         }
         garden.unUsePot();
-        return true;
     }
 
     @Override
     @Transactional
-    public boolean renameGarden(Integer gardenId, Integer userId, String nickname) {
+    public void renameGarden(Integer gardenId, Integer userId, String nickname) {
         // 정원 확인(해당 심은 식물의 소유자가 맞는지)
-        Garden garden = gardenRepository.findOneById(gardenId);
-        if(garden == null || garden.getUser().getId() != userId) {
-            return false;
+        Garden garden = Optional.ofNullable(gardenRepository.findOneById(gardenId)).orElseThrow(() -> new CustomException(ErrorCode.GARDEN_NOT_FOUND));
+        if (garden.getUser().getId() != userId) {
+           throw new CustomException(ErrorCode.GARDEN_NOT_MATCH_USER);
         }
         garden.rename(nickname);
-        return true;
     }
 
     @Override
     public Garden findOndByIdAndUserId(Integer gardenId, Integer userId) {
-        return gardenRepository.findOneByIdAndUserId(gardenId, userId);
+        return Optional.ofNullable(gardenRepository.findOneByIdAndUserId(gardenId, userId)).orElseThrow(() -> new CustomException(ErrorCode.GARDEN_NOT_FOUND));
     }
 
     @Override
@@ -90,9 +85,9 @@ public class GardenServiceImpl implements GardenService {
 
     @Override
     @Transactional
-    public boolean deleteFromGarden(Integer gardenId) {
-        gardenRepository.removeFromGarden(gardenId);
-        return false;
+    public void deleteFromGarden(Integer userId, Integer gardenId) {
+        Garden garden = Optional.ofNullable(gardenRepository.findOneByIdAndUserId(gardenId, userId)).orElseThrow(() -> new CustomException(ErrorCode.GARDEN_NOT_FOUND));
+        garden.removeFromGarden();
     }
 
     @Override
@@ -105,15 +100,25 @@ public class GardenServiceImpl implements GardenService {
             map.put(gardenIdsOrderBy.get(i), i);
             log.debug("key, value={} / {}", gardenIdsOrderBy.get(i), i);
         }
-        List<Garden> gardenList = gardenRepository.findAllByUserIdAndIds(userId, gardenIdsOrderBy);
+        List<Garden> gardenList = gardenRepository.findAllByUserId(userId);
         gardenList.forEach(g -> {
                     Integer order = map.get(g.getId());
-                    if(order == null){
+                    if (order == null){
                         gardenList.forEach(errorGarden -> em.detach(errorGarden));
-                        throw new CustomException(ErrorCode.TEST_NOT_FOUND);
+                        throw new CustomException(ErrorCode.GARDEN_NOT_FOUND);
                     }
-                    log.debug("{} / {}", g.getId(), g.getOrders());
                     g.modifyOrders(order);
-                });
+                    log.debug("{} / {}", g.getId(), g.getOrders());
+        });
+    }
+
+    @Override
+    public boolean isDuplicateUsingByPotId(Integer potId) {
+        Garden garden = gardenRepository.findUsingByPotId(potId);
+        if (garden == null) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

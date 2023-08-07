@@ -18,9 +18,9 @@ public interface GardenService {
 
     Garden findOndById(Integer id);
 
-    boolean deleteGarden(Integer userId, Integer gardenId);
+    void deleteFromPot(Integer userId, Integer gardenId);
 
-    boolean renameGarden(Integer gardenId, Integer userId, String nickname);
+    void renameGarden(Integer gardenId, Integer userId, String nickname);
 
     Garden findOndByIdAndUserId(Integer gardenId, Integer userId);
 
@@ -28,7 +28,9 @@ public interface GardenService {
 
     List<Garden> findAllByUserId(Integer userId);
 
-    boolean deleteFromGarden(Integer gardenId);
+    void deleteFromGarden(Integer userId, Integer gardenId);
 
     void modifyOrders(Integer userId, List<Integer> gardenIdsOrderBy);
+
+    boolean isDuplicateUsingByPotId(Integer potId);
 }
