@@ -18,6 +18,24 @@ spring:
 #          timeout: 5000
 #          starttls:
 #            enable: true
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: a12d292510e3111fe093a99ff91e118b
+            client-name: Kakao
+            client-secret: vKsnBevawpU8o8PXbRaBcQAkH7W3wCQT
+            redirect-uri: http://localhost:8080/user/kakao/callback
+            scope: profile_nickname, profile_image, account_email
+            authorization-grant-type: authorization_code
+            client-authentication-method: POST
+          provider:
+            kakao:
+              authorization-uri: https://kauth.kakao.com/oauth/authorize
+              token-uri: https://kauth.kakao.com/oauth/token
+              user-info-uri: https://kapi.kakao.com/v2/user/me
+              user-name-attribute: id
 
   redis:
     lettuce:
