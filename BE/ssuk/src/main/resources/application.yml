@@ -1,23 +1,4 @@
 spring:
-#  datasource:
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://localhost:3306/ssuk_ssuk?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
-#    #url: jdbc:mysql://localhost:3306/ssuk_ssuk?useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
-#    username: ssafy
-#    password: b102ssuk
-
-#  mail:
-#    host: smtp.gmail.com
-#    port: 587
-#    username: ssukssuk102
-#    password: bodxihtuxhwrzcfb
-#    properties:
-#      mail:
-#        smtp:
-#          auth: true
-#          timeout: 5000
-#          starttls:
-#            enable: true
   security:
     oauth2:
       client:
@@ -47,7 +28,7 @@ spring:
         min-idle: 2
     host: localhost
     port: 6379
-    password: b102ssuk
+    password: ${REDIS_PW}
 
   jpa:
     database: mysql   # 추가 해준 부분
