@@ -22,4 +22,14 @@ public class CommonResponseEntity {
                         .data(data)
                         .build());
     }
+
+    public static ResponseEntity<CommonResponseEntity> getResponseEntity(SuccessCode sc) {
+        return ResponseEntity
+                .status(sc.getHttpStatus())
+                .body(CommonResponseEntity.builder()
+                        .statusCode(sc.getHttpStatus().value())
+                        .statusName(sc.name())
+                        .message(sc.getMessage())
+                        .build());
+    }
 }

@@ -9,7 +9,7 @@ public interface CategoryService {
 
     public void savePlantCategory(Category plantCategory);
 
-    public boolean modifyPlantCategory(Integer categoryId, String updateName);
+    public void modifyPlantCategory(Integer categoryId, String updateName);
 
     public List<Category> findPlantCategories();
 

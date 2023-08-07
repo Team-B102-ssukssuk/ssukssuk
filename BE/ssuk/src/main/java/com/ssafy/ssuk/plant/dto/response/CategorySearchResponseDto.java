@@ -17,7 +17,5 @@ public class CategorySearchResponseDto {
     public CategorySearchResponseDto(String name, List<Plant> plants) {
         this.name = name;
         plants.forEach(p -> subcategories.add(new NameId(p.getId(), p.getName())));
-        log.info("plants:{}", plants);
-        subcategories.forEach(p -> log.info("{}  {}", p.plantName, p.plantId));
     }
 }

@@ -3,6 +3,7 @@ package com.ssafy.ssuk.plant.repository.domain;
 import com.ssafy.ssuk.plant.domain.Category;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CategoryRepository {
     public void save(Category plantCategory);

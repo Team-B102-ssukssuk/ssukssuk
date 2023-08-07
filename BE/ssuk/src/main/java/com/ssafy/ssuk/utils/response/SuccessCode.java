@@ -24,6 +24,7 @@ public enum SuccessCode {
     POT_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 화분이 유효하지 않습니다."),
 
     //기타
+    SUCCESS_CODE(HttpStatus.OK, "Success"),
     DUPLICATE_RESOURCE(HttpStatus.CONFLICT, "데이터가 이미 존재합니다."),
     INPUT_EXCEPTION(HttpStatus.BAD_REQUEST, "입력값을 확인하세요")
     ;

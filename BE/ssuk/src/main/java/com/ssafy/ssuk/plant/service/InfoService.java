@@ -16,5 +16,5 @@ public interface InfoService {
 
     Info findOne(Integer plantId, Integer level);
 
-    boolean modifyInfo(InfoUpdateRequestDto infoUpdateRequestDto);
+    void modifyInfo(InfoUpdateRequestDto infoUpdateRequestDto);
 }
