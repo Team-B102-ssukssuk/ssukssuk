@@ -155,15 +155,12 @@ public class KakaoAuthService {
         // 1. Login email/password를 기반으로 Authentication 객체 생성
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(email, RAW_PASSWORD);
-        log.debug("1111111111111111111111111111111111111111111");
         // 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
         try {
             Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-            log.debug("222222222222222222222222222");
             // 3. 인증 정보를 기반으로 JWT 생성
             // 3-1. JWT에 담을 유저 정보 추출
             Optional<User> user = userRepository.findByEmail(email);
-            log.debug("3333333333333333333333333");
             if (user.isPresent()) {
                 User loginUser = user.get();
                 String userId = String.valueOf(loginUser.getId());
