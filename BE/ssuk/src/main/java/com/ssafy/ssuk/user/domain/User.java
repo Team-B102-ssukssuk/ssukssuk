@@ -59,7 +59,7 @@ public class User implements UserDetails {
             joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID")},
             inverseJoinColumns = {@JoinColumn(name = "ROLE_ID", referencedColumnName = "ROLE_ID")}
     )
-    @Builder.Default
+//    @Builder.Default
     private List<Role> roles = new ArrayList<>();
 
     public void addRole(Role role) {
