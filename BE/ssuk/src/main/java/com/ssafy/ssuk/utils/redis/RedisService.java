@@ -1,4 +1,4 @@
-package com.ssafy.ssuk.redis.service;
+package com.ssafy.ssuk.utils.redis;
 
 import org.springframework.stereotype.Service;
 

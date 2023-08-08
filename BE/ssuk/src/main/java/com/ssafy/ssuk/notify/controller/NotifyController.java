@@ -20,18 +20,6 @@ public class NotifyController {
         this.fcmService = fcmService;
     }
 
-    @GetMapping("/test")
-    ResponseEntity<?> testNotify() throws IOException {
-        fcmService.sendMessageTo("1","1","1","1","1");
 
-        return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/token")
-    ResponseEntity<?> getToken() throws IOException {
-        String result = fcmService.getAccessToken();
-
-        return ResponseEntity.ok(result);
-    }
 
 }

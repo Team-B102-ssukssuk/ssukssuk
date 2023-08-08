@@ -5,6 +5,7 @@ import com.ssafy.ssuk.plant.dto.response.GardenSearchOneResponseDto;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 public interface GardenRepository {
     Garden findUsingByPotId(Integer potId);
@@ -18,4 +19,8 @@ public interface GardenRepository {
     List<Garden> findAllByUserId(Integer userId, Boolean isUse);
 
     List<Garden> findAllByUserId(Integer userId);
+
+    List<Garden> findOnlyAllByUserId(int userId);
+
+    void minusOrders(int userId, int orders);
 }

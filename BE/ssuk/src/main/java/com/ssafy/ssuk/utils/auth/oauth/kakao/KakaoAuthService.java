@@ -14,6 +14,7 @@ import com.ssafy.ssuk.utils.auth.oauth.kakao.dto.KakaoProfile;
 import com.ssafy.ssuk.utils.auth.oauth.kakao.dto.KakaoProperties;
 import com.ssafy.ssuk.utils.auth.oauth.kakao.dto.KakaoProviderProperties;
 import com.ssafy.ssuk.utils.auth.oauth.kakao.dto.KakaoToken;
+import com.ssafy.ssuk.utils.image.S3UploadService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -27,6 +28,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @Slf4j
@@ -41,7 +43,7 @@ public class KakaoAuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
-
+    private final S3UploadService s3UploadService;
     // 카카오로부터 accessToken 받는 함수
     public KakaoToken getAccessToken(String code) {
         // 요청 파라미터
@@ -98,7 +100,7 @@ public class KakaoAuthService {
     }
 
     @Transactional
-    public User saveOrGetUser(String accessToken) {
+    public User saveOrGetUser(String accessToken) throws IOException {
         KakaoProfile profile = getUserInfo(accessToken);
         Optional<User> findUser = userRepository.findByEmail(profile.getKakaoAccount().email+".kakao");
         if (findUser.isPresent()) return findUser.get();
@@ -120,20 +122,23 @@ public class KakaoAuthService {
         // 3. 프로필 사진만 동의
         else if (profile.kakaoAccount.profile.nickname == null) {
             nickname = "쑥쑥";
-            profileImage = profile.getKakaoAccount().getProfile().getProfileImageUrl();
+            profileImage = s3UploadService.upload(profile.getKakaoAccount().getProfile().getProfileImageUrl()).getImageName();
         }
         // 4. 전체 동의
         else {
             nickname = profile.getKakaoAccount().getProfile().getNickname();
             profileImage = profile.getKakaoAccount().getProfile().getProfileImageUrl();
-            if (profileImage.equals("http://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_640x640.jpg"))
+            if (profileImage.equals("http://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_640x640.jpg")) {
                 profileImage = "default";
+            }
+            profileImage = s3UploadService.upload(profileImage).getImageName();
         }
         User newUser = new User(
                 profile.getKakaoAccount().getEmail()+".kakao",
-                passwordEncoder.encode("b102ssuktmppassword"),
+                passwordEncoder.encode("ssukssuk_fighting"),
                 nickname,
                 profileImage);
+
         Role userRole = roleRepository.findByRolename("USER");
         newUser.addRole(userRole);
         userRepository.save(newUser);
@@ -141,10 +146,10 @@ public class KakaoAuthService {
     }
 
     @Transactional
-    public TokenInfo login(String email) {
+    public TokenInfo kakaoLogin(String email) {
         // 1. Login email/password를 기반으로 Authentication 객체 생성
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(email, "b102ssuktmppassword");
+                new UsernamePasswordAuthenticationToken(email, "ssukssuk_fighting");
 
         // 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
         try {
@@ -156,10 +161,9 @@ public class KakaoAuthService {
 
             if (user.isPresent()) {
                 User loginUser = user.get();
-                Integer userId = loginUser.getId();
-                String userNickname = loginUser.getNickname();
+                String userId = String.valueOf(loginUser.getId());
                 // 3-2. 유저 정보 가져가서 JWT 생성
-                TokenInfo tokenInfo = jwtTokenProvider.createToken(authentication, userId, userNickname);
+                TokenInfo tokenInfo = jwtTokenProvider.createToken(authentication, userId);
 
                 return tokenInfo;
             }

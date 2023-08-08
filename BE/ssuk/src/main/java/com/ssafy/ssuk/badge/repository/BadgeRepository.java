@@ -6,7 +6,7 @@ import com.ssafy.ssuk.badge.domain.UserBadge;
 import java.util.List;
 
 public interface BadgeRepository {
-    void save(Badge badge);
+    void saveBadge(Badge badge);
 
     List<Badge> findAllByName(String badgeName);
 
@@ -17,4 +17,8 @@ public interface BadgeRepository {
     Badge findOneById(Integer badgeId);
 
     List<UserBadge> findAllWithUserId(Integer userId);
+
+    UserBadge findUserBadgeByIdAndUserId(int badgeId, int userId);
+
+    void saveUserBadge(int badgeId, int userId);
 }

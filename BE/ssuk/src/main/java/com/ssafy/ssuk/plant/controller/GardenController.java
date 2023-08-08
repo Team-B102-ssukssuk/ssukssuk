@@ -1,5 +1,7 @@
 package com.ssafy.ssuk.plant.controller;
 
+import com.ssafy.ssuk.badge.domain.BadgeCode;
+import com.ssafy.ssuk.badge.service.BadgeService;
 import com.ssafy.ssuk.exception.dto.CustomException;
 import com.ssafy.ssuk.exception.dto.ErrorCode;
 import com.ssafy.ssuk.plant.domain.Garden;
@@ -42,6 +44,7 @@ public class GardenController {
     private final PlantService plantService;
     private final PotRepository potRepository;
     private final UserRepository userRepository;
+    private final BadgeService badgeService;
 
     private final String SUCCESS = "OK";
     private final String FAIL = "false";
@@ -63,10 +66,8 @@ public class GardenController {
         // 화분 확인(존재하는지, 소유자가 유저인지)
         Integer potId = gardenRegisterRequestDto.getPotId();
         Pot pot = potRepository.findById(potId).orElseThrow(() -> new CustomException(ErrorCode.POT_NOT_FOUND));
-        /** 이부분 쿼리 또 발생함
-         * lazy에 대해 하나 잘못 이해하고 있었네!!
-         */
-        if (pot.getIsRegisted() && (pot.getUser() == null || user.getId() != pot.getUser().getId())) {
+
+        if (!pot.getIsRegisted() || (pot.getUser() == null || user.getId() != pot.getUser().getId())) {
             throw new CustomException(ErrorCode.POT_NOT_MATCH_USER);
         }
 
@@ -82,6 +83,14 @@ public class GardenController {
          * user의 plantcount 늘리는 메소드 추가해야함
          * user.plusPlantCount()
          */
+        int plantCount = user.getPlantCount();
+        if (plantCount >= 10 && badgeService.checkUserBadge(BadgeCode.정신차리고보니.getCode(), userId) == false) {
+            badgeService.saveUserBadge(BadgeCode.정신차리고보니.getCode(), userId);
+        } else if (plantCount >= 5 && badgeService.checkUserBadge(BadgeCode.가만히_있어도_절반은_간다.getCode(), userId) == false) {
+            badgeService.saveUserBadge(BadgeCode.가만히_있어도_절반은_간다.getCode(), userId);
+        } else if (plantCount >= 1 && badgeService.checkUserBadge(BadgeCode.시작이반.getCode(), userId) == false) {
+            badgeService.saveUserBadge(BadgeCode.시작이반.getCode(), userId);
+        }
         return CommonResponseEntity.getResponseEntity(SuccessCode.SUCCESS_CODE, new GardenRegisterResponseDto(newGarden.getId()));
     }
 
@@ -146,6 +155,10 @@ public class GardenController {
             @RequestAttribute(required = true) Integer userId,
             @PathVariable Integer gardenId) {
         gardenService.deleteFromGarden(userId, gardenId);
+
+        if (badgeService.checkUserBadge(BadgeCode.쑥쑥을_위하여.getCode(), userId) == false) {
+            badgeService.saveUserBadge(BadgeCode.쑥쑥을_위하여.getCode(), userId);
+        }
         return CommonResponseEntity.getResponseEntity(SuccessCode.SUCCESS_CODE);
     }
 

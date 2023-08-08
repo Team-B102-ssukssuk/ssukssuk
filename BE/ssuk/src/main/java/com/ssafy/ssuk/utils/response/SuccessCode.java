@@ -10,6 +10,8 @@ public enum SuccessCode {
     /* 기본 */
     OK(HttpStatus.OK, "ok"),
 
+
+    SUCCESS_FCM(HttpStatus.OK, "OK"),
     //user
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당하는 정보의 사용자를 찾을 수 없습니다."),
     //추가할 것들은 여기에 작성해주세요.

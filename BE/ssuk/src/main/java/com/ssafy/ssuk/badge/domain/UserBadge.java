@@ -4,6 +4,7 @@ import com.ssafy.ssuk.badge.domain.id.UserBadgeId;
 import com.ssafy.ssuk.user.domain.User;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 
@@ -15,6 +16,7 @@ import static javax.persistence.FetchType.*;
 @Getter
 @Table(name = "USER_BADGE")
 @IdClass(UserBadgeId.class)
+@DynamicInsert
 @RequiredArgsConstructor
 public class UserBadge {
 
@@ -28,4 +30,10 @@ public class UserBadge {
     private Badge badge;
     @Column(name = "CREATED_DATE")
     private LocalDateTime createdDate;
+
+    public UserBadge(Badge badge, User user) {
+        this.user = user;
+        this.badge = badge;
+        this.createdDate = LocalDateTime.now();
+    }
 }

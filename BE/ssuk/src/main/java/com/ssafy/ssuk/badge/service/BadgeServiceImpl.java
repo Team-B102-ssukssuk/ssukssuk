@@ -7,6 +7,7 @@ import com.ssafy.ssuk.badge.dto.request.BadgeUpdateRequestDto;
 import com.ssafy.ssuk.badge.dto.response.BadgeSearchResponseDto;
 import com.ssafy.ssuk.badge.dto.response.UserBadgeResponseDto;
 import com.ssafy.ssuk.badge.repository.BadgeRepository;
+import com.ssafy.ssuk.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,7 +30,7 @@ public class BadgeServiceImpl implements BadgeService {
     public void saveBadge(BadgeRegisterRequestDto badgeRegisterRequestDto) {
         Badge badge = new Badge(badgeRegisterRequestDto);
         log.info("badge={}", badge);
-        badgeRepository.save(badge);
+        badgeRepository.saveBadge(badge);
     }
 
     @Override
@@ -82,5 +82,20 @@ public class BadgeServiceImpl implements BadgeService {
                 .stream()
                 .map(key -> new UserBadgeResponseDto(badgeMap.get(key), userBadgeMap.get(key)))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean checkUserBadge(int badgeId, int userId) {
+        if (badgeRepository.findUserBadgeByIdAndUserId(badgeId, userId) == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    @Override
+    @Transactional
+    public void saveUserBadge(int badgeId, int userId) {
+        badgeRepository.saveUserBadge(badgeId, userId);
     }
 }
