@@ -20,7 +20,7 @@ import java.util.List;
 @NoArgsConstructor // 기본 생성자
 @AllArgsConstructor // 모든 필드 값을 파라미터로 받는 생성자
 @Setter
-//@Builder
+@Builder
 public class User implements UserDetails {
 
     @Id @GeneratedValue
