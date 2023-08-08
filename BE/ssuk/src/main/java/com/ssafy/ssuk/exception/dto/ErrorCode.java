@@ -16,7 +16,7 @@ public enum ErrorCode {
     DUPLICATE_USER_EMAIL(HttpStatus.CONFLICT, "중복된 이메일입니다."), // 409 : CONFLICT
     DUPLICATE_USER_NICKNAME(HttpStatus.CONFLICT, "중복된 닉네임입니다."), // 409 : CONFLICT
     INVALID_AUTH_TOKEN(HttpStatus.UNAUTHORIZED, "권한 정보가 없는 토큰입니다."),
-    EXPIRED_AUTH_TOKEN(HttpStatus.ACCEPTED, "토큰이 만료되었습니다."),
+    EXPIRED_AUTH_TOKEN(HttpStatus.CONFLICT, "토큰이 만료되었습니다."),
 
     //추가할 것들은 여기에 작성해주세요.
     //화분

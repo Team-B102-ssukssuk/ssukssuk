@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -33,8 +34,9 @@ public class AuthenticationConfig {
                 .csrf().disable()
                 .cors().and()
                 .authorizeRequests()
-                .antMatchers("/*").permitAll()
-//                .antMatchers("/user/join").permitAll() // 모든 사용자 접근 허용
+//                .antMatchers("/*").permitAll()
+                .antMatchers("/user").permitAll() // 모든 사용자 접근 허용
+                .antMatchers(HttpMethod.GET,"/user").authenticated() // 로그아웃 요청에 대해 인증 필요
 //                .antMatchers(HttpMethod.POST, "/user").permitAll() // POST /user 요청에 대해 모든 사용자 접근 허용
 //                .anyRequest().authenticated() // 나머지 요청에 대해 인증 필요
                 .and()

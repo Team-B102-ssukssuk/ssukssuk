@@ -44,6 +44,8 @@ public class KakaoAuthService {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
     private final S3UploadService s3UploadService;
+
+    private final static String RAW_PASSWORD = "ssukssuk_fighting";
     // 카카오로부터 accessToken 받는 함수
     public KakaoToken getAccessToken(String code) {
         // 요청 파라미터
@@ -134,13 +136,15 @@ public class KakaoAuthService {
                 profileImage = s3UploadService.upload(profileImage).getImageName();
             }
         }
+
         User newUser = new User(
                 profile.getKakaoAccount().getEmail()+".kakao",
-                passwordEncoder.encode("ssukssuk_fighting"),
+                passwordEncoder.encode(RAW_PASSWORD),
                 nickname,
                 profileImage);
 
         Role userRole = roleRepository.findByRolename("USER");
+        log.debug("userRole={}", userRole);
         newUser.addRole(userRole);
         userRepository.save(newUser);
         return newUser;
@@ -150,16 +154,16 @@ public class KakaoAuthService {
     public TokenInfo kakaoLogin(String email) {
         // 1. Login email/password를 기반으로 Authentication 객체 생성
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(email, "ssukssuk_fighting");
-
+                new UsernamePasswordAuthenticationToken(email, RAW_PASSWORD);
+        log.debug("1111111111111111111111111111111111111111111");
         // 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
         try {
             Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-
+            log.debug("222222222222222222222222222");
             // 3. 인증 정보를 기반으로 JWT 생성
             // 3-1. JWT에 담을 유저 정보 추출
             Optional<User> user = userRepository.findByEmail(email);
-
+            log.debug("3333333333333333333333333");
             if (user.isPresent()) {
                 User loginUser = user.get();
                 String userId = String.valueOf(loginUser.getId());

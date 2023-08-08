@@ -21,6 +21,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletRequest;
@@ -134,7 +135,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public TokenInfo recreateToken(String refreshToken, HttpServletRequest request) {
         // 토큰 유효성 검사
-        if (!jwtTokenProvider.validateToken(refreshToken)) return null;
+        try{
+            if (!jwtTokenProvider.validateToken(refreshToken)) return null;
+        } catch (Exception e) {
+            throw new CustomException(ErrorCode.EXPIRED_AUTH_TOKEN);
+        }
             log.debug("리프레시 토큰 유효성 검사는 했는데..");
             Authentication authentication = jwtTokenProvider.getAuthentication(refreshToken, request);
             log.debug("authentication={}", authentication);
