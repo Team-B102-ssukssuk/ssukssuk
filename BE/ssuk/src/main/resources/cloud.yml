@@ -1,12 +1,12 @@
 cloud:
   aws:
     s3:
-      bucket: ssook
-      dir: image/
+      bucket: ENC(BDzBNnakZEMIW5Nb+DAdDw==)
+      dir: ENC(/+vLVoEX2tS+RTvaPvGtRQ==)
     region:
       static: ap-northeast-2
     stack:
       auto: false
     credentials:
-      accessKey: ${ack}
-      secretKey: ${sck}
+      accessKey: ENC(1P2QSRUTh5e/EAINxmFclN9c8c4w63SzXCkSgp+plN0=)
+      secretKey: ENC(m1Mtj/cxAwAE+sg3GSSUz0TP8Zkz/iqb4EY/jSjh4DJ12JOyoRz/wzq6fayyyRy3fRmiQj2Czcs=)
