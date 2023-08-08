@@ -14,10 +14,11 @@
 // >> loginscreen 에서는 카카오 로그인 화면으로 이동하는 버튼 추가
 
 import { View, Alert } from "react-native";
-import React, { useState } from "react";
+import React from "react";
 // import styles from "./style";
 import WebView from "react-native-webview";
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // other import settings...
 
@@ -25,9 +26,7 @@ const REST_API_KEY = "a12d292510e3111fe093a99ff91e118b";
 const REDIRECT_URI = "http://i9b102.p.ssafy.io:8080/user/kakao/callback";
 
 const KakaoLoginScreen = ({ navigation }) => {
-  const [accessToken, setAccessToken] = useState(null);
-
-  console.log(accessToken);
+  // const [accessToken, setAccessToken] = useState(null);
 
   const runFirst = `window.ReactNativeWebView.postMessage("this is message from web");`;
   const LogInProgress = (data) => {
@@ -51,7 +50,6 @@ const KakaoLoginScreen = ({ navigation }) => {
   };
 
   const requestToken = async () => {
-    // const request_token_url = "https://kauth.kakao.com/oauth/token";
     const request_token_url = "https://kauth.kakao.com/oauth/authorize";
 
     const urlll =
@@ -59,10 +57,17 @@ const KakaoLoginScreen = ({ navigation }) => {
       `?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}`;
     try {
       const response = await axios.get(urlll);
+      console.log("data");
       console.log(response.data);
 
-      const token = response.data.access_token;
-      setAccessToken(token);
+      const accessToken = response.data.accessToken;
+      const refreshToken = response.data.refreshToken;
+      console.log("token");
+      console.log(accessToken);
+
+      await AsyncStorage.setItem("accessToken", accessToken);
+      await AsyncStorage.setItem("refreshToken", refreshToken);
+
       navigation.navigate("Pot"); // 로그인 성공 후 MainScreen으로 이동
     } catch (error) {
       console.error("토큰 요청에 실패했습니다:", error);

@@ -1,5 +1,6 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
 
 // 로컬 스토리지에 accessToken 값 추출
 export async function getAccessToken() {
@@ -26,12 +27,15 @@ export async function postRefreshToken() {
   try {
     const refreshToken = await AsyncStorage.getItem("refreshToken");
 
+    console.log("refreshToken : " + refreshToken);
+
     const response = await axios.post(
       "http://i9b102.p.ssafy.io:8080/user/token",
+      {},
       {
         headers: {
           // 헤더값 추가
-          Authorization: `${refreshToken}`,
+          Authorization: refreshToken,
         },
       }
     );
@@ -56,23 +60,23 @@ customAxios.interceptors.response.use(
     console.log("응답 : " + status);
     console.log(error.response.data);
 
-    if (status === 401) {
-      if (error.response.data.message === "Unauthorized") {
-        const originRequest = config;
-        const response = await postRefreshToken();
-        if (response.status === 200) {
-          const newAccessToken = response.data.token;
-          AsyncStorage.setItem("accessToken", newAccessToken);
-          AsyncStorage.setItem("refreshToken", response.data.refreshToken);
-          customAxios.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
-          originRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-          return customAxios(originRequest);
-        } else if (response.status === 404) {
-          alert("Token expired.");
-          // Perform any additional handling here, e.g., redirect to sign-in page
-        } else {
-          alert("Unexpected reason.");
-        }
+    if (status === 409) {
+      const originRequest = config;
+      const response = await postRefreshToken();
+      console.log(response.status);
+      if (response.status === 200) {
+        const newAccessToken = response.data.accessToken;
+        AsyncStorage.setItem("accessToken", newAccessToken);
+        AsyncStorage.setItem("refreshToken", response.data.refreshToken);
+        console.log("성공");
+        customAxios.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
+        originRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+        return customAxios(originRequest);
+      } else if (response.status === 409) {
+        const navigation = useNavigation(); // 네비게이션 객체 가져오기
+        navigation.navigate("Login"); // 토큰 만료 화면으로 이동
+      } else {
+        alert("Unexpected reason.");
       }
     }
     return Promise.reject(error);
