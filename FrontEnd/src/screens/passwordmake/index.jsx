@@ -75,6 +75,7 @@ const PasswordMakeScreen = ({ navigation, route }) => {
             onChangeText={setPassword}
             value={password}
             placeholder="새로운 비밀번호"
+            secureTextEntry={true}
           ></TextInput>
         </View>
         <TextInput
@@ -82,6 +83,7 @@ const PasswordMakeScreen = ({ navigation, route }) => {
           onChangeText={setPasswordRe}
           value={PasswordRe}
           placeholder="비밀번호 확인"
+          secureTextEntry={true}
         ></TextInput>
         <Text style={[styles.verifyErrorMessage, { opacity: errorOpacity }]}>
           비밀번호가 일치하지 않습니다.

@@ -22,7 +22,7 @@ import axios from "axios";
 // other import settings...
 
 const REST_API_KEY = "a12d292510e3111fe093a99ff91e118b";
-const REDIRECT_URI = "http://localhost:8080/user/kakao/callback";
+const REDIRECT_URI = "http://i9b102.p.ssafy.io:8080/user/kakao/callback";
 
 const KakaoLoginScreen = ({ navigation }) => {
   const [accessToken, setAccessToken] = useState(null);
@@ -50,16 +50,16 @@ const KakaoLoginScreen = ({ navigation }) => {
     }
   };
 
-  const requestToken = async (request_code) => {
-    const request_token_url = "https://kauth.kakao.com/oauth/token";
+  const requestToken = async () => {
+    // const request_token_url = "https://kauth.kakao.com/oauth/token";
+    const request_token_url = "https://kauth.kakao.com/oauth/authorize";
 
+    const urlll =
+      request_token_url +
+      `?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}`;
     try {
-      const response = await axios.post(request_token_url, {
-        grant_type: "authorization_code",
-        client_id: REST_API_KEY,
-        redirect_uri: REDIRECT_URI,
-        code: request_code,
-      });
+      const response = await axios.get(urlll);
+      console.log(response.data);
 
       const token = response.data.access_token;
       setAccessToken(token);
@@ -69,6 +69,24 @@ const KakaoLoginScreen = ({ navigation }) => {
       Alert.alert("로그인 실패", "카카오 로그인에 실패했습니다.");
     }
   };
+
+  //   try {
+  //     const response = await axios.post(request_token_url, {
+  //       grant_type: "authorization_code",
+  //       client_id: REST_API_KEY,
+  //       redirect_uri: REDIRECT_URI,
+  //       code: request_code,
+  //     });
+  //     console.log(response);
+
+  //     const token = response.data.access_token;
+  //     setAccessToken(token);
+  //     navigation.navigate("Pot"); // 로그인 성공 후 MainScreen으로 이동
+  //   } catch (error) {
+  //     console.error("토큰 요청에 실패했습니다:", error);
+  //     Alert.alert("로그인 실패", "카카오 로그인에 실패했습니다.");
+  //   }
+  // };
 
   return (
     <View style={{ flex: 1 }}>

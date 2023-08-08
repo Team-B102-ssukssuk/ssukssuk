@@ -99,6 +99,7 @@ const LoginScreen = ({ navigation }) => {
           onChangeText={setPassword}
           value={password}
           placeholder="password"
+          secureTextEntry={true}
         ></TextInput>
         <TouchableOpacity
           style={styles.singInButton}
