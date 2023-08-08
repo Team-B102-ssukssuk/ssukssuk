@@ -19,7 +19,7 @@ public class SsukApplication {
     @GetMapping("")
     String home()
     {
-        return "백엔드!";
+        return "암호화????!";
     }
 
     @PostMapping("")
