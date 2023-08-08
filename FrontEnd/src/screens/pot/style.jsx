@@ -153,9 +153,14 @@ const styles = StyleSheet.create({
   },
   trashCanMargin: {
     alignItems: "flex-end",
+    justifyContent: "flex-end",
   },
   alignCenterContainer: {
     alignItems: "center",
+  },
+  gardenCharacter: {
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
 

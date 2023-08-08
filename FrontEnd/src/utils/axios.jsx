@@ -1,13 +1,13 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-// Function to get the access token from AsyncStorage
+// 로컬 스토리지에 accessToken 값 추출
 export async function getAccessToken() {
   const value = await AsyncStorage.getItem("accessToken");
   return value;
 }
 
-// Axios instance with baseURL and interceptor to add Authorization header
+// baseURL 설정
 export const customAxios = axios.create({
   baseURL: `http://i9b102.p.ssafy.io:8080`,
 });
@@ -21,15 +21,21 @@ customAxios.interceptors.request.use(async (config) => {
   return config;
 });
 
-// Function to make a token renewal request
+// refreshtoken을 통한 accessToken 재발급
 export async function postRefreshToken() {
   try {
+    const refreshToken = await AsyncStorage.getItem("refreshToken");
+
     const response = await axios.post(
-      "http://i9b102.p.ssafy.io:8080/api/v1/auth/refresh",
+      "http://i9b102.p.ssafy.io:8080/user/token",
       {
-        refreshToken: AsyncStorage.getItem("refreshToken"),
+        headers: {
+          // 헤더값 추가
+          Authorization: `${refreshToken}`,
+        },
       }
     );
+
     return response;
   } catch (error) {
     return error.response;
@@ -46,6 +52,9 @@ customAxios.interceptors.response.use(
       config,
       response: { status },
     } = error;
+
+    console.log("응답 : " + status);
+    console.log(error.response.data);
 
     if (status === 401) {
       if (error.response.data.message === "Unauthorized") {

@@ -7,7 +7,6 @@ import {
   Dimensions,
   TouchableOpacity,
 } from "react-native";
-import { Avatar, Title } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import BottomSheet from "reanimated-bottom-sheet";
 import ModalPlantRegist from "../../components/modalplantregist";
@@ -15,6 +14,8 @@ import CookieRunBold from "../../components/common/CookieRunBold";
 import { ScrollView } from "react-native-gesture-handler";
 import customAxios from "../../utils/axios";
 import styles from "./style";
+import CookieRunRegular from "../../components/common/CookieRunRegular";
+import LoadingScreen from "../loading";
 
 const ProfileScreen = ({ navigation }) => {
   const [isEditModalVisible, setEditModalVisible] = useState(false);
@@ -31,16 +32,18 @@ const ProfileScreen = ({ navigation }) => {
     createdDate: "",
   });
   const [isUserData, setUserData] = useState({
-    information: {
-      badges: [],
-    },
+    badges: [],
   });
   const [badgeIndex, setBadgeIndex] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   const getUserData = () => {
     customAxios.get("/user/info").then((res) => {
       console.log(res.data.data);
       setUserData(res.data.data);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 500);
     });
   };
 
@@ -168,7 +171,7 @@ const ProfileScreen = ({ navigation }) => {
     return divided;
   };
 
-  const badges = isUserData.information.badges; // Use all the badge data from the response
+  const badges = isUserData.badges; // Use all the badge data from the response
   const rows = divideIntoRowsAndColumns(badges, 3, 3);
 
   const handleBadgeClick = (badge, index) => {
@@ -176,6 +179,11 @@ const ProfileScreen = ({ navigation }) => {
     setBadgeIndex(index);
     onOpen();
   };
+
+  if (isLoading) {
+    // Render the loading screen here
+    return <LoadingScreen />;
+  }
 
   return (
     <ImageBackground
@@ -195,24 +203,22 @@ const ProfileScreen = ({ navigation }) => {
           <View style={styles.profileContent}>
             <CookieRunBold style={styles.myPageTitle}>마이페이지</CookieRunBold>
             <View style={{ flexDirection: "row", marginTop: 15 }}>
-              <Avatar.Image
+              <Image
                 source={{
-                  uri: "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y",
+                  uri: `${isUserData.imageUrl}`,
                 }}
-                size={80}
+                style={{ width: 70, height: 70, borderRadius: 100 }}
               />
-              <View style={{ marginLeft: 20 }}>
-                <Title
-                  style={[
-                    styles.title,
-                    {
-                      marginTop: 15,
-                      marginBottom: 5,
-                    },
-                  ]}
-                >
-                  {isUserData.information.nickname}
-                </Title>
+              <View
+                style={{
+                  marginLeft: 20,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <CookieRunRegular style={styles.title}>
+                  {isUserData.nickname}
+                </CookieRunRegular>
               </View>
             </View>
           </View>
@@ -230,7 +236,7 @@ const ProfileScreen = ({ navigation }) => {
                   내 식물
                 </CookieRunBold>
                 <CookieRunBold style={styles.Collection_num}>
-                  {isUserData.information.myPlantCount}
+                  {isUserData.myPlantCount}
                 </CookieRunBold>
               </View>
               <View style={styles.barContent}>
@@ -238,7 +244,7 @@ const ProfileScreen = ({ navigation }) => {
                   정원
                 </CookieRunBold>
                 <CookieRunBold style={styles.Collection_num}>
-                  {isUserData.information.gardenCount}
+                  {isUserData.gardenCount}
                 </CookieRunBold>
               </View>
               <View style={styles.barContent}>
@@ -246,7 +252,7 @@ const ProfileScreen = ({ navigation }) => {
                   도감
                 </CookieRunBold>
                 <CookieRunBold style={styles.Collection_num}>
-                  {isUserData.information.collectionCount}
+                  {isUserData.collectionCount}
                 </CookieRunBold>
               </View>
             </View>
@@ -282,19 +288,6 @@ const ProfileScreen = ({ navigation }) => {
             </View>
           ))}
         </View>
-        {isOpen && renderBackDrop()}
-        <BottomSheet
-          ref={bs}
-          snapPoints={[
-            "-10%",
-            window.height * 0.3,
-            window.height * 0.4,
-            window.height * 0.5,
-          ]}
-          initialSnap={0}
-          renderContent={renderInner}
-          onCloseEnd={onClose}
-        />
         <ModalPlantRegist
           isVisible={isEditModalVisible}
           onClose={() => setEditModalVisible(false)}
@@ -303,6 +296,19 @@ const ProfileScreen = ({ navigation }) => {
           placeholder="변경하시려는 닉네임을 말씀해주세요"
         />
       </ScrollView>
+      {isOpen && renderBackDrop()}
+      <BottomSheet
+        ref={bs}
+        snapPoints={[
+          "-10%",
+          window.height * 0.3,
+          window.height * 0.4,
+          window.height * 0.5,
+        ]}
+        initialSnap={0}
+        renderContent={renderInner}
+        onCloseEnd={onClose}
+      />
     </ImageBackground>
   );
 };

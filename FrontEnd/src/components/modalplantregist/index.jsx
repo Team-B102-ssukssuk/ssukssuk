@@ -10,22 +10,18 @@ const ModalPlantRegist = ({
   onRegist,
   title,
   placeholder,
+  errormessage,
 }) => {
   const [inputValue, setInputValue] = useState("");
-  const [trueMessage, setTrueMessage] = useState(false);
 
   const handleInputChange = (text) => {
     setInputValue(text);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (inputValue.length > 0) {
-      onRegist(inputValue);
+      await onRegist(inputValue);
       setInputValue("");
-      setTrueMessage(false);
-      onClose();
-    } else {
-      setTrueMessage(true);
     }
   };
 
@@ -49,12 +45,13 @@ const ModalPlantRegist = ({
           onChangeText={handleInputChange}
           value={inputValue}
           placeholder={placeholder}
+          maxLength={8}
         />
-        {trueMessage && (
+        {errormessage != null ? (
           <CookieRunBold style={styles.loginErrorMessageActive}>
-            아이디 혹은 비밀번호가 올바른지 확인해주세요
+            {errormessage}
           </CookieRunBold>
-        )}
+        ) : null}
         <View style={styles.modalButtonAlign}>
           <TouchableOpacity
             onPress={handleSubmit}

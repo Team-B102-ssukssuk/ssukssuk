@@ -9,7 +9,7 @@ const QRCodeScanner = ({
   onOpenInputModal,
 }) => {
   const [hasPermission, setHasPermission] = useState(null);
-  const [setScannedData] = useState(null);
+  const [isScannedData, setScannedData] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -18,14 +18,14 @@ const QRCodeScanner = ({
     })();
   }, []);
 
-  const handleBarCodeScanned = ({ tyYpe, data }) => {
+  const handleBarCodeScanned = ({ type, data }) => {
     setScannedData(data);
     // Pass the scanned data back to PotScreen using the onScannedData prop
     onScannedData(data);
   };
 
   if (hasPermission === null) {
-    return <Text>Requesting camera permission...</Text>;
+    return null;
   }
   if (hasPermission === false) {
     return <Text>Unable to access camera</Text>;

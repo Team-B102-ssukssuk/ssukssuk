@@ -10,15 +10,17 @@ import * as Animatable from "react-native-animatable";
 import { useNavigation } from "@react-navigation/native";
 import customAxios from "../../utils/axios";
 import ModalPlantSeed from "../../components/modalplantseed";
+import LoadingScreen from "../loading";
 
 const GardenScreen = () => {
   const navigation = useNavigation();
-  const [gardenName] = useState("지민이네");
+  const [gardenName] = useState("내 정원");
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
   const [isDeleteIconVisible, setDeleteIconVisible] = useState(false);
   const [isCharacterModalVisible, setCharacterModalVisible] = useState(false);
   const [isDeleteGardenId, setDeleteGardenId] = useState(0);
   const [isPlantData, setPlantData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleSeedPlant = (nickname, option) => {
     // 씨앗 심기 관련 로직
@@ -28,7 +30,10 @@ const GardenScreen = () => {
 
   const getPotData = () => {
     customAxios.get("/plant/all").then((res) => {
-      setPlantData(res.data.data.gardens);
+      setPlantData(res.data.data);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 500);
     });
   };
 
@@ -38,10 +43,6 @@ const GardenScreen = () => {
 
   const visibleIcon = () => {
     setDeleteIconVisible(!isDeleteIconVisible);
-  };
-
-  const toggleCharacterModal = () => {
-    setCharacterModalVisible(!isCharacterModalVisible);
   };
 
   const toggleDeleteModal = (garden) => {
@@ -55,6 +56,7 @@ const GardenScreen = () => {
     customAxios.put(`plant/delete/${isDeleteGardenId}`).then(() => {
       console.log("삭제성공");
       getPotData();
+      visibleIcon();
     });
     setDeleteModalVisible(false);
   };
@@ -72,7 +74,11 @@ const GardenScreen = () => {
   };
 
   const rows = divideIntoRows(gardenPlants, 3);
-  const lastRowWithCharacter = rows.length;
+
+  if (isLoading) {
+    // Render the loading screen here
+    return <LoadingScreen />;
+  }
 
   return (
     <View style={styles.container}>
@@ -87,15 +93,15 @@ const GardenScreen = () => {
             </TouchableOpacity>
           </View>
         </View>
-        <ScrollView style={styles.plantContainer}>
-          <View style={styles.gardenWood}>
-            <View style={styles.gardenWoodGroup}>
-              <Image source={require("../../assets/img/gardenWood.png")} />
-              <CookieRunBold style={styles.gardenWoodText}>
-                {gardenName}
-              </CookieRunBold>
-            </View>
+        <View style={styles.gardenWood}>
+          <View style={styles.gardenWoodGroup}>
+            <Image source={require("../../assets/img/gardenWood.png")} />
+            <CookieRunBold style={styles.gardenWoodText}>
+              {gardenName}
+            </CookieRunBold>
           </View>
+        </View>
+        <ScrollView style={styles.plantContainer}>
           <View style={styles.alignCenterContainer}>
             {/* Map through the rows */}
             {rows.map((row, rowIndex) => (
@@ -180,23 +186,6 @@ const GardenScreen = () => {
                       style={styles.gardenContainer}
                       key={`empty_${emptyIndex}`}
                     >
-                      <View style={styles.absoultPosition}>
-                        {rowIndex === lastRowWithCharacter - 1 ? (
-                          emptyIndex === 0 ? (
-                            <TouchableOpacity
-                              style={styles.gardenCharacter}
-                              onPress={toggleCharacterModal}
-                            >
-                              {/* Display the characterBaechoo image */}
-                              <Image
-                                source={require("../../assets/img/silhouette.png")}
-                                resizeMode="contain"
-                                style={styles.gardenEmptyResize}
-                              />
-                            </TouchableOpacity>
-                          ) : null
-                        ) : null}
-                      </View>
                       <View style={styles.gardenGround}>
                         {/* Garden ground image */}
                         <Image

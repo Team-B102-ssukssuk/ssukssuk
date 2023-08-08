@@ -109,6 +109,7 @@ const ModalPlantSeed = ({ isVisible, onClose, onSeedPlant }) => {
               }}
               onChangeText={(text) => setSelectedNickname(text)}
               placeholder="애칭을 입력해주세요"
+              maxLength={5}
             />
           )}
           {!selectedSubcategory ? (

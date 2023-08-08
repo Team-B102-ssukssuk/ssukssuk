@@ -12,20 +12,33 @@ import customAxios from "../../utils/axios";
 import { connect } from "react-redux";
 import { storePotID, setGardenID } from "../../redux/action";
 import QRCodeScanner from "../../components/qrCode";
+import ToastNotification from "../../components/toast";
+import Icon from "react-native-vector-icons/AntDesign";
+import LoadingScreen from "../loading";
 
 const PotScreen = (props) => {
   const navigation = useNavigation();
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
   const [isRegistModalVisible, setRegistModalVisible] = useState(false);
   const [isDeleteIconVisible, setDeleteIconVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isQRcodeVisible, setQRcodeVisible] = useState(false);
+  const [isRegistMessage, setRegistMessage] = useState(null);
   const [isPotId, setPotID] = useState(0);
   const [isPotData, setPotData] = useState([]);
+  const [isToastVisible, setIsToastVisible] = useState(false);
+  const [toastTitle, setToastTitle] = useState("");
+  const [toastContent, setToastContent] = useState("");
+  const [toastIconName, setToastIconName] = useState("");
+  const [isTrashcanVisible, setTrashcanVisible] = useState("true");
 
   const getPotData = () => {
     customAxios.get("/pot").then((res) => {
       console.log(res.data);
       setPotData(res.data);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 500);
     });
   };
 
@@ -42,6 +55,13 @@ const PotScreen = (props) => {
       })
       .then(() => {
         console.log("등록 성공");
+        // Show the success toast notification
+        showToast(
+          "등록",
+          "성공적으로 화분이 등록되었습니다.",
+          "checkmark-circle-sharp"
+        );
+        // Update the pot data
         getPotData();
       })
       .catch((err) => {
@@ -50,12 +70,30 @@ const PotScreen = (props) => {
     toggleQRCodeScanner();
   };
 
+  const showToast = (title, content, iconName) => {
+    setIsToastVisible(true);
+    setToastTitle(title);
+    setToastContent(content);
+    setToastIconName(iconName);
+
+    // Start the timer to hide the toast after a few seconds
+    setTimeout(() => {
+      setIsToastVisible(false);
+    }, 2000); // Set the duration for the toast to stay visible (2 seconds in this case)
+  };
+
   const toggleQRCodeScanner = () => {
+    showTrashcan();
     setQRcodeVisible(!isQRcodeVisible);
+  };
+
+  const showTrashcan = () => {
+    setTrashcanVisible(!isTrashcanVisible);
   };
 
   const toggleInputModal = () => {
     setQRcodeVisible(!isQRcodeVisible);
+    setRegistMessage(null);
     setRegistModalVisible(!isRegistModalVisible);
   };
 
@@ -187,6 +225,12 @@ const PotScreen = (props) => {
                 resizeMode="contain"
                 style={styles.potResize}
               />
+              <Icon
+                name="pluscircle"
+                size={28}
+                color="#000"
+                style={{ position: "absolute" }}
+              />
             </TouchableOpacity>
           </View>
         );
@@ -203,6 +247,7 @@ const PotScreen = (props) => {
     };
     customAxios.put("/pot", data).then(() => {
       getPotData();
+      visibleIcon();
     });
     setDeleteModalVisible(false);
   };
@@ -218,12 +263,27 @@ const PotScreen = (props) => {
       .post("/pot", serialNumber)
       .then(() => {
         console.log("등록 성공");
+        setRegistModalVisible(false);
+        showToast(
+          "등록",
+          "성공적으로 화분이 등록되었습니다.",
+          "checkmark-circle-sharp"
+        );
         getPotData();
       })
       .catch((err) => {
-        console.log(err);
+        if (err.response.status === 409) {
+          setRegistMessage("중복된 시리얼 넘버");
+        } else if (err.response.status === 400) {
+          setRegistMessage("유효하지 않는 시리얼 넘버");
+        }
       });
   };
+
+  if (isLoading) {
+    // Render the loading screen here
+    return <LoadingScreen />;
+  }
 
   return (
     <View style={styles.container}>
@@ -238,6 +298,7 @@ const PotScreen = (props) => {
               <CookieRunBold style={styles.PotWoodText}>내 화분</CookieRunBold>
             </View>
           </View>
+
           <View style={styles.alignCenterContainer}>
             <View style={styles.reContainer}>
               <View style={styles.gardenContainer}>
@@ -265,6 +326,8 @@ const PotScreen = (props) => {
               </View>
             </View>
           </View>
+        </ScrollView>
+        {isTrashcanVisible && (
           <View style={styles.trashCanMargin}>
             <TouchableOpacity onPress={visibleIcon}>
               <Image
@@ -273,7 +336,7 @@ const PotScreen = (props) => {
               />
             </TouchableOpacity>
           </View>
-        </ScrollView>
+        )}
       </ImageBackground>
       <ModalPlantDelete
         isVisible={isDeleteModalVisible}
@@ -287,12 +350,20 @@ const PotScreen = (props) => {
         onRegist={handleRegist}
         title="화분 등록"
         placeholder="화분 고유 ID를 입력해주세요"
+        errormessage={isRegistMessage}
       />
       {isQRcodeVisible && (
         <QRCodeScanner
           onScannedData={handleScannedData}
           onCloseQRCodeScanner={toggleQRCodeScanner}
           onOpenInputModal={toggleInputModal}
+        />
+      )}
+      {isToastVisible && (
+        <ToastNotification
+          title={toastTitle}
+          content={toastContent}
+          iconName={toastIconName}
         />
       )}
     </View>

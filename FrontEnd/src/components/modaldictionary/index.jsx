@@ -11,7 +11,7 @@ const ModalDictionary = ({ isVisible, onClose }) => {
   const [isContentModalVisible, setContentModalVisible] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("채소");
   const [selectedPlant, setSelectedPlant] = useState(null);
-  const [isDictionaryData, setDictionaryData] = useState({ categories: [] });
+  const [isDictionaryData, setDictionaryData] = useState([]);
 
   const getDictionaryData = () => {
     customAxios.get("/plantinfo").then((res) => {
@@ -142,7 +142,7 @@ const ModalDictionary = ({ isVisible, onClose }) => {
         {/* 모달 내용 */}
         <CookieRunBold style={styles.modalText}>도감</CookieRunBold>
         <ScrollView>
-          {isDictionaryData.categories.map((category) =>
+          {isDictionaryData.map((category) =>
             category.categoryName === selectedCategory ? (
               <View key={`category_${category.categoryId}`}>
                 {category.plants.map((plant) => (

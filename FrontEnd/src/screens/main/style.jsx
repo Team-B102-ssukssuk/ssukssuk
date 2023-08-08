@@ -1,26 +1,29 @@
 import { StyleSheet } from "react-native";
-import { COLORS } from "../../constants/theme";
+import { COLORS, SIZES } from "../../constants/theme";
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
   userInfoSection: {
+    height: SIZES.height * 0.15,
     paddingHorizontal: 20,
     marginVertical: 40,
   },
   characterSection: {
+    height: SIZES.height * 0.45,
     flexDirection: "row",
     justifyContent: "center",
   },
   nameTagSection: {
     flexDirection: "row",
     justifyContent: "center",
+    height: SIZES.height * 0.12,
   },
   wateringCanSection: {
-    position: "absolute",
-    right: 20,
-    bottom: 30,
+    alignItems: "flex-end",
+    marginRight: 20,
+    height: SIZES.height * 0.2,
   },
   SensorContainer: {
     flexDirection: "row",
@@ -36,6 +39,7 @@ const styles = StyleSheet.create({
   },
   tmp: {
     flexDirection: "row",
+    width: "23%",
     color: COLORS.brown,
     backgroundColor: COLORS.lightYellow,
     borderRadius: 12.5,
@@ -43,6 +47,8 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     textAlign: "center",
     textAlignVertical: "center",
+    justifyContent: "space-evenly",
+    alignItems: "center",
     borderWidth: 2,
     borderColor: "#896A50",
     marginLeft: 10,
@@ -51,8 +57,8 @@ const styles = StyleSheet.create({
     fontSize: 11,
   },
   sensorSize: {
-    width: 15,
-    height: 15,
+    width: 20,
+    height: 20,
     marginRight: 5,
   },
   mapSize: {
@@ -74,12 +80,12 @@ const styles = StyleSheet.create({
     marginLeft: 7.5,
   },
   characterSize: {
-    width: 350,
-    height: 350,
+    width: "100%",
+    height: "100%",
   },
   nameTagSize: {
-    width: 150,
-    height: 150,
+    width: "80%",
+    height: "80%",
   },
   wateringCanSize: {
     width: 93,

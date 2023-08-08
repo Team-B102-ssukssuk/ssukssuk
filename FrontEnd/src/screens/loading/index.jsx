@@ -1,4 +1,4 @@
-import { Text, View, Image } from "react-native";
+import { View, Image, Text } from "react-native";
 import styles from "./styles";
 
 const LoadingScreen = () => {

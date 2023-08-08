@@ -9,6 +9,7 @@ import styles from "./style";
 import { useNavigation } from "@react-navigation/native";
 import { connect } from "react-redux";
 import customAxios from "../../utils/axios";
+import LoadingScreen from "../loading";
 
 const MainScreen = (props) => {
   const navigation = useNavigation();
@@ -21,6 +22,7 @@ const MainScreen = (props) => {
   const [temperature, setTemperature] = useState(0);
   const [moisture, setMoisture] = useState(0);
   const [humidity, setHumidity] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   const getUserData = () => {
     customAxios.get(`/sensor/${props.potID}`).then((res) => {
@@ -46,21 +48,6 @@ const MainScreen = (props) => {
     });
   };
 
-  useEffect(() => {
-    // 컴포넌트가 마운트될 때 getUserData 함수 호출
-    getUserData();
-
-    // 30초마다 getUserData 함수 호출하는 interval 설정
-    const interval = setInterval(() => {
-      getUserData();
-    }, 30000); // 30초를 밀리초로 변환
-
-    // 컴포넌트가 언마운트될 때 interval 정리
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
-
   const getPlantData = (gardenId) => {
     if (gardenId === 999) {
       customAxios
@@ -84,6 +71,26 @@ const MainScreen = (props) => {
         });
     }
   };
+
+  useEffect(() => {
+    // 컴포넌트가 마운트될 때 getUserData 함수 호출
+    getUserData();
+    getPlantData(999);
+
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
+
+    // 30초마다 getUserData 함수 호출하는 interval 설정
+    const interval = setInterval(() => {
+      getUserData();
+    }, 30000); // 30초를 밀리초로 변환
+
+    // 컴포넌트가 언마운트될 때 interval 정리
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
 
   useEffect(() => {
     getPlantData(999);
@@ -133,6 +140,11 @@ const MainScreen = (props) => {
       console.log("성공");
     });
   };
+
+  if (isLoading) {
+    // Render the loading screen here
+    return <LoadingScreen />;
+  }
 
   return (
     <View style={styles.container}>
@@ -228,16 +240,13 @@ const MainScreen = (props) => {
           />
         </View>
         {isCharacterTrue ? (
-          <TouchableOpacity
-            style={styles.characterSection}
-            onPress={toggleCharacterModal}
-          >
+          <View style={styles.characterSection}>
             <Image
               source={require("../../assets/img/lettuce_3.gif")}
               resizeMode="contain"
               style={styles.characterSize}
             />
-          </TouchableOpacity>
+          </View>
         ) : (
           <TouchableOpacity
             style={styles.characterSection}

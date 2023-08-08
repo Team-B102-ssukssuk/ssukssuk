@@ -27,7 +27,7 @@ export default function App() {
     }
 
     const token = (await Notifications.getExpoPushTokenAsync()).data;
-    alert(token); // This is the push notification token
+    console.log(token); // This is the push notification token
     // Send this token to your server to send push notifications to this device.
   };
 

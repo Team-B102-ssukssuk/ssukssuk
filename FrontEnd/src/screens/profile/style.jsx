@@ -3,7 +3,8 @@ import { COLORS, SIZES } from "../../constants/theme";
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    width: SIZES.width,
+    height: SIZES.height,
   },
   userInfoSection: {
     paddingHorizontal: 30,
@@ -15,6 +16,7 @@ const styles = StyleSheet.create({
   lineSection: {
     width: SIZES.width - 50,
     marginHorizontal: 20,
+    marginVertical: 10,
     borderBottomColor: "white",
     borderBottomWidth: 1,
   },
@@ -37,7 +39,7 @@ const styles = StyleSheet.create({
   myPageTitle: {
     fontSize: 24,
     color: "#fff",
-    marginTop: 30,
+    marginVertical: 20,
   },
   badgeContent: {
     flexDirection: "row",
@@ -120,7 +122,7 @@ const styles = StyleSheet.create({
     right: 0,
   },
   panel: {
-    height: 600,
+    height: 700,
     padding: 20,
     backgroundColor: "#fff",
     alignItems: "center",
@@ -149,8 +151,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "gray",
     height: 30,
-    marginBottom: 10,
-    marginTop: 10,
+    marginTop: 5,
   },
   panelButton: {
     padding: 20,
