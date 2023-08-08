@@ -37,6 +37,7 @@ public class AuthenticationConfig {
 //                .antMatchers("/*").permitAll()
                 .antMatchers("/user").permitAll() // 모든 사용자 접근 허용
                 .antMatchers(HttpMethod.GET,"/user").authenticated() // 로그아웃 요청에 대해 인증 필요
+                .antMatchers(HttpMethod.GET,"/kakao/callback").permitAll()
 //                .antMatchers(HttpMethod.POST, "/user").permitAll() // POST /user 요청에 대해 모든 사용자 접근 허용
 //                .anyRequest().authenticated() // 나머지 요청에 대해 인증 필요
                 .and()
