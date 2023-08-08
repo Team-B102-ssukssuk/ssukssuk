@@ -20,4 +20,8 @@ public interface BadgeService {
     void modifyBadge(BadgeUpdateRequestDto badgeUpdateRequestDto);
 
     List<UserBadgeResponseDto> findAllWithUserId(Integer userId);
+
+    boolean checkUserBadge(int badgeId, int userId);
+
+    void saveUserBadge(int badgeId, int userId);
 }

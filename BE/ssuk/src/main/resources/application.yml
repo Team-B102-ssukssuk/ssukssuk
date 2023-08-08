@@ -46,7 +46,7 @@ spring:
         min-idle: 2
     host: localhost
     port: 6379
-#    password: b102ssuk
+    password: b102ssuk
 
   jpa:
     database: mysql   # 추가 해준 부분
