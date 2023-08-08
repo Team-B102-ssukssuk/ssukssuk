@@ -18,6 +18,7 @@ import com.ssafy.ssuk.utils.email.EmailMessage;
 import com.ssafy.ssuk.utils.image.S3UploadService;
 import com.ssafy.ssuk.utils.response.CommonResponseEntity;
 import com.ssafy.ssuk.utils.response.SuccessCode;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -254,6 +255,11 @@ public class UserController {
         TokenInfo tokenInfo = userService.recreateToken(refreshToken, request);
     return new ResponseEntity<>(tokenInfo, HttpStatus.OK);
     }
+
+//    @GetMapping
+//    public ResponseEntity<?> logout(@RequestAttribute Integer uerId) {
+//        redisService.
+//    }
 
 
 
