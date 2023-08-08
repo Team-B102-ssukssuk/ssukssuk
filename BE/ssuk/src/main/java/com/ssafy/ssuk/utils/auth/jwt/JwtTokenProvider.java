@@ -33,7 +33,7 @@ public class JwtTokenProvider {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public TokenInfo createToken(Authentication authentication, Integer userId, String userNickname) {
+    public TokenInfo createToken(Authentication authentication, String userId) {
         // 사용자의 권한 정보 가져오기
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -48,7 +48,6 @@ public class JwtTokenProvider {
         String accessToken = Jwts.builder()
                 .claim("auth", authorities)
                 .claim("userId", userId)
-                .claim("userNickname", userNickname)
                 .setExpiration(accessTokenExt)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
@@ -56,6 +55,8 @@ public class JwtTokenProvider {
         // refreshToken 생성
         Date refreshTokenExt = new Date(now + 86400000 * 14); // 2주 후
         String refreshToken = Jwts.builder()
+                .claim("auth", authorities)
+                .claim("userId", userId)
                 .setExpiration(refreshTokenExt)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
@@ -68,9 +69,9 @@ public class JwtTokenProvider {
     }
 
     // JWT 토큰을 복호화하여 토큰에 들어있는 정보를 꺼냄
-    public Authentication getAuthentication(String accessToken, ServletRequest request) {
+    public Authentication getAuthentication(String token, ServletRequest request) {
 
-        Claims claims = parseClaims(accessToken);
+        Claims claims = parseClaims(token);
 
         log.debug("claims={}", claims);
         log.debug("auth={}", claims.get("auth"));
@@ -86,9 +87,8 @@ public class JwtTokenProvider {
                         .collect(Collectors.toList());
 
         // UserDetails 객체를 만들어서 Authentication 리턴
-        UserDetails principal = new User(claims.get("userNickname",String.class), "", authorities);
+        UserDetails principal = new User(claims.get("userId",String.class), "", authorities);
         request.setAttribute("userId", claims.get("userId"));
-        request.setAttribute("userNickname", claims.get("userNickname"));
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 

@@ -64,7 +64,7 @@ dependencies {
 	//fcm
 	implementation 'com.google.firebase:firebase-admin:6.8.1'
 	implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.2.2'
-	implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5'
+	implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
 	// http 요청, 응답
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux', version: '2.7.7'
 	// 설정파일 어노테이션

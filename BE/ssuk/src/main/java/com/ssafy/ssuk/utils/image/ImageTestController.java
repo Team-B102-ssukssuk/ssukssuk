@@ -15,22 +15,22 @@ import java.io.IOException;
 @Slf4j
 public class ImageTestController {
 
-    private final S3Uploader s3Uploader;
+    private final S3UploadService s3UploadService;
     private final static String IMAGE_URL = "https://ssook.s3.ap-northeast-2.amazonaws.com/image/";
 
     @PostMapping("/upload")
     public ResponseEntity<ImageInfo> upload(@RequestParam("image") MultipartFile multipartFile) throws IOException {
-        return new ResponseEntity<>(s3Uploader.upload(multipartFile), HttpStatus.OK);
+        return new ResponseEntity<>(s3UploadService.upload(multipartFile), HttpStatus.OK);
     }
 
     @PostMapping("/update")
     public ResponseEntity<ImageInfo> update(@RequestParam String origin, @RequestParam("image") MultipartFile multipartFile) throws IOException {
-        return new ResponseEntity<>(s3Uploader.modifyFile(origin, multipartFile), HttpStatus.OK);
+        return new ResponseEntity<>(s3UploadService.modifyFile(origin, multipartFile), HttpStatus.OK);
     }
 
     @PostMapping("/url")
     public ResponseEntity<ImageInfo> update(@RequestParam String url) throws IOException {
-        s3Uploader.upload(url);
+        s3UploadService.upload(url);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
