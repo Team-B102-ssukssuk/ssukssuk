@@ -69,7 +69,7 @@ const PotScreen = (props) => {
     customAxios
       .get("/pot")
       .then((res) => {
-        console.log(res.data);
+        console.log("화분" + res.data);
         setPotData(res.data);
         setTimeout(() => {
           setIsLoading(false);
@@ -148,7 +148,7 @@ const PotScreen = (props) => {
     // Store the potID in Redux using the action
     props.storePotID(potId);
     props.setGardenID(gardenId);
-    navigation.push("Slider");
+    navigation.push("Main");
   };
 
   const renderPotsOnShelve = (startIndex, endIndex) => {
