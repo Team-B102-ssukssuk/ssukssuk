@@ -219,13 +219,12 @@ public class UserController {
         userService.updateNickname(userId, updateNicknameDto.getNickname());
         return new ResponseEntity<>("OK", HttpStatus.OK);
     }
-
     // 카카오로그인
     // 카카오 인가코드 받아서 카카오서버 accesstoken 발급
     // accesstoken으로 사용자 정보 확인 후 쑥쑥 로그인 accesstoken 발급
     @GetMapping("/kakao/callback")
-    public ResponseEntity<?> kakaoLogin(@RequestParam String code, HttpSession session) throws Exception {
-            log.debug("code={}", code);
+    public ResponseEntity<?> kakaoLogin(@RequestParam String code) throws Exception {
+        log.debug("code={}", code);
         String kakaoAccessToken = kakaoAuthService.getAccessToken(code).getAccessToken();
         // 사용자 정보 가져오거나 회원가입
         User user = kakaoAuthService.saveOrGetUser(kakaoAccessToken);
@@ -234,14 +233,31 @@ public class UserController {
         TokenInfo tokenInfo = kakaoAuthService.kakaoLogin(user.getEmail());
         log.debug("loginTokenInfo={}", tokenInfo);
 
-        // 토큰 정보 세션에 저장
-        session.setAttribute("tokenInfo", tokenInfo);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create("http://i9b102.p.ssafy.io:8080"));
-
-        return new ResponseEntity<>(headers, HttpStatus.SEE_OTHER);
+        return new ResponseEntity<>(tokenInfo, HttpStatus.OK);
     }
+
+//    // 카카오로그인
+//    // 카카오 인가코드 받아서 카카오서버 accesstoken 발급
+//    // accesstoken으로 사용자 정보 확인 후 쑥쑥 로그인 accesstoken 발급
+//    @GetMapping("/kakao/callback")
+//    public ResponseEntity<?> kakaoLogin(@RequestParam String code, HttpSession session) throws Exception {
+//            log.debug("code={}", code);
+//        String kakaoAccessToken = kakaoAuthService.getAccessToken(code).getAccessToken();
+//        // 사용자 정보 가져오거나 회원가입
+//        User user = kakaoAuthService.saveOrGetUser(kakaoAccessToken);
+////        redisService.
+//        log.debug("회원가입 또는 사용자 정보 가져오기");
+//        TokenInfo tokenInfo = kakaoAuthService.kakaoLogin(user.getEmail());
+//        log.debug("loginTokenInfo={}", tokenInfo);
+//
+//        // 토큰 정보 세션에 저장
+//        session.setAttribute("tokenInfo", tokenInfo);
+//
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setLocation(URI.create("http://i9b102.p.ssafy.io:8080"));
+//
+//        return new ResponseEntity<>(headers, HttpStatus.SEE_OTHER);
+//    }
 
     // 프로필 사진 변경
     @PutMapping("/image")
