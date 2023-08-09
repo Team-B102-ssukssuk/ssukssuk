@@ -238,7 +238,7 @@ public class UserController {
         session.setAttribute("tokenInfo", tokenInfo);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create("http://localhost:8080"));
+        headers.setLocation(URI.create("http://i9b102.p.ssafy.io:8080"));
 
         return new ResponseEntity<>(headers, HttpStatus.SEE_OTHER);
     }
