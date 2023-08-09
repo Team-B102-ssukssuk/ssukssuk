@@ -23,6 +23,12 @@ public class ImageTestController {
         return new ResponseEntity<>(s3UploadService.upload(multipartFile), HttpStatus.OK);
     }
 
+    @PostMapping("/upload/force")
+    public ResponseEntity<String> uploadOne(@RequestParam("file") MultipartFile multipartFile) throws IOException {
+        s3UploadService.uploadForce(multipartFile);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @PostMapping("/update")
     public ResponseEntity<ImageInfo> update(@RequestParam String origin, @RequestParam("image") MultipartFile multipartFile) throws IOException {
         return new ResponseEntity<>(s3UploadService.modifyFile(origin, multipartFile), HttpStatus.OK);

@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedInputStream;
@@ -49,6 +48,12 @@ public class S3UploadService {
                 .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File로 전환이 실패했습니다."));
 
         return upload(uploadFile);
+    }
+
+    public void uploadForce(MultipartFile multipartFile) throws IOException {
+        File uploadFile = convert(multipartFile)
+                .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File로 전환이 실패했습니다."));
+        uploadOne(uploadFile);
     }
 
     /**
@@ -93,6 +98,13 @@ public class S3UploadService {
             }
         }
         return tempFile;
+    }
+
+    private void uploadOne(File uploadFile) {
+        String fileName = uploadFile.getName();
+        String uploadImageUrl = putS3(uploadFile, fileName);
+        log.debug("uploadImageUrl={}", uploadImageUrl);
+        removeNewFile(uploadFile);  // 로컬에 생성된 파일 삭제
     }
 
     private ImageInfo upload(File uploadFile) {
