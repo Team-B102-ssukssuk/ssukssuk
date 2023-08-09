@@ -17,6 +17,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 @Slf4j
@@ -56,7 +58,7 @@ public class FcmService {
                 CloseableHttpClient httpClient = HttpClients.createDefault();
                 HttpPost httpPost = new HttpPost(EXPO_PUSH_API_URL);
                 httpPost.addHeader("Accept", "application/json");
-                httpPost.addHeader("Content-Type", "application/json");
+                httpPost.addHeader("Content-Type", "application/json; charset=UTF-8");
 
                 httpPost.addHeader("Expo-Push-Token", findFcm.get().getFcm_token());
 
@@ -66,7 +68,7 @@ public class FcmService {
                         "  \"body\": \"" + body + "\"\n" +
                         "}";
 
-                HttpEntity entity = new StringEntity(payload);
+                HttpEntity entity = new StringEntity(payload, StandardCharsets.UTF_8);
                 httpPost.setEntity(entity);
 
                 HttpResponse response = httpClient.execute(httpPost);

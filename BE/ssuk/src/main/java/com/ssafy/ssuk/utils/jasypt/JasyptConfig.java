@@ -35,12 +35,12 @@ public class JasyptConfig {
          * 여기에 암호화하고 싶은 값을 origin에 넣고
          * encode 값을 ENC(encode)로 yml에 추가하면됩니다
          */
-        String origin = "a12d292510e3111fe093a99ff91e118b";
-        String encode = encryptor.encrypt(origin);
-        String decode = encryptor.decrypt(encode);
-        log.debug("origin={}", origin);
-        log.debug("encode={}", encode);
-        log.debug("decode={}", decode);
+//        String origin = "유호하지 않은거로 유지하세요";
+//        String encode = encryptor.encrypt(origin);
+//        String decode = encryptor.decrypt(encode);
+//        log.debug("origin={}", origin);
+//        log.debug("encode={}", encode);
+//        log.debug("decode={}", decode);
 
         return encryptor;
     }

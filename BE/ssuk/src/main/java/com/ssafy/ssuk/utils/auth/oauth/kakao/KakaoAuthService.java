@@ -77,6 +77,36 @@ public class KakaoAuthService {
         return kakaoToken;
     }
 
+    public KakaoToken getAccessToken(String code, String redirectURL) {
+        // 요청 파라미터
+        MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
+        parameters.add("grant_type", kakaoProperties.getAuthorizationGrantType());
+        parameters.add("client_id", kakaoProperties.getClientId());
+        parameters.add("redirect_uri", redirectURL);
+        parameters.add("code", code);
+        parameters.add("client_secret", kakaoProperties.getClientSecret());
+        // 요청보내고 응답 받기
+        String accessTokenUri = kakaoProviderProperties.getTokenUri();
+        WebClient webClient = WebClient.create(accessTokenUri);
+        String response = webClient.post()
+                .uri(accessTokenUri)
+                .bodyValue(parameters)
+                .header("Contnt-type", "application/x-www-form-urlencoded;charset=utf-8")
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+        log.debug("kakaoToken={}", response);
+        // 응답 파싱해서 토큰 반환
+        ObjectMapper objectMapper = new ObjectMapper();
+        KakaoToken kakaoToken = null;
+        try {
+            kakaoToken = objectMapper.readValue(response, KakaoToken.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return kakaoToken;
+    }
+
     // 카카오로부터 사용자 정보 받아오기
     public KakaoProfile getUserInfo(String accessToken) {
         String userInfoUri = kakaoProviderProperties.getUserInfoUri();

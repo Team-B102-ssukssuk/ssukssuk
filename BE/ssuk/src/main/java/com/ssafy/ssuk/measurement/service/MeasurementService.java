@@ -1,6 +1,7 @@
 package com.ssafy.ssuk.measurement.service;
 
 import com.ssafy.ssuk.measurement.domain.Measurement;
+import com.ssafy.ssuk.measurement.dto.request.UploadRequestDto;
 import com.ssafy.ssuk.measurement.dto.socket.SensorMessageDto;
 
 import java.util.List;
@@ -15,5 +16,5 @@ public interface MeasurementService {
 
     void checkMeasurement(SensorMessageDto sensorMessageDto);
 
-    
+    void updateLevel(UploadRequestDto uploadRequestDto);
 }

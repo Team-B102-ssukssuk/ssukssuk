@@ -2,6 +2,7 @@ package com.ssafy.ssuk.measurement.service;
 
 import com.ssafy.ssuk.measurement.domain.Measurement;
 import com.ssafy.ssuk.measurement.domain.SensorType;
+import com.ssafy.ssuk.measurement.dto.request.UploadRequestDto;
 import com.ssafy.ssuk.measurement.dto.socket.SensorMessageDto;
 import com.ssafy.ssuk.measurement.repository.MeasurementRepository;
 import com.ssafy.ssuk.notify.domain.Notification;
@@ -14,6 +15,7 @@ import com.ssafy.ssuk.user.domain.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -54,15 +56,12 @@ public class MeasurementServiceImpl implements MeasurementService {
     }
 
     //센서값 비교
-
     @Override
     public void checkMeasurement(SensorMessageDto sensorMessageDto) {
         List<Garden> gardens = gardenRepository.findGardenByPotId(sensorMessageDto.getPotId());
 
-        if(sensorMessageDto.getSensorType().equals(SensorType.M))
-        {
-            if(gardens.get(0).getPlant().getMoistureMin() > sensorMessageDto.getMeasurementValue())
-            {
+        if (sensorMessageDto.getSensorType().equals(SensorType.M)) {
+            if (gardens.get(0).getPlant().getMoistureMin() > sensorMessageDto.getMeasurementValue()) {
                 Integer userId = gardens.get(0).getUser().getId();
                 String nickName = gardens.get(0).getNickname();
 
@@ -82,6 +81,41 @@ public class MeasurementServiceImpl implements MeasurementService {
 
 
             }
+        }
+    }
+
+    /*
+    - 이미지 변경 요청시 레벨업이라면? -> 가든 테이블 값 갱신하고 푸쉬알림, 식물 사진 저장
+    - 이미지 변경 요청시 레벨업이 아니라면? -? 식물 사진 저장
+     */
+    @Override
+    @Transactional
+    public void updateLevel(UploadRequestDto uploadRequestDto) {
+        Garden findGarden = gardenRepository.findGardenByPotId(uploadRequestDto.getPotId()).get(0);
+
+        if (findGarden.getLevel() < uploadRequestDto.getLevel()) { // 레벨업
+            //푸시알림
+            fcmService.sendPushTo(findGarden.getUser().getId(), "레벨 업", findGarden.getNickname() + "이(가) 레벨업했어요 !");
+
+            //알림 갱신
+            Notification notification = Notification.builder()
+                    .user(findGarden.getUser())
+                    .garden(findGarden)
+                    .pot(findGarden.getPot())
+                    .title("레벨업")
+                    .body(findGarden.getNickname() + "이(가) 레벨업했어요 !")
+                    .notificationType(NotificationType.L)
+                    .build();
+            notificationRepository.save(notification);
+
+            //테이블 갱신
+            findGarden.updateLevel(uploadRequestDto.getLevel());
+            gardenRepository.save(findGarden); // 갱신
+
+            //식물 사진 테이블 insert
+        } else {
+            //식물 사진 테이블 insert
+
         }
     }
 }

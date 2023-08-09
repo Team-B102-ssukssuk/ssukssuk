@@ -98,7 +98,7 @@ public class GardenRepositoryImpl implements GardenRepository {
         return em.createQuery("select g from Garden g " +
                         " join fetch g.plant" +
                         " join fetch g.user" +
-                        " where g.pot.id = :potId and g.isDeleted = false", Garden.class)
+                        " where g.pot.id = :potId and g.isDeleted = false and g.isUse = true ", Garden.class)
                 .setParameter("potId", potId).getResultList();
     }
 }

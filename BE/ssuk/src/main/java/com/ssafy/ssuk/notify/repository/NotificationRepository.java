@@ -13,7 +13,7 @@ import java.util.Optional;
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, Integer> {
     // 조회 (visible 1인거만)
-    @Query("select new com.ssafy.ssuk.notify.dto.response.NotificationResponseDto(n.id, n.user.id, n.garden.id, n.pot.id, n.title, n.body, n.visible, n.notification_date) from Notification n " +
+    @Query("select new com.ssafy.ssuk.notify.dto.response.NotificationResponseDto(n.id, n.user.id, n.garden.id, n.pot.id, n.title, n.notificationType, n.body, n.visible, n.notification_date, n.garden.nickname) from Notification n " +
             "where n.user.id = :userId and n.visible = true ")
     List<NotificationResponseDto> findByUser_Id(@Param("userId") Integer userId);
 
