@@ -43,6 +43,9 @@ public class SensorSokcetController {
         Measurement measurement = measurementMapper.MessageDtoToMeasurement(message);
         measurementService.insertMeasurement(measurement);
 
+        //센서값 비교 후 조건에 맞지 않으면 푸쉬
+        measurementService.checkMeasurement(message);
+
         //template.convertAndSend("/sub/socket/room/" + message.getSerialNumber(), message);
     }
 }

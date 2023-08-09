@@ -39,16 +39,10 @@ public class MeasurementController {
         return ResponseEntity.ok(result);
     }
 
-//    @GetMapping("/water/{potId}")
-//    ResponseEntity<?> test(@RequestAttribute Integer userId, @PathVariable Integer potId)
-//    {
-//        return ResponseEntity.ok("hi");
-//    }
 
     //급수 요청
     @GetMapping("/water/{potId}")
-    ResponseEntity<?> insertWater(@PathVariable Integer potId)
-    {
+    ResponseEntity<?> insertWater(@PathVariable Integer potId) {
         log.info("물급수 요청");
         Measurement findMeasurement = mesurementService.findByPot_Id(potId).get(0);
 
