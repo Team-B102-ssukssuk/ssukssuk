@@ -26,7 +26,6 @@ public class KakaoController {
 //        TokenInfo tokenInfo = kakaoAuthService.kakaoLogin(user.getEmail());
 //        log.debug("loginTokenInfo={}", tokenInfo);
 
-//        return "redirect:http://i9b102.p.ssafy.io:8080";
-        return "팍씨";
+        return "redirect:http://i9b102.p.ssafy.io:8080";
     }
 }
