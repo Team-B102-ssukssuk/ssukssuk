@@ -21,6 +21,7 @@ import com.ssafy.ssuk.utils.response.SuccessCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -30,6 +31,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -221,15 +224,23 @@ public class UserController {
     // 카카오 인가코드 받아서 카카오서버 accesstoken 발급
     // accesstoken으로 사용자 정보 확인 후 쑥쑥 로그인 accesstoken 발급
     @GetMapping("/kakao/callback")
-    public ResponseEntity<?> kakaoLogin(@RequestParam String code) throws Exception {
+    public ResponseEntity<?> kakaoLogin(@RequestParam String code, HttpSession session) throws Exception {
             log.debug("code={}", code);
         String kakaoAccessToken = kakaoAuthService.getAccessToken(code).getAccessToken();
         // 사용자 정보 가져오거나 회원가입
         User user = kakaoAuthService.saveOrGetUser(kakaoAccessToken);
+//        redisService.
         log.debug("회원가입 또는 사용자 정보 가져오기");
         TokenInfo tokenInfo = kakaoAuthService.kakaoLogin(user.getEmail());
         log.debug("loginTokenInfo={}", tokenInfo);
-        return new ResponseEntity<>(tokenInfo, HttpStatus.OK);
+
+        // 토큰 정보 세션에 저장
+        session.setAttribute("tokenInfo", tokenInfo);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(URI.create("http://localhost:8080"));
+
+        return new ResponseEntity<>(headers, HttpStatus.SEE_OTHER);
     }
 
     // 프로필 사진 변경
@@ -256,10 +267,25 @@ public class UserController {
     return new ResponseEntity<>(tokenInfo, HttpStatus.OK);
     }
 
-//    @GetMapping
-//    public ResponseEntity<?> logout(@RequestAttribute Integer uerId) {
-//        redisService.
-//    }
+    @GetMapping
+    public ResponseEntity<?> logout(@RequestAttribute Integer userId) {
+        User loginUser = userService.findById(userId);
+        String email = loginUser.getEmail();
+        if ((email.substring(email.length()-6, email.length())).equals(".kakao")) {
+            log.debug("카카오 로그아웃할거야");
+            log.debug("근데 아직 뭐가 정답인 지 모르겠어");
+            /*
+                1. redis에서 userId로 카카오 accessToken 꺼내오기
+                2. 카카오에 로그아웃 요청
+                3. accessToken 만료? refreshToken으로 다시 accessToken 재발급 요청
+
+             */
+//            kakaoAuthService.kakaoLogout(카카오 에세스토큰);
+        }
+        log.debug("로컬 로그아웃할거야");
+        userService.logout(userId);
+        return null;
+    }
 
 
 

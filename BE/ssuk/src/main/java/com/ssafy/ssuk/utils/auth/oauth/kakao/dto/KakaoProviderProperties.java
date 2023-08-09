@@ -14,5 +14,6 @@ public class KakaoProviderProperties {
     private String tokenUri;
     private String userInfoUri;
     private String userNameAttribute;
+    private String logoutUri;
 
 }
