@@ -23,4 +23,6 @@ public interface GardenRepository {
     List<Garden> findOnlyAllByUserId(int userId);
 
     void minusOrders(int userId, int orders);
+
+    List<Garden> findGardenByPotId(Integer potId); //지민
 }

@@ -47,7 +47,7 @@ public class NotificationController {
             CloseableHttpClient httpClient = HttpClients.createDefault();
             HttpPost httpPost = new HttpPost(EXPO_PUSH_API_URL);
             httpPost.addHeader("Accept", "application/json");
-            httpPost.addHeader("Content-Type", "application/json");
+            httpPost.addHeader("Content-Type", "application/json; charset=UTF-8");
 
             // Replace YOUR_EXPO_PUSH_TOKEN with your actual Expo push token
             httpPost.addHeader("Expo-Push-Token", EXPO_PUSH_TOKEN);

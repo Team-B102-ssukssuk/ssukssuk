@@ -1,6 +1,7 @@
 package com.ssafy.ssuk.measurement.service;
 
 import com.ssafy.ssuk.measurement.domain.Measurement;
+import com.ssafy.ssuk.measurement.dto.socket.SensorMessageDto;
 
 import java.util.List;
 
@@ -11,6 +12,8 @@ public interface MeasurementService {
     void insertMeasurement(Measurement measurement);
 
     List<Measurement> findByPot_Id(Integer pot_id);
+
+    void checkMeasurement(SensorMessageDto sensorMessageDto);
 
     
 }

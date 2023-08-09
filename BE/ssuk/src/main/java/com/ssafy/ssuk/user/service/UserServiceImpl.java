@@ -65,8 +65,9 @@ public class UserServiceImpl implements UserService {
 
         // 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
         try {
+            log.debug("authenticationToken={}",authenticationToken);
             Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-
+            log.debug("authentication={}",authentication);
             // 3. 인증 정보를 기반으로 JWT 생성
             // 3-1. JWT에 담을 유저 정보 추출
             Optional<User> user = userRepository.findByEmail(loginRequestDto.getEmail());
@@ -149,6 +150,11 @@ public class UserServiceImpl implements UserService {
             String newRefreshToken = tokenInfo.getRefreshToken();
             redisService.setRefreshToken(userId, newRefreshToken);
             return tokenInfo;
+    }
+
+    @Override
+    public void logout(Integer userId) {
+        redisService.deleteRefreshToken(String.valueOf(userId));
     }
 
 }

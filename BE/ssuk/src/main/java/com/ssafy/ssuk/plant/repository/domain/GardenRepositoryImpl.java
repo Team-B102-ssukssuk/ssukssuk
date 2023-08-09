@@ -20,7 +20,7 @@ public class GardenRepositoryImpl implements GardenRepository {
     public Garden findUsingByPotId(Integer potId) {
         List<Garden> gardens = em.createQuery("select g from Garden g where g.pot.id = :potId and g.isUse = true", Garden.class)
                 .setParameter("potId", potId).getResultList();
-        if(gardens.isEmpty()){
+        if (gardens.isEmpty()) {
             return null;
         } else {
             return gardens.get(0);
@@ -46,7 +46,7 @@ public class GardenRepositoryImpl implements GardenRepository {
                 .setParameter("gardenId", gardenId)
                 .setParameter("userId", userId)
                 .getResultList();
-        if(resultList.isEmpty()) {
+        if (resultList.isEmpty()) {
             return null;
         } else {
             return resultList.get(0);
@@ -85,11 +85,20 @@ public class GardenRepositoryImpl implements GardenRepository {
     @Override
     public void minusOrders(int userId, int orders) {
         em.createNativeQuery("update GARDEN" +
-                " set ORDERS = ORDERS - 1" +
-                " where USER_ID = :userId" +
-                " and ORDERS > :orders")
+                        " set ORDERS = ORDERS - 1" +
+                        " where USER_ID = :userId" +
+                        " and ORDERS > :orders")
                 .setParameter("userId", userId)
                 .setParameter("orders", orders)
                 .executeUpdate();
+    }
+
+    @Override     //지민
+    public List<Garden> findGardenByPotId(Integer potId) {
+        return em.createQuery("select g from Garden g " +
+                        " join fetch g.plant" +
+                        " join fetch g.user" +
+                        " where g.pot.id = :potId and g.isDeleted = false", Garden.class)
+                .setParameter("potId", potId).getResultList();
     }
 }

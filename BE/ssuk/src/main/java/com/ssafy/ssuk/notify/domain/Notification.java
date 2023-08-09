@@ -40,6 +40,10 @@ public class Notification {
     @Column(name = "TITLE")
     private String title;
 
+    @Column(name = "NOTIFICATION_TYPE")
+    @Enumerated(EnumType.STRING)
+    private NotificationType notificationType;
+
     @Column(name = "BODY")
     private String body;
 

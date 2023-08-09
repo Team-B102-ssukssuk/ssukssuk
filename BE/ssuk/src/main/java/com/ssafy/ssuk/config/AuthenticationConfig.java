@@ -34,12 +34,16 @@ public class AuthenticationConfig {
                 .csrf().disable()
                 .cors().and()
                 .authorizeRequests()
-//                .antMatchers("/*").permitAll()
-                .antMatchers("/user").permitAll() // 모든 사용자 접근 허용
+                // 권한이 필요한 규칙 먼저 작성
+                .antMatchers(HttpMethod.POST,"/user/token").authenticated() // accessToken 재발급 요청에 대해 인증 필요
                 .antMatchers(HttpMethod.GET,"/user").authenticated() // 로그아웃 요청에 대해 인증 필요
-                .antMatchers(HttpMethod.GET,"/kakao/callback").permitAll()
-//                .antMatchers(HttpMethod.POST, "/user").permitAll() // POST /user 요청에 대해 모든 사용자 접근 허용
-//                .anyRequest().authenticated() // 나머지 요청에 대해 인증 필요
+                .antMatchers(HttpMethod.PUT,"/user/nickname","/user/image", "/user/quit").authenticated()
+                // 권한이 필요하지 않은 넓은 범위의 규칙
+                .antMatchers("/").permitAll() // 모든 사용자 접근 허용
+                .antMatchers("/user/**").permitAll() // 모든 사용자 접근 허용
+                .antMatchers("/stomp/**").permitAll() // 모든 센서값 요청에 대해 접근 허용
+                // 그 외의 모든 요청에 대해 인증 필요
+                .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // JWT 사용하는 경우

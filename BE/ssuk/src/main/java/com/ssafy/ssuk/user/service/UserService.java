@@ -35,4 +35,7 @@ public interface UserService {
 
     // 토큰 재발급
     TokenInfo recreateToken(String refreshToken, HttpServletRequest request);
+
+    // 로그아웃
+    void logout(Integer userId);
 }

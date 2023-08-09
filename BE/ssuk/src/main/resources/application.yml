@@ -9,6 +9,7 @@ spring:
             client-secret: vKsnBevawpU8o8PXbRaBcQAkH7W3wCQT
             redirect-uri: http://i9b102.p.ssafy.io:8080/user/kakao/callback
 #            redirect-uri: http://localhost:8080/user/kakao/callback
+#            logout-redirect-uri: http://localhost:8080
             scope: profile_nickname, profile_image, account_email
             authorization-grant-type: authorization_code
             client-authentication-method: POST
@@ -18,6 +19,7 @@ spring:
               token-uri: https://kauth.kakao.com/oauth/token
               user-info-uri: https://kapi.kakao.com/v2/user/me
               user-name-attribute: id
+              logout-uri: https://kapi.kakao.com/v1/user/logout
 
   redis:
     lettuce:
