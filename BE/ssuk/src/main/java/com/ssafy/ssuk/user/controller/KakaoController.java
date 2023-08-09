@@ -14,7 +14,7 @@ public class KakaoController {
 
     private final KakaoAuthService kakaoAuthService;
 
-    private final String REDIRECT_URL = "http://localhost:8080/kakao";
+    private final String REDIRECT_URL = "http://i9b102.p.ssafy.io:8080/kakao";
     @GetMapping("/kakao")
     public String kakaoLogin(@RequestParam String code) throws Exception {
         log.debug("tmpcode={}", code);
