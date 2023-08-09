@@ -6,18 +6,32 @@ import ModalInfo from "../modalInfo";
 import styles from "./style";
 import { ScrollView } from "react-native-gesture-handler";
 import customAxios from "../../utils/axios";
+import plantImages from "../../assets/img/plantImages";
 
 const ModalDictionary = ({ isVisible, onClose }) => {
   const [isContentModalVisible, setContentModalVisible] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("채소");
   const [selectedPlant, setSelectedPlant] = useState(null);
   const [isDictionaryData, setDictionaryData] = useState([]);
+  const [isSelectedPlantImg, setSelectedPlantImg] = useState(null);
+
+  const getPlantImageSource = (plantId, index) => {
+    const imageName = `${plantId}_${index + 1}.png`;
+    const image = plantImages[imageName];
+    const resolvedImage = Image.resolveAssetSource(image);
+
+    return resolvedImage;
+  };
 
   const getDictionaryData = () => {
-    customAxios.get("/plantinfo").then((res) => {
-      console.log(res.data);
-      setDictionaryData(res.data.data);
-    });
+    customAxios
+      .get("/plantinfo")
+      .then((res) => {
+        setDictionaryData(res.data.data);
+      })
+      .catch(() => {
+        console.log("도감 전체 관련 오류");
+      });
   };
 
   useEffect(() => {
@@ -25,8 +39,9 @@ const ModalDictionary = ({ isVisible, onClose }) => {
     getDictionaryData();
   }, []);
 
-  const toggleContentModal = (plant) => {
+  const toggleContentModal = (plant, plantImg) => {
     setSelectedPlant(plant);
+    setSelectedPlantImg(plantImg);
     setContentModalVisible(!isContentModalVisible);
   };
 
@@ -34,20 +49,27 @@ const ModalDictionary = ({ isVisible, onClose }) => {
     setSelectedCategory(category);
   };
 
-  const renderEmptyImageRows = (plants) => {
+  const renderEmptyImageRows = (plants, plantId) => {
     const numColumns = 3;
     const emptyImageSize = 75; // Define the size of each emptyImage
     const gapSize = 5; // Define the gap between emptyImage elements
+
+    console.log(plantId);
 
     return plants.map((plant, index) => (
       <View
         key={`${plant.level}_${plant.plantId}`}
         style={styles.emptyImageContainer}
       >
-        <TouchableOpacity onPress={() => toggleContentModal(plant)}>
+        <TouchableOpacity
+          onPress={() =>
+            toggleContentModal(plant, getPlantImageSource(plantId, index))
+          }
+        >
           {plant.createdDate != null ? (
             <Image
-              source={require("../../assets/img/404.png")}
+              // source={require(`../../assets/img/${plantId}_${index + 1}.png`)}
+              source={getPlantImageSource(plantId, index)}
               resizeMode="contain"
               style={[
                 styles.emptyImg,
@@ -152,7 +174,7 @@ const ModalDictionary = ({ isVisible, onClose }) => {
                         {plant.plantName}
                       </CookieRunBold>
                       <View style={styles.dictionaryContainer}>
-                        {renderEmptyImageRows(plant.plantInfos)}
+                        {renderEmptyImageRows(plant.plantInfos, plant.plantId)}
                       </View>
                     </View>
                   </View>
@@ -167,6 +189,7 @@ const ModalDictionary = ({ isVisible, onClose }) => {
         isVisible={isContentModalVisible}
         onClose={() => setContentModalVisible(false)}
         plant={selectedPlant}
+        plantImg={isSelectedPlantImg}
       ></ModalInfo>
     </Modal>
   );

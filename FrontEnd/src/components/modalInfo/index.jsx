@@ -5,8 +5,8 @@ import CookieRunBold from "../common/CookieRunBold";
 import CookieRunRegular from "../common/CookieRunRegular";
 import styles from "./style";
 
-const ModalInfo = ({ isVisible, onClose, plant }) => {
-  console.log(plant);
+const ModalInfo = ({ isVisible, onClose, plant, plantImg }) => {
+  console.log(plantImg);
   if (!plant) {
     return null;
   }
@@ -27,7 +27,7 @@ const ModalInfo = ({ isVisible, onClose, plant }) => {
         <View style={styles.content}>
           {plant.createdDate != null ? (
             <Image
-              source={require("../../assets/img/404.png")}
+              source={plantImg}
               resizeMode="contain"
               style={styles.emptyImgTest}
             />

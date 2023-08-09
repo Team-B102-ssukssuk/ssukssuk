@@ -1,5 +1,7 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { ImageBackground, View, Image, TouchableOpacity } from "react-native";
+// import * as MediaLibrary from "expo-media-library";
+
 import CookieRunRegular from "../../components/common/CookieRunRegular";
 import ModalSetting from "../../components/modalsetting";
 import ModalPlantSeed from "../../components/modalplantseed";
@@ -10,6 +12,7 @@ import { useNavigation } from "@react-navigation/native";
 import { connect } from "react-redux";
 import customAxios from "../../utils/axios";
 import LoadingScreen from "../loading";
+import axios from "axios";
 
 const MainScreen = (props) => {
   const navigation = useNavigation();
@@ -23,29 +26,75 @@ const MainScreen = (props) => {
   const [moisture, setMoisture] = useState(0);
   const [humidity, setHumidity] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [backgroundImage, setBackgroundImage] = useState(
+    require("../../assets/img/ProfileBackground.png")
+  );
+
+  const changeBackgroundImage = () => {
+    const now = new Date();
+    const currentHour = now.getHours();
+
+    if (currentHour >= 6 && currentHour < 18) {
+      setBackgroundImage(require("../../assets/img/ProfileBackground.png"));
+    } else {
+      setBackgroundImage(require("../../assets/img/ProfileBackgroundDark.png"));
+    }
+  };
+
+  const registNotification = () => {
+    axios
+      .post("http://i9b102.p.ssafy.io:8080/notification", {
+        fcm_token: props.notificationToken,
+      })
+      .then(() => {
+        console.log("성공");
+      });
+  };
+
+  useEffect(() => {
+    changeBackgroundImage();
+    registNotification();
+
+    const interval = setInterval(() => {
+      changeBackgroundImage();
+    }, 3600000); // 매 시간마다 호출 (밀리초 단위)
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
 
   const getUserData = () => {
-    customAxios.get(`/sensor/${props.potID}`).then((res) => {
-      console.log("여기", res.data);
+    customAxios
+      .get(`/sensor/${props.potID}`)
+      .then((res) => {
+        console.log("여기", res.data);
 
-      const temperatureData = res.data.find(
-        (sensor) => sensor.sensorType === "T"
-      );
-      const moistureData = res.data.find((sensor) => sensor.sensorType === "M");
-      const humidityData = res.data.find((sensor) => sensor.sensorType === "H");
+        const temperatureData = res.data.find(
+          (sensor) => sensor.sensorType === "T"
+        );
+        const moistureData = res.data.find(
+          (sensor) => sensor.sensorType === "M"
+        );
+        const humidityData = res.data.find(
+          (sensor) => sensor.sensorType === "H"
+        );
 
-      if (temperatureData) {
-        setTemperature(temperatureData.measurementValue);
-      }
+        if (temperatureData) {
+          setTemperature(temperatureData.measurementValue);
+        }
 
-      if (moistureData) {
-        setMoisture(moistureData.measurementValue);
-      }
+        if (moistureData) {
+          setMoisture(moistureData.measurementValue);
+        }
 
-      if (humidityData) {
-        setHumidity(humidityData.measurementValue);
-      }
-    });
+        if (humidityData) {
+          setHumidity(humidityData.measurementValue);
+        }
+      })
+      .catch(() => {
+        console.log("문제");
+      });
   };
 
   const getPlantData = (gardenId) => {
@@ -136,9 +185,14 @@ const MainScreen = (props) => {
   };
 
   const handleWateringPlant = () => {
-    customAxios.get(`/sensor/water/${props.potID}`).then(() => {
-      console.log("성공");
-    });
+    customAxios
+      .get(`/sensor/water/${props.potID}`)
+      .then(() => {
+        console.log("성공");
+      })
+      .catch(() => {
+        console.log("물 급수 관련 오류");
+      });
   };
 
   if (isLoading) {
@@ -148,10 +202,7 @@ const MainScreen = (props) => {
 
   return (
     <View style={styles.container}>
-      <ImageBackground
-        source={require("../../assets/img/ProfileBackground.png")}
-        style={styles.container}
-      >
+      <ImageBackground source={backgroundImage} style={styles.container}>
         <View style={styles.userInfoSection}>
           <View style={styles.SensorContainer}>
             <View style={styles.tmp}>
@@ -296,6 +347,7 @@ const mapStateToProps = (state) => {
   return {
     potID: state.app.potID,
     gardenID: state.app.gardenID,
+    notificationToken: state.app.notificationToken,
   };
 };
 

@@ -55,14 +55,20 @@ const Router = () => {
       <Stack.Navigator>
         <Stack.Screen
           options={{ headerShown: false }}
-          name="Intro"
-          component={IntroScreen}
-        />
-        <Stack.Screen
-          options={{ headerShown: false }}
           name="Login"
           component={LoginScreen}
         />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="Pot"
+          component={PotScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="Intro"
+          component={IntroScreen}
+        />
+
         <Stack.Screen
           options={{ headerShown: false }}
           name="KakaoLogin"
@@ -98,11 +104,7 @@ const Router = () => {
           name="Main"
           component={MainScreen}
         />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="Pot"
-          component={PotScreen}
-        />
+
         <Stack.Screen
           options={{ headerShown: false }}
           name="Alarm"

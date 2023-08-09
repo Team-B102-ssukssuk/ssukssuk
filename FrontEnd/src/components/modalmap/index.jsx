@@ -2,6 +2,7 @@ import { View, TouchableOpacity, Image } from "react-native";
 import React from "react";
 import styles from "./style";
 import Modal from "react-native-modal";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 // import CookieRunBold from "../common/CookieRunBold";
 // import { COLORS } from "../../constants/theme";
 
@@ -18,6 +19,7 @@ const ModalMap = ({ isVisible, onClose, navigation }) => {
 
   const Logout = () => {
     onClose(false);
+    deleteTokens();
 
     const delayNavigation = setTimeout(() => {
       navigation.navigate("Login");
@@ -44,6 +46,16 @@ const ModalMap = ({ isVisible, onClose, navigation }) => {
     }, 300);
 
     return () => clearTimeout(delayNavigation);
+  };
+
+  const deleteTokens = async () => {
+    try {
+      await AsyncStorage.removeItem("accessToken"); // Replace 'accessToken' with your actual access token key
+      await AsyncStorage.removeItem("refreshToken"); // Replace 'refreshToken' with your actual refresh token key
+      console.log("Access token and refresh token deleted successfully.");
+    } catch (error) {
+      console.error("Error deleting tokens:", error);
+    }
   };
 
   return (

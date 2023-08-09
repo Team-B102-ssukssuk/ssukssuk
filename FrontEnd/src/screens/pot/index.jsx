@@ -15,6 +15,7 @@ import QRCodeScanner from "../../components/qrCode";
 import ToastNotification from "../../components/toast";
 import Icon from "react-native-vector-icons/AntDesign";
 import LoadingScreen from "../loading";
+import * as Notifications from "expo-notifications";
 
 const PotScreen = (props) => {
   const navigation = useNavigation();
@@ -32,14 +33,51 @@ const PotScreen = (props) => {
   const [toastIconName, setToastIconName] = useState("");
   const [isTrashcanVisible, setTrashcanVisible] = useState("true");
 
+  useEffect(() => {
+    registerForPushNotificationsAsync();
+  }, []);
+
+  const registerForPushNotificationsAsync = async () => {
+    const { status: existingStatus } =
+      await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+
+    if (existingStatus !== "granted") {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+
+    if (finalStatus !== "granted") {
+      alert("푸시 알림을 위한 토큰을 얻을 수 없습니다!");
+      return;
+    }
+    const token = (await Notifications.getExpoPushTokenAsync()).data;
+
+    customAxios
+      .post("/notification", {
+        fcm_token: token,
+      })
+      .then(() => {
+        console.log("토큰 보내기 성공");
+      })
+      .catch(() => {
+        console.log("토큰 보내기 오류");
+      });
+  };
+
   const getPotData = () => {
-    customAxios.get("/pot").then((res) => {
-      console.log(res.data);
-      setPotData(res.data);
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 500);
-    });
+    customAxios
+      .get("/pot")
+      .then((res) => {
+        console.log(res.data);
+        setPotData(res.data);
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 500);
+      })
+      .catch(() => {
+        console.log("화분 데이터 불러오기 오류");
+      });
   };
 
   useEffect(() => {
@@ -118,10 +156,11 @@ const PotScreen = (props) => {
     for (let i = startIndex; i < endIndex; i++) {
       if (i < isPotData.length) {
         const plant = isPotData[i];
+        console.log("테스트" + plant);
         const potId = plant.potId;
         pots.push(
           <View
-            key={`pot_${plant.potId}`}
+            key={`pot_${plant.potId}_${plant.gardenId}`}
             style={styles[`absoultPosition${i + 1}`]}
           >
             {plant.isUse ? (
@@ -245,10 +284,15 @@ const PotScreen = (props) => {
     const data = {
       potId: potID,
     };
-    customAxios.put("/pot", data).then(() => {
-      getPotData();
-      visibleIcon();
-    });
+    customAxios
+      .put("/pot", data)
+      .then(() => {
+        getPotData();
+        visibleIcon();
+      })
+      .catch((err) => {
+        console.log("화분 삭제 관련 오류" + err);
+      });
     setDeleteModalVisible(false);
   };
 
@@ -270,6 +314,7 @@ const PotScreen = (props) => {
           "checkmark-circle-sharp"
         );
         getPotData();
+        showTrashcan(true);
       })
       .catch((err) => {
         if (err.response.status === 409) {
@@ -346,7 +391,10 @@ const PotScreen = (props) => {
       />
       <ModalPlantRegist
         isVisible={isRegistModalVisible}
-        onClose={() => setRegistModalVisible(false)}
+        onClose={() => {
+          setRegistModalVisible(false);
+          showTrashcan(true);
+        }}
         onRegist={handleRegist}
         title="화분 등록"
         placeholder="화분 고유 ID를 입력해주세요"

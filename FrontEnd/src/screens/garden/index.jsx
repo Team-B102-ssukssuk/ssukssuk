@@ -29,12 +29,17 @@ const GardenScreen = () => {
   };
 
   const getPotData = () => {
-    customAxios.get("/plant/all").then((res) => {
-      setPlantData(res.data.data);
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 500);
-    });
+    customAxios
+      .get("/plant/all")
+      .then((res) => {
+        setPlantData(res.data.data);
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 500);
+      })
+      .catch(() => {
+        console.log("정원 데이터 불러오기 오류");
+      });
   };
 
   useEffect(() => {
@@ -53,11 +58,16 @@ const GardenScreen = () => {
   const handleDelete = () => {
     // 삭제 관련 로직
     console.log("식물 삭제 인덱스 넣으면 바로 작동");
-    customAxios.put(`plant/delete/${isDeleteGardenId}`).then(() => {
-      console.log("삭제성공");
-      getPotData();
-      visibleIcon();
-    });
+    customAxios
+      .put(`plant/delete/${isDeleteGardenId}`)
+      .then(() => {
+        console.log("삭제성공");
+        getPotData();
+        visibleIcon();
+      })
+      .catch(() => {
+        console.log("정원 식물 삭제 관련 오류");
+      });
     setDeleteModalVisible(false);
   };
 

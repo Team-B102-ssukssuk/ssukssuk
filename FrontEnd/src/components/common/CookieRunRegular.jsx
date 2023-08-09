@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Text } from "react-native";
-import LoadingScreen from "../../screens/loading";
+// import LoadingScreen from "../../screens/loading";
 import * as Font from "expo-font";
 import * as SplashScreen from "expo-splash-screen"; // Import expo-splash-screen module
 
@@ -24,7 +24,7 @@ const CookieRunRegular = (props) => {
     loadFonts();
   }, []);
   if (!fontsLoaded) {
-    return <LoadingScreen />;
+    // return <LoadingScreen />;
   } else {
     return (
       <Text

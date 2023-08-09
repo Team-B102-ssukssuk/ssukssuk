@@ -1,10 +1,11 @@
 // reduxReducer.js
 
-import { SAVE_POT_ID, SAVE_GARDEN_ID } from "./action";
+import { SAVE_POT_ID, SAVE_GARDEN_ID, NOTIFICATION_TOKEN } from "./action";
 
 const initialState = {
   potID: null,
   gardenID: null,
+  notificationToken: null,
 };
 
 const reducer = (state = initialState, action) => {
@@ -18,6 +19,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         gardenID: action.gardenID,
+      };
+    case NOTIFICATION_TOKEN:
+      return {
+        ...state,
+        notificationToken: action.notificationToken,
       };
     default:
       return state;

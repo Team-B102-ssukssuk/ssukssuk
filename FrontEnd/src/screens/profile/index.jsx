@@ -16,6 +16,7 @@ import customAxios from "../../utils/axios";
 import styles from "./style";
 import CookieRunRegular from "../../components/common/CookieRunRegular";
 import LoadingScreen from "../loading";
+import * as ImagePicker from "expo-image-picker";
 
 const ProfileScreen = ({ navigation }) => {
   const [isEditModalVisible, setEditModalVisible] = useState(false);
@@ -39,7 +40,7 @@ const ProfileScreen = ({ navigation }) => {
 
   const getUserData = () => {
     customAxios.get("/user/info").then((res) => {
-      console.log(res.data.data);
+      // console.log(res.data.data);
       setUserData(res.data.data);
       setTimeout(() => {
         setIsLoading(false);
@@ -50,6 +51,51 @@ const ProfileScreen = ({ navigation }) => {
   useEffect(() => {
     getUserData();
   }, []);
+
+  const handleImageUpload = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== "granted") {
+      console.error("Permission denied to access media library");
+      return;
+    }
+
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+      });
+
+      if (!result.canceled) {
+        // Prepare form data
+        const formData = new FormData();
+        formData.append("image", {
+          uri: result.assets[0].uri,
+          type: "image/png",
+          name: "image.png",
+        });
+
+        // Upload image to server
+        const response = await customAxios.put(
+          "/user/image", // Replace with your backend URL
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        console.log("Image upload response:", response);
+
+        // Refresh user data
+        getUserData();
+      }
+    } catch (error) {
+      console.error("Image upload error:", error);
+    }
+  };
 
   const toggleEditModal = () => {
     setEditModalVisible(!isEditModalVisible);
@@ -203,12 +249,14 @@ const ProfileScreen = ({ navigation }) => {
           <View style={styles.profileContent}>
             <CookieRunBold style={styles.myPageTitle}>마이페이지</CookieRunBold>
             <View style={{ flexDirection: "row", marginTop: 15 }}>
-              <Image
-                source={{
-                  uri: `${isUserData.imageUrl}`,
-                }}
-                style={{ width: 70, height: 70, borderRadius: 100 }}
-              />
+              <TouchableOpacity onPress={handleImageUpload}>
+                <Image
+                  source={{
+                    uri: `${isUserData.imageUrl}`,
+                  }}
+                  style={{ width: 70, height: 70, borderRadius: 100 }}
+                />
+              </TouchableOpacity>
               <View
                 style={{
                   marginLeft: 20,
