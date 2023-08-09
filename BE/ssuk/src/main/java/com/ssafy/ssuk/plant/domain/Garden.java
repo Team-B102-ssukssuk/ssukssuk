@@ -17,7 +17,8 @@ import static javax.persistence.FetchType.*;
 @NoArgsConstructor
 @DynamicInsert  // select 할 때 null이면 default 값 자동으로 들어감
 public class Garden {
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "GARDEN_ID")
     private Integer id;
     @ManyToOne(fetch = LAZY)
@@ -76,6 +77,10 @@ public class Garden {
         this.isUse = false;
         this.isDeleted = true;
         this.orders = 0;
+    }
+
+    public void updateLevel(Integer level) {
+        this.level = level;
     }
 
     public void modifyOrders(Integer order) {

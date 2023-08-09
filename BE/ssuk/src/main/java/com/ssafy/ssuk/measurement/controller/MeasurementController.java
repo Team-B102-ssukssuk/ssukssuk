@@ -2,6 +2,7 @@ package com.ssafy.ssuk.measurement.controller;
 
 import com.ssafy.ssuk.measurement.domain.Measurement;
 import com.ssafy.ssuk.measurement.dto.request.RaspberryRequestDto;
+import com.ssafy.ssuk.measurement.dto.request.UploadRequestDto;
 import com.ssafy.ssuk.measurement.dto.socket.SensorMessageDto;
 import com.ssafy.ssuk.measurement.service.MeasurementService;
 import lombok.extern.slf4j.Slf4j;
@@ -10,10 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -51,6 +49,16 @@ public class MeasurementController {
         template.convertAndSend("/sub/socket/room/" + serialNumber, new RaspberryRequestDto(1, "물 급수 요청"));
 
         return ResponseEntity.ok("물 급수 완료");
+    }
+
+    //나중에 시큐리티 필터 빼달라고 하기
+    @PostMapping("/upload")
+    ResponseEntity<?> updateLevel(@RequestBody UploadRequestDto uploadRequestDto)
+    {
+        log.info(String.valueOf(uploadRequestDto.getPotId()) + " upload 컨트롤러");
+        mesurementService.updateLevel(uploadRequestDto);
+
+        return ResponseEntity.ok().build();
     }
 
 }

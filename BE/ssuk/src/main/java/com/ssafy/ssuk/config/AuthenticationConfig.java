@@ -42,6 +42,7 @@ public class AuthenticationConfig {
                 .antMatchers("/").permitAll() // 모든 사용자 접근 허용
                 .antMatchers("/user/**").permitAll() // 모든 사용자 접근 허용
                 .antMatchers("/stomp/**").permitAll() // 모든 센서값 요청에 대해 접근 허용
+                .antMatchers("/sensor/upload").permitAll() // 라즈베리에서 날라오는 이미지 변경 요청
                 // 그 외의 모든 요청에 대해 인증 필요
                 .anyRequest().authenticated()
                 .and()
