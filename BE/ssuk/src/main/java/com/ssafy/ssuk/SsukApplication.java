@@ -2,6 +2,7 @@ package com.ssafy.ssuk;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +20,11 @@ public class SsukApplication {
     @GetMapping("")
     String home()
     {
-        return "백엔드!";
+        return "<div style='display: flex; width: 100%; height: 100vh;\n" +
+                "    align-items: center;\n" +
+                "    justify-content: center;'>\n" +
+                "    <img src='https://ssook.s3.ap-northeast-2.amazonaws.com/image/Loading.gif' loop='infinite'/>\n" +
+                "</div>";
     }
 
     @PostMapping("")
