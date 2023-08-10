@@ -11,6 +11,7 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import styles from "./style";
 import CookieRunRegular from "../../components/common/CookieRunRegular";
 import axios from "axios";
+import ToastNotification from "../../components/toast";
 // import axios from "axios";
 
 // navigation 등록
@@ -25,6 +26,10 @@ const SignUpScreen = ({ navigation }) => {
   const [isCodeVerified, setIsCodeVerified] = useState(false);
   const [verifyError, setVerifyError] = useState("이미 존재하는 이메일입니다.");
   const [verificationResponse, setVerificationResponse] = useState(null);
+  const [isToastVisible, setIsToastVisible] = useState(false);
+  const [toastTitle, setToastTitle] = useState("");
+  const [toastContent, setToastContent] = useState("");
+  const [toastIconName, setToastIconName] = useState("");
 
   const sendVerificationCode = async () => {
     try {
@@ -36,15 +41,44 @@ const SignUpScreen = ({ navigation }) => {
         requestData
       );
       console.log("인증번호 전송 성공:", response.data);
+      showToast(
+        "발송 완료",
+        "인증번호가 발송되었습니다.",
+        "checkmark-circle-sharp"
+      );
       setVerificationResponse(response.data);
       setIsCodeVerified(true);
       setErrorOpacity(0);
     } catch (error) {
-      console.error("인증번호 전송 실패", error);
-      setIsCodeVerified(false);
-      setErrorOpacity(100);
-      setVerifyError("이미 존재하는 이메일입니다.");
+      if (error.response) {
+        console.log(error.response.status);
+        if (error.response.status === 409) {
+          console.error("인증번호 전송 실패 - 이미 존재하는 이메일", error);
+          setErrorOpacity(100);
+          setVerifyError("이미 존재하는 이메일입니다.");
+          // } else if (error.response.status === 409) {
+          //   console.error("인증번호 전송 실패 - 잘못된 이메일 형식", error);
+          //   setErrorOpacity(100);
+          //   setVerifyError("올바르지 않은 이메일 형식입니다.");
+        } else {
+          console.error("인증번호 전송 실패 - 기타 오류", error);
+          setErrorOpacity(100);
+          setVerifyError("올바르지 않은 이메일 형식입니다.");
+        }
+      }
     }
+  };
+
+  const showToast = (title, content, iconName) => {
+    setIsToastVisible(true);
+    setToastTitle(title);
+    setToastContent(content);
+    setToastIconName(iconName);
+
+    // Start the timer to hide the toast after a few seconds
+    setTimeout(() => {
+      setIsToastVisible(false);
+    }, 2000); // Set the duration for the toast to stay visible (2 seconds in this case)
   };
 
   const goToSignUpPassword = () => {
@@ -85,9 +119,15 @@ const SignUpScreen = ({ navigation }) => {
       });
       // console.log(SignUpData);
     } catch (error) {
-      console.error("인증번호 확인 실패", error);
-      setErrorOpacity(100);
-      setVerifyError("인증번호가 일치하지 않습니다.");
+      if (error.response.status === "409") {
+        console.error("인증번호 전송 실패 - 이미 존재하는 이메일", error);
+        setErrorOpacity(100);
+        setVerifyError("이미 존재하는 이메일입니다.");
+      } else {
+        setErrorOpacity(100);
+        setVerifyError("인증번호가 일치하지 않습니다.");
+        console.error("인증번호 전송 실패 - 기타 오류", error);
+      }
     }
   };
 
@@ -96,6 +136,25 @@ const SignUpScreen = ({ navigation }) => {
     // 작성한 이메일 변경시 인증번호 상태가 false
     setIsCodeVerified(false);
   }, [email]);
+
+  useEffect(() => {
+    // verifyNumber의 길이가 7일 때 버튼 색상을 변경
+    if (verifyNumber.length === 8) {
+      setNextButtonColor("#2DD0AF");
+      setVerifyError("");
+      setErrorOpacity(0);
+    } else if (verifyNumber.length > 8) {
+      setNextButtonColor("#CACACA");
+      setErrorOpacity(100);
+      setVerifyError("인증번호가 일치하지 않습니다.");
+    } else if (verifyNumber === "") {
+      setErrorOpacity(0);
+    } else {
+      setNextButtonColor("#CACACA");
+      setErrorOpacity(100);
+      setVerifyError("인증번호가 일치하지 않습니다.");
+    }
+  }, [verifyNumber]);
 
   return (
     // 배경
@@ -132,7 +191,6 @@ const SignUpScreen = ({ navigation }) => {
           {/* 인증 버튼 보내기 */}
           <TouchableOpacity
             onPress={() => {
-              setNextButtonColor("#2DD0AF");
               sendVerificationCode();
             }}
             style={styles.verifyButton}
@@ -159,6 +217,15 @@ const SignUpScreen = ({ navigation }) => {
             다음
           </CookieRunRegular>
         </TouchableOpacity>
+      </View>
+      <View style={styles.toastnotice}>
+        {isToastVisible && (
+          <ToastNotification
+            title={toastTitle}
+            content={toastContent}
+            iconName={toastIconName}
+          />
+        )}
       </View>
     </ImageBackground>
   );
