@@ -39,7 +39,8 @@ public enum ErrorCode {
 
     //기타
     DUPLICATE_RESOURCE(HttpStatus.CONFLICT, "데이터가 이미 존재합니다."),
-    INPUT_EXCEPTION(HttpStatus.BAD_REQUEST, "입력값을 확인하세요")
+    INPUT_EXCEPTION(HttpStatus.BAD_REQUEST, "입력값을 확인하세요"),
+    DATA_NOT_FOUND(HttpStatus.NOT_FOUND, "데이터가 존재하지 않습니다."),
     ;
 
     private final HttpStatus httpStatus;
