@@ -53,8 +53,7 @@ public class MeasurementController {
 
     //나중에 시큐리티 필터 빼달라고 하기
     @PostMapping("/upload")
-    ResponseEntity<?> updateLevel(@RequestBody UploadRequestDto uploadRequestDto)
-    {
+    ResponseEntity<?> updateLevel(@RequestBody UploadRequestDto uploadRequestDto) {
         log.info(String.valueOf(uploadRequestDto.getPotId()) + " upload 컨트롤러");
         mesurementService.updateLevel(uploadRequestDto);
 

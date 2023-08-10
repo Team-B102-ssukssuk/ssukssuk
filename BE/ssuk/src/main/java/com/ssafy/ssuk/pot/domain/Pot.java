@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -20,9 +21,11 @@ import static javax.persistence.FetchType.LAZY;
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
+@DynamicInsert
 public class Pot {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "POT_ID")
     private Integer id;
 
@@ -37,15 +40,26 @@ public class Pot {
     @Column(name = "REGISTED_DATE")
     private LocalDateTime registedDate;
 
-    @Column(name = "LAST_WATER_TIME")
-    private LocalDateTime lastWaterTime;
-
-    @Column(name="IS_REGISTED")
+    @Column(name = "IS_REGISTED")
     private Boolean isRegisted;
 
     @OneToMany(mappedBy = "pot")
     private List<Garden> garden;
 
-    @Column(name="ORDERS")
+    @Column(name = "ORDERS")
     private Integer orders;
+
+    @Column(name = "MOISTURE_LAST_DATE")
+    private LocalDateTime moistureLastDate;
+
+    @Column(name = "TANK_LAST_DATE")
+    private LocalDateTime tankLastDate;
+
+    public void updateMoistueLastDate(LocalDateTime moistureLastDate) {
+        this.moistureLastDate = moistureLastDate;
+    }
+
+    public void updateTankLastDate(LocalDateTime tankLastDate) {
+        this.tankLastDate = tankLastDate;
+    }
 }
