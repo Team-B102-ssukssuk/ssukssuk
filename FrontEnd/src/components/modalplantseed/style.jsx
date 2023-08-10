@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
   },
   modalText: {
     fontSize: 28,
-    marginBottom: 20,
+    marginBottom: 10,
     marginTop: 5,
     color: "#4C0C0C",
   },
@@ -33,6 +33,14 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: COLORS.lightBrown,
   },
+  disabledSeedButton: {
+    fontSize: 20,
+    color: "white",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 5,
+    backgroundColor: COLORS.Grey,
+  },
   plantText: { color: COLORS.white },
   modalButtonAlign: {
     flexDirection: "row",
@@ -42,6 +50,7 @@ const styles = StyleSheet.create({
   characterSize: {
     width: 180,
     height: 180,
+    margin: 20,
   },
   PotInputBox: {
     height: 40,

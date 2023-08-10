@@ -1,66 +1,87 @@
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-// 토큰이 필요한 API 요청을 보내는 axios 인스턴스
+// 로컬 스토리지에 accessToken 값 추출
+export async function getAccessToken() {
+  const value = await AsyncStorage.getItem("accessToken");
+  return value;
+}
+
+// baseURL 설정
 export const customAxios = axios.create({
   baseURL: `http://i9b102.p.ssafy.io:8080`,
-  //   headers: {
-  //     Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-  //   },
 });
 
-// 토큰 갱신 API
+// Add an interceptor to the request to set the Authorization header with the access token
+customAxios.interceptors.request.use(async (config) => {
+  const accessToken = await getAccessToken();
+  console.log(accessToken);
+  if (accessToken) {
+    config.headers.Authorization = `Bearer ${accessToken}`;
+  }
+  return config;
+});
+
+// refreshtoken을 통한 accessToken 재발급
 export async function postRefreshToken() {
   try {
+    const refreshToken = await AsyncStorage.getItem("refreshToken");
+
+    console.log("refreshToken : " + refreshToken);
+
     const response = await axios.post(
-      "http://i9b102.p.ssafy.io:8080/api/v1/auth/refresh",
+      "http://i9b102.p.ssafy.io:8080/user/token",
+      {},
       {
-        refreshToken: localStorage.getItem("refreshToken"),
+        headers: {
+          // 헤더값 추가
+          Authorization: refreshToken,
+        },
       }
     );
+
     return response;
   } catch (error) {
     return error.response;
   }
 }
 
-// privateApi에 인터셉터를 적용하여 토큰을 함께 보냄
+// Add an interceptor to handle token expiration and renewal
 customAxios.interceptors.response.use(
-  // 200번대 응답을 처리하는 부분
   (response) => {
     return response;
   },
-  // 200번대 응답이 아닌 경우 처리하는 부분
   async (error) => {
     const {
       config,
       response: { status },
     } = error;
 
-    // 토큰이 만료되었을 때
-    if (status === 401) {
-      if (error.response.data.message === "Unauthorized") {
-        const originRequest = config;
-        // 토큰 갱신 API 호출
-        const response = await postRefreshToken();
-        // 토큰 갱신 요청이 성공했을 때
-        if (response.status === 200) {
-          const newAccessToken = response.data.token;
-          localStorage.setItem("accessToken", newAccessToken);
-          localStorage.setItem("refreshToken", response.data.refreshToken);
-          customAxios.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
-          // 진행 중인 요청을 이어서 처리
-          originRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-          return customAxios(originRequest);
-        }
-        // 토큰 갱신 요청이 실패했을 때 (토큰 갱신이 만료되었음 = 다시 로그인 안내)
-        else if (response.status === 404) {
-          alert("토큰만료.");
-          window.location.replace("/sign-in");
-        } else {
-          alert("예기치 못한 이유.");
-        }
+    // console.log("응답 : " + status);
+    // console.log(error.response.data.message);
+
+    if (status === 409 && error.response.data.message === "Expired JWT Token") {
+      const originRequest = config;
+      const response = await postRefreshToken();
+      console.log(response.status);
+      if (response.status === 200) {
+        const newAccessToken = response.data.accessToken;
+        AsyncStorage.setItem("accessToken", newAccessToken);
+        AsyncStorage.setItem("refreshToken", response.data.refreshToken);
+        console.log("성공");
+        customAxios.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
+        originRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+        return customAxios(originRequest);
+      } else if (response.status === 409) {
+        // Handle unauthorized or conflict scenarios
+        // For example, you might want to log the user out or navigate to a login screen
+        // You can use your own logic here based on your application flow
+        console.log("토큰 만료 혹은 충돌");
+      } else {
+        alert("Unexpected reason.");
       }
     }
+
     return Promise.reject(error);
   }
 );

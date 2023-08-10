@@ -1,13 +1,27 @@
 import { StyleSheet } from "react-native";
-import { COLORS } from "../../constants/theme";
+import { COLORS, SIZES } from "../../constants/theme";
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    width: SIZES.width,
+    height: SIZES.height,
   },
   userInfoSection: {
     paddingHorizontal: 30,
-    marginBottom: 25,
+    marginBottom: 20,
+    marginTop: 5,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  lineSection: {
+    width: SIZES.width - 50,
+    marginHorizontal: 20,
+    marginVertical: 10,
+    borderBottomColor: "white",
+    borderBottomWidth: 1,
+  },
+  rankText: {
+    width: SIZES.width - 40,
   },
   title: {
     fontSize: 24,
@@ -23,13 +37,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   myPageTitle: {
-    fontSize: 18,
+    fontSize: 24,
     color: "#fff",
-    marginTop: 30,
+    marginVertical: 20,
   },
   badgeContent: {
     flexDirection: "row",
     marginTop: 20,
+  },
+  profileContent: {
+    width: SIZES.width - 60,
   },
   barContent: {
     padding: 30,
@@ -39,11 +56,13 @@ const styles = StyleSheet.create({
   },
   badge: {
     borderRadius: 10,
-    width: 85,
-    height: 85,
-    margin: 9,
+    width: 100,
+    height: 100,
+    resizeMode: "contain",
+    margin: 7,
   },
   header: {
+    width: SIZES.width - 40,
     paddingTop: 50,
     flexDirection: "row",
     alignItems: "center",
@@ -72,7 +91,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   Profile_bar: {
-    width: 310,
+    width: SIZES.width - 40,
     height: 100,
     alignItems: "center",
     justifyContent: "center",
@@ -80,7 +99,6 @@ const styles = StyleSheet.create({
   menuItem: {
     flexDirection: "row",
     paddingVertical: 15,
-    paddingHorizontal: 30,
   },
   // 여기
   wow: {
@@ -104,7 +122,7 @@ const styles = StyleSheet.create({
     right: 0,
   },
   panel: {
-    height: 600,
+    height: 700,
     padding: 20,
     backgroundColor: "#fff",
     alignItems: "center",
@@ -126,13 +144,14 @@ const styles = StyleSheet.create({
   panelTitle: {
     fontSize: 27,
     height: 35,
+    marginTop: 30,
     color: COLORS.Mint,
   },
   panelSubtitle: {
     fontSize: 14,
     color: "gray",
     height: 30,
-    marginBottom: 10,
+    marginTop: 5,
   },
   panelButton: {
     padding: 20,

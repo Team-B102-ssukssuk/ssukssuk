@@ -15,6 +15,14 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: "rgba(137, 106, 80, 0.2)",
   },
+  emptyImgTest: {
+    borderWidth: 2,
+    borderColor: "#896A50", // Set the border color here
+    borderRadius: 20,
+    backgroundColor: "rgba(137, 106, 80, 0.2)",
+    width: 75,
+    height: 75,
+  },
   content: {
     flexDirection: "row",
     alignItems: "center",

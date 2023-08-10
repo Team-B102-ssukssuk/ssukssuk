@@ -9,15 +9,15 @@ import { COLORS } from "../../constants/theme";
 
 const ModalSetting = ({ isVisible, onClose }) => {
   const [toggleSoundValue, setSoundToggleValue] = useState(false);
-  const [toggleEffectValue, setToggleEffectValue] = useState(false);
+  // const [toggleEffectValue, setToggleEffectValue] = useState(false);
 
   const handleSoundToggle = () => {
     setSoundToggleValue(!toggleSoundValue);
   };
 
-  const handleEffectToggle = () => {
-    setToggleEffectValue(!toggleEffectValue);
-  };
+  // const handleEffectToggle = () => {
+  //   setToggleEffectValue(!toggleEffectValue);
+  // };
 
   return (
     <Modal
@@ -48,7 +48,7 @@ const ModalSetting = ({ isVisible, onClose }) => {
             thumbColor={toggleSoundValue ? COLORS.white : COLORS.white}
           />
         </View>
-        <View style={styles.settingSection}>
+        {/* <View style={styles.settingSection}>
           <CookieRunBold style={styles.settingText}>효과음</CookieRunBold>
           {toggleEffectValue ? (
             <CookieRunBold style={styles.onText}>ON</CookieRunBold>
@@ -61,7 +61,7 @@ const ModalSetting = ({ isVisible, onClose }) => {
             trackColor={{ false: COLORS.lightGrey, true: COLORS.lightBrown }}
             thumbColor={toggleEffectValue ? COLORS.white : COLORS.white}
           />
-        </View>
+        </View> */}
         <View style={styles.modalButtonAlign}>
           <TouchableOpacity style={styles.CloseButton} onPress={onClose}>
             {/* 모달 내용 외의 영역을 클릭하면 모달이 닫히도록 설정 */}

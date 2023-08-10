@@ -5,6 +5,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  scanButton: {
+    alignSelf: "center",
+    marginTop: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    elevation: 4,
+  },
+  scanButtonText: {
+    fontSize: 18,
+    color: "#000",
+  },
   potWood: {
     flexDirection: "row",
     justifyContent: "center",
@@ -16,6 +29,7 @@ const styles = StyleSheet.create({
   },
   PotWoodText: {
     position: "absolute",
+    alignItems: "center",
     marginTop: 15,
     color: COLORS.brown,
     fontSize: 18,
@@ -30,12 +44,23 @@ const styles = StyleSheet.create({
   potDelete: {
     position: "absolute",
   },
+  potEmptyDelete: {
+    position: "absolute",
+    bottom: 2,
+    right: -13,
+  },
   deleteIcon: {
     color: COLORS.white,
     padding: 5,
     backgroundColor: COLORS.Coral,
     borderRadius: 100,
     marginLeft: 65,
+  },
+  emptyDeleteIcon: {
+    color: COLORS.white,
+    padding: 5,
+    backgroundColor: COLORS.Coral,
+    borderRadius: 100,
   },
   potName: {
     width: 70,
@@ -128,9 +153,14 @@ const styles = StyleSheet.create({
   },
   trashCanMargin: {
     alignItems: "flex-end",
+    justifyContent: "flex-end",
   },
   alignCenterContainer: {
     alignItems: "center",
+  },
+  gardenCharacter: {
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
 

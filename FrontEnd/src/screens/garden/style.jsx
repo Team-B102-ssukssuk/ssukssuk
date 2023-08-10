@@ -25,8 +25,8 @@ const styles = StyleSheet.create({
   },
   gardenWoodText: {
     position: "absolute",
-    marginTop: 15,
-    color: "white",
+    marginTop: "12%",
+    color: COLORS.lightYellow,
     fontSize: 18,
   },
   gardenContainer: {
@@ -82,9 +82,6 @@ const styles = StyleSheet.create({
     marginVertical: 40,
   },
   trashCanMargin: {
-    position: "absolute",
-    bottom: 10,
-    right: 10,
     alignItems: "flex-end",
   },
   imgSize: {

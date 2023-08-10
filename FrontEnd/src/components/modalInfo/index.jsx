@@ -5,7 +5,8 @@ import CookieRunBold from "../common/CookieRunBold";
 import CookieRunRegular from "../common/CookieRunRegular";
 import styles from "./style";
 
-const ModalInfo = ({ isVisible, onClose, plant }) => {
+const ModalInfo = ({ isVisible, onClose, plant, plantImg }) => {
+  console.log(plantImg);
   if (!plant) {
     return null;
   }
@@ -24,11 +25,19 @@ const ModalInfo = ({ isVisible, onClose, plant }) => {
     >
       <View style={styles.modalContainer}>
         <View style={styles.content}>
-          <Image
-            source={require("../../assets/img/silhouette.png")}
-            resizeMode="contain"
-            style={styles.emptyImg}
-          />
+          {plant.createdDate != null ? (
+            <Image
+              source={plantImg}
+              resizeMode="contain"
+              style={styles.emptyImgTest}
+            />
+          ) : (
+            <Image
+              source={require("../../assets/img/silhouette.png")}
+              resizeMode="contain"
+              style={styles.emptyImgTest}
+            />
+          )}
           <View style={styles.titleText}>
             <CookieRunBold style={styles.plantName}>
               {plant.characterName}
