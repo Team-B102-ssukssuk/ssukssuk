@@ -16,7 +16,7 @@ const ModalDictionary = ({ isVisible, onClose }) => {
   const [isSelectedPlantImg, setSelectedPlantImg] = useState(null);
 
   const getPlantImageSource = (plantId, index) => {
-    const imageName = `${plantId}_${index + 1}.png`;
+    const imageName = `${plantId}_${index + 1}.gif`;
     const image = plantImages[imageName];
     const resolvedImage = Image.resolveAssetSource(image);
 
@@ -54,7 +54,7 @@ const ModalDictionary = ({ isVisible, onClose }) => {
     const emptyImageSize = 75; // Define the size of each emptyImage
     const gapSize = 5; // Define the gap between emptyImage elements
 
-    console.log(plantId);
+    // console.log(plantId);
 
     return plants.map((plant, index) => (
       <View

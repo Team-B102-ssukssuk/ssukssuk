@@ -12,7 +12,7 @@ import PotScreen from "../screens/pot";
 import AlarmScreen from "../screens/alarm";
 import GardenScreen from "../screens/garden";
 import ProfileScreen from "../screens/profile";
-import ErrorScreen from "../screens/main";
+import ErrorScreen from "../screens/error";
 
 import KakaoLoginScreen from "../screens/kakaologin";
 
@@ -24,6 +24,11 @@ const Router = () => {
       <Stack.Navigator>
         <Stack.Screen
           options={{ headerShown: false }}
+          name="Intro"
+          component={IntroScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
           name="Login"
           component={LoginScreen}
         />
@@ -32,12 +37,6 @@ const Router = () => {
           name="Pot"
           component={PotScreen}
         />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="Intro"
-          component={IntroScreen}
-        />
-
         <Stack.Screen
           options={{ headerShown: false }}
           name="KakaoLogin"

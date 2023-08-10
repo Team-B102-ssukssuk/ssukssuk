@@ -5,7 +5,13 @@ import CookieRunBold from "../common/CookieRunBold";
 import CookieRunRegular from "../common/CookieRunRegular";
 import styles from "./style";
 
-const ModalPlantDelete = ({ isVisible, onClose, onDelete, potID }) => {
+const ModalPlantDelete = ({
+  isVisible,
+  onClose,
+  onDelete,
+  potID,
+  typeName,
+}) => {
   return (
     <Modal
       isVisible={isVisible}
@@ -20,9 +26,9 @@ const ModalPlantDelete = ({ isVisible, onClose, onDelete, potID }) => {
     >
       <View style={styles.modalContainer}>
         {/* 모달 내용 */}
-        <CookieRunBold style={styles.modalText}>식물 삭제</CookieRunBold>
+        <CookieRunBold style={styles.modalText}>{typeName} 삭제</CookieRunBold>
         <CookieRunRegular style={styles.modalTextContent}>
-          화분을 삭제하시면 모든 데이터가
+          {typeName}을 삭제하시면 모든 데이터가
         </CookieRunRegular>
         <CookieRunRegular style={styles.modalTextContent}>
           사라지며 복구가 불가합니다.

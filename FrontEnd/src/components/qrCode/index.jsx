@@ -28,7 +28,7 @@ const QRCodeScanner = ({
     return null;
   }
   if (hasPermission === false) {
-    return <Text>Unable to access camera</Text>;
+    // return <Text>Unable to access camera</Text>;
   }
 
   return (

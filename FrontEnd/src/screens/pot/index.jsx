@@ -16,8 +16,11 @@ import ToastNotification from "../../components/toast";
 import Icon from "react-native-vector-icons/AntDesign";
 import LoadingScreen from "../loading";
 import * as Notifications from "expo-notifications";
+import { useIsFocused } from "@react-navigation/native";
+import plantImages from "../../assets/img/plantImages";
 
 const PotScreen = (props) => {
+  const isFocused = useIsFocused();
   const navigation = useNavigation();
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
   const [isRegistModalVisible, setRegistModalVisible] = useState(false);
@@ -32,6 +35,14 @@ const PotScreen = (props) => {
   const [toastContent, setToastContent] = useState("");
   const [toastIconName, setToastIconName] = useState("");
   const [isTrashcanVisible, setTrashcanVisible] = useState("true");
+
+  const getPlantImageSource = (plantId, level) => {
+    const imageName = `${plantId}_${level}.gif`;
+    const image = plantImages[imageName];
+    const resolvedImage = Image.resolveAssetSource(image);
+
+    return resolvedImage;
+  };
 
   useEffect(() => {
     registerForPushNotificationsAsync();
@@ -81,8 +92,10 @@ const PotScreen = (props) => {
   };
 
   useEffect(() => {
-    getPotData();
-  }, []);
+    if (isFocused) {
+      getPotData(); // Fetch data only when the screen is focused
+    }
+  }, [isFocused]); // The effect depends on the isFocused value
 
   const handleScannedData = (data) => {
     console.log(data);
@@ -221,14 +234,13 @@ const PotScreen = (props) => {
                 ) : null}
               </>
             )}
-
             {plant.isUse ? (
               <TouchableOpacity
                 style={styles.gardenCharacter}
                 onPress={() => GoMain(potId, plant.gardenId)}
               >
                 <Image
-                  source={require("../../assets/img/characterBaechoo.png")}
+                  source={getPlantImageSource(plant.plantId, plant.level)}
                   resizeMode="contain"
                   style={styles.potResize}
                 />
@@ -388,6 +400,7 @@ const PotScreen = (props) => {
         onClose={() => setDeleteModalVisible(false)}
         onDelete={handleDelete}
         potID={isPotId}
+        typeName="화분"
       />
       <ModalPlantRegist
         isVisible={isRegistModalVisible}

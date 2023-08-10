@@ -18,6 +18,7 @@ const styles = StyleSheet.create({
   nameTagSection: {
     flexDirection: "row",
     justifyContent: "center",
+    alignItems: "center",
     height: SIZES.height * 0.12,
   },
   wateringCanSection: {
@@ -84,12 +85,19 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   nameTagSize: {
-    width: "80%",
-    height: "80%",
+    width: "65%",
+    height: "65%",
+    justifyContent: "center",
+    alignItems: "center",
   },
   wateringCanSize: {
     width: 93,
     height: 84,
+  },
+  characterName: {
+    position: "absolute",
+    color: COLORS.lightYellow,
+    fontSize: 20,
   },
 });
 

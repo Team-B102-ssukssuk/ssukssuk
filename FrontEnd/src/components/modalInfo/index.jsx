@@ -35,7 +35,7 @@ const ModalInfo = ({ isVisible, onClose, plant, plantImg }) => {
             <Image
               source={require("../../assets/img/silhouette.png")}
               resizeMode="contain"
-              style={styles.emptyImg}
+              style={styles.emptyImgTest}
             />
           )}
           <View style={styles.titleText}>

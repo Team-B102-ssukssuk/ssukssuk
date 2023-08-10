@@ -15,55 +15,47 @@
 
 import { View, Alert } from "react-native";
 import React from "react";
-// import styles from "./style";
 import WebView from "react-native-webview";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-// other import settings...
-
 const REST_API_KEY = "a12d292510e3111fe093a99ff91e118b";
-const REDIRECT_URI = "http://i9b102.p.ssafy.io:8080/user/kakao/callback";
+const URI = "http://i9b102.p.ssafy.io:8082/kakao/code";
+const REDIRECT_URI = "http://i9b102.p.ssafy.io:8082/kakao";
 
 const KakaoLoginScreen = ({ navigation }) => {
-  // const [accessToken, setAccessToken] = useState(null);
-
   const runFirst = `window.ReactNativeWebView.postMessage("this is message from web");`;
   const LogInProgress = (data) => {
     // access code는 url에 붙어 장황하게 날아온다.
 
     // substringd으로 url에서 code=뒤를 substring하면 된다.
-
     const exp = "code=";
 
-    const condition = data.indexOf(exp);
+    var condition = data.indexOf(exp);
 
     if (condition != -1) {
+      console.log("코드 추출");
       const request_code = data.substring(condition + exp.length);
-
-      // console.log("access code :: " + request_code);
+      console.log("인가 코드 : " + request_code);
 
       // 토큰값 받기
-
-      requestToken(request_code);
+      setTimeout(function () {
+        requestToken(request_code);
+      }, 1500);
     }
   };
 
-  const requestToken = async () => {
-    const request_token_url = "https://kauth.kakao.com/oauth/authorize";
-
-    const urlll =
-      request_token_url +
-      `?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}`;
+  const requestToken = async (request_code) => {
     try {
-      const response = await axios.get(urlll);
-      console.log("data");
-      console.log(response.data);
+      console.log("토큰 발급");
+      const response = await axios.post(URI, {
+        code: request_code,
+      });
 
-      const accessToken = response.data.accessToken;
-      const refreshToken = response.data.refreshToken;
-      console.log("token");
-      console.log(accessToken);
+      console.log("response.data : ", response.data);
+
+      const accessToken = response.data.data.accessToken;
+      const refreshToken = response.data.data.refreshToken;
 
       await AsyncStorage.setItem("accessToken", accessToken);
       await AsyncStorage.setItem("refreshToken", refreshToken);
@@ -75,39 +67,20 @@ const KakaoLoginScreen = ({ navigation }) => {
     }
   };
 
-  //   try {
-  //     const response = await axios.post(request_token_url, {
-  //       grant_type: "authorization_code",
-  //       client_id: REST_API_KEY,
-  //       redirect_uri: REDIRECT_URI,
-  //       code: request_code,
-  //     });
-  //     console.log(response);
-
-  //     const token = response.data.access_token;
-  //     setAccessToken(token);
-  //     navigation.navigate("Pot"); // 로그인 성공 후 MainScreen으로 이동
-  //   } catch (error) {
-  //     console.error("토큰 요청에 실패했습니다:", error);
-  //     Alert.alert("로그인 실패", "카카오 로그인에 실패했습니다.");
-  //   }
-  // };
-
   return (
     <View style={{ flex: 1 }}>
       <WebView
         originWhitelist={["*"]}
         scalesPageToFit={false}
-        style={{ marginTop: 30 }}
         source={{
-          uri: `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}`,
+          uri: `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&prompt=login`,
         }}
         injectedJavaScript={runFirst}
         javaScriptEnabled={true}
         onMessage={(event) => {
+          console.log(event.nativeEvent["url"]);
           LogInProgress(event.nativeEvent["url"]);
         }}
-
         // onMessage ... :: webview에서 온 데이터를 event handler로 잡아서 logInProgress로 전달
       />
     </View>

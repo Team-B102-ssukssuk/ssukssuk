@@ -1,6 +1,5 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useNavigation } from "@react-navigation/native";
 
 // 로컬 스토리지에 accessToken 값 추출
 export async function getAccessToken() {
@@ -16,6 +15,7 @@ export const customAxios = axios.create({
 // Add an interceptor to the request to set the Authorization header with the access token
 customAxios.interceptors.request.use(async (config) => {
   const accessToken = await getAccessToken();
+  console.log(accessToken);
   if (accessToken) {
     config.headers.Authorization = `Bearer ${accessToken}`;
   }
@@ -57,10 +57,10 @@ customAxios.interceptors.response.use(
       response: { status },
     } = error;
 
-    console.log("응답 : " + status);
-    console.log(error.response.data);
+    // console.log("응답 : " + status);
+    // console.log(error.response.data.message);
 
-    if (status === 409) {
+    if (status === 409 && error.response.data.message === "Expired JWT Token") {
       const originRequest = config;
       const response = await postRefreshToken();
       console.log(response.status);
@@ -73,12 +73,15 @@ customAxios.interceptors.response.use(
         originRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         return customAxios(originRequest);
       } else if (response.status === 409) {
-        const navigation = useNavigation(); // 네비게이션 객체 가져오기
-        navigation.navigate("Login"); // 토큰 만료 화면으로 이동
+        // Handle unauthorized or conflict scenarios
+        // For example, you might want to log the user out or navigate to a login screen
+        // You can use your own logic here based on your application flow
+        console.log("토큰 만료 혹은 충돌");
       } else {
         alert("Unexpected reason.");
       }
     }
+
     return Promise.reject(error);
   }
 );

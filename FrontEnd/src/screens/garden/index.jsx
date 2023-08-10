@@ -11,8 +11,11 @@ import { useNavigation } from "@react-navigation/native";
 import customAxios from "../../utils/axios";
 import ModalPlantSeed from "../../components/modalplantseed";
 import LoadingScreen from "../loading";
+import { useIsFocused } from "@react-navigation/native";
+import plantImages from "../../assets/img/plantImages";
 
 const GardenScreen = () => {
+  const isFocused = useIsFocused();
   const navigation = useNavigation();
   const [gardenName] = useState("내 정원");
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
@@ -21,6 +24,7 @@ const GardenScreen = () => {
   const [isDeleteGardenId, setDeleteGardenId] = useState(0);
   const [isPlantData, setPlantData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [deleteAction, setDeleteAction] = useState(false);
 
   const handleSeedPlant = (nickname, option) => {
     // 씨앗 심기 관련 로직
@@ -28,10 +32,19 @@ const GardenScreen = () => {
     console.log("Selected option: " + option);
   };
 
-  const getPotData = () => {
+  const getPlantImageSource = (plantId, level) => {
+    const imageName = `${plantId}_${level}.gif`;
+    const image = plantImages[imageName];
+    const resolvedImage = Image.resolveAssetSource(image);
+
+    return resolvedImage;
+  };
+
+  const getGardenData = () => {
     customAxios
       .get("/plant/all")
       .then((res) => {
+        console.log(res.data.data);
         setPlantData(res.data.data);
         setTimeout(() => {
           setIsLoading(false);
@@ -43,8 +56,10 @@ const GardenScreen = () => {
   };
 
   useEffect(() => {
-    getPotData();
-  }, []);
+    if (isFocused) {
+      getGardenData(); // Fetch data only when the screen is focused
+    }
+  }, [isFocused]); // The effect depends on the isFocused value
 
   const visibleIcon = () => {
     setDeleteIconVisible(!isDeleteIconVisible);
@@ -62,8 +77,8 @@ const GardenScreen = () => {
       .put(`plant/delete/${isDeleteGardenId}`)
       .then(() => {
         console.log("삭제성공");
-        getPotData();
-        visibleIcon();
+        navigation.navigate("Pot");
+        setDeleteAction(!deleteAction);
       })
       .catch(() => {
         console.log("정원 식물 삭제 관련 오류");
@@ -149,7 +164,10 @@ const GardenScreen = () => {
                         <View style={styles.gardenCharacter}>
                           {/* Transparent character image */}
                           <Image
-                            source={require("../../assets/img/characterBaechoo.png")}
+                            source={getPlantImageSource(
+                              garden.plantId,
+                              garden.level
+                            )}
                             resizeMode="contain"
                             style={styles.gardenCharacterResize}
                           />
@@ -170,7 +188,10 @@ const GardenScreen = () => {
                         <View style={styles.gardenCharacter}>
                           {/* Transparent character image */}
                           <Image
-                            source={require("../../assets/img/characterBaechoo.png")}
+                            source={getPlantImageSource(
+                              garden.plantId,
+                              garden.level
+                            )}
                             resizeMode="contain"
                             style={styles.gardenCharacterResize}
                           />
@@ -251,6 +272,7 @@ const GardenScreen = () => {
         isVisible={isDeleteModalVisible}
         onClose={() => setDeleteModalVisible(false)}
         onDelete={handleDelete}
+        typeName="식물"
       />
     </View>
   );

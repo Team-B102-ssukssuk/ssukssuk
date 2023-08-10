@@ -38,20 +38,12 @@ const ModalPlantSeed = ({ isVisible, onClose, onSeedPlant }) => {
           plantName: "상추",
         },
         {
-          plantId: 4,
-          plantName: "바질",
-        },
-        {
-          plantId: 5,
-          plantName: "로즈마리",
-        },
-        {
-          plantId: 10,
-          plantName: "오이",
+          plantId: 12,
+          plantName: "커밍순",
         },
         {
           plantId: 12,
-          plantName: "오오이",
+          plantName: "커밍순",
         },
       ],
     },
@@ -63,12 +55,12 @@ const ModalPlantSeed = ({ isVisible, onClose, onSeedPlant }) => {
           plantName: "장미",
         },
         {
-          plantId: 6,
-          plantName: "튤립",
+          plantId: 13,
+          plantName: "커밍순",
         },
         {
-          plantId: 7,
-          plantName: "국화",
+          plantId: 14,
+          plantName: "커밍순",
         },
       ],
     },
@@ -76,16 +68,16 @@ const ModalPlantSeed = ({ isVisible, onClose, onSeedPlant }) => {
       name: "선인장",
       subcategories: [
         {
-          plantId: 3,
+          plantId: 17,
           plantName: "백도선",
         },
         {
-          plantId: 8,
-          plantName: "하트호야",
+          plantId: 16,
+          plantName: "커밍순",
         },
         {
-          plantId: 9,
-          plantName: "레티지아",
+          plantId: 20,
+          plantName: "커밍순",
         },
       ],
     },

@@ -3,6 +3,7 @@ import { View, TouchableOpacity, Modal, Image } from "react-native";
 import CookieRunRegular from "../common/CookieRunRegular";
 import CookieRunBold from "../common/CookieRunBold";
 import { ScrollView } from "react-native-gesture-handler";
+import plantImages from "../../assets/img/plantImages";
 import styles from "./style";
 
 const CustomDropdown = ({ options, onSelect }) => {
@@ -12,6 +13,18 @@ const CustomDropdown = ({ options, onSelect }) => {
     subcategories: options[0].subcategories,
   });
   const [selectedSubcategory, setSelectedSubcategory] = useState(null);
+
+  const getPlantImageSource = (plantId, level) => {
+    const imageName = `${plantId}_${level}.gif`;
+    const image = plantImages[imageName];
+    const resolvedImage = Image.resolveAssetSource(image);
+
+    if (resolvedImage == null) {
+      return require("../../assets/img/silhouette.png");
+    }
+
+    return resolvedImage;
+  };
 
   const toggleModal = () => {
     setIsVisible(!isVisible);
@@ -38,6 +51,8 @@ const CustomDropdown = ({ options, onSelect }) => {
       rows.push(row);
     }
 
+    console.log(rows);
+
     return rows.map((row, rowIndex) => (
       <View key={rowIndex} style={styles.rowContainer}>
         {row.map((subcategory, columnIndex) => (
@@ -46,7 +61,7 @@ const CustomDropdown = ({ options, onSelect }) => {
               onPress={() => handleSubcategoryPress(subcategory)}
             >
               <Image
-                source={require("../../assets/img/silhouette.png")}
+                source={getPlantImageSource(subcategory.plantId, 1)}
                 resizeMode="contain"
                 style={[
                   styles.emptyImg,

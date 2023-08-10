@@ -13,6 +13,9 @@ import { connect } from "react-redux";
 import customAxios from "../../utils/axios";
 import LoadingScreen from "../loading";
 import axios from "axios";
+import plantImages from "../../assets/img/plantImages";
+import CookieRunBold from "../../components/common/CookieRunBold";
+import { setGardenID } from "../../redux/action";
 
 const MainScreen = (props) => {
   const navigation = useNavigation();
@@ -29,6 +32,18 @@ const MainScreen = (props) => {
   const [backgroundImage, setBackgroundImage] = useState(
     require("../../assets/img/ProfileBackground.png")
   );
+
+  const [isCharacterData, setCharacterData] = useState({
+    plantNickname: null,
+  });
+
+  const getPlantImageSource = (plantId, level) => {
+    const imageName = `${plantId}_${level}.gif`;
+    const image = plantImages[imageName];
+    const resolvedImage = Image.resolveAssetSource(image);
+
+    return resolvedImage;
+  };
 
   const changeBackgroundImage = () => {
     const now = new Date();
@@ -50,19 +65,6 @@ const MainScreen = (props) => {
         console.log("성공");
       });
   };
-
-  useEffect(() => {
-    changeBackgroundImage();
-    registNotification();
-
-    const interval = setInterval(() => {
-      changeBackgroundImage();
-    }, 3600000); // 매 시간마다 호출 (밀리초 단위)
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
 
   const getUserData = () => {
     customAxios
@@ -103,6 +105,7 @@ const MainScreen = (props) => {
         .get(`/plant/${props.gardenID}`)
         .then((res) => {
           console.log(res.data);
+          setCharacterData(res.data.data);
           setCharacterTrue(true);
         })
         .catch((err) => {
@@ -113,6 +116,7 @@ const MainScreen = (props) => {
         .get(`/plant/${gardenId}`)
         .then((res) => {
           console.log(res.data);
+          setCharacterData(res.data.data);
           setCharacterTrue(true);
         })
         .catch((err) => {
@@ -125,24 +129,27 @@ const MainScreen = (props) => {
     // 컴포넌트가 마운트될 때 getUserData 함수 호출
     getUserData();
     getPlantData(999);
+    changeBackgroundImage();
+    registNotification();
 
     setTimeout(() => {
       setIsLoading(false);
     }, 500);
 
     // 30초마다 getUserData 함수 호출하는 interval 설정
-    const interval = setInterval(() => {
+    const sensorInterval = setInterval(() => {
       getUserData();
     }, 30000); // 30초를 밀리초로 변환
 
+    const interval = setInterval(() => {
+      changeBackgroundImage();
+    }, 3600000); // 매 시간마다 호출 (밀리초 단위)
+
     // 컴포넌트가 언마운트될 때 interval 정리
     return () => {
+      clearInterval(sensorInterval);
       clearInterval(interval);
     };
-  }, []);
-
-  useEffect(() => {
-    getPlantData(999);
   }, []);
 
   const toggleSettingModal = () => {
@@ -173,6 +180,7 @@ const MainScreen = (props) => {
       })
       .then((res) => {
         console.log("식물 등록 성공");
+        props.setGardenID(res.data.data.gardenId);
         getPlantData(res.data.data.gardenId);
       })
       .catch(() => {
@@ -254,13 +262,13 @@ const MainScreen = (props) => {
                 style={styles.iconSize}
               />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.iconBackground}>
+            {/* <TouchableOpacity style={styles.iconBackground}>
               <Image
                 source={require("../../assets/img/boardIIcon.png")}
                 resizeMode="contain"
                 style={styles.iconSize}
               />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <TouchableOpacity
               style={styles.iconBackground}
               onPress={toggleOpenDictionary}
@@ -283,17 +291,28 @@ const MainScreen = (props) => {
             </TouchableOpacity>
           </View>
         </View>
-        <View style={styles.nameTagSection}>
-          <Image
-            source={require("../../assets/img/nameTag.png")}
-            resizeMode="contain"
-            style={styles.nameTagSize}
-          />
-        </View>
+        {isCharacterData.plantNickname != null ? (
+          <View style={styles.nameTagSection}>
+            <Image
+              source={require("../../assets/img/nameTag.png")}
+              resizeMode="contain"
+              style={styles.nameTagSize}
+            ></Image>
+            <CookieRunBold style={styles.characterName}>
+              {isCharacterData.plantNickname}
+            </CookieRunBold>
+          </View>
+        ) : (
+          <View style={styles.nameTagSection}></View>
+        )}
+
         {isCharacterTrue ? (
           <View style={styles.characterSection}>
             <Image
-              source={require("../../assets/img/lettuce_3.gif")}
+              source={getPlantImageSource(
+                isCharacterData.plantId,
+                isCharacterData.level
+              )}
               resizeMode="contain"
               style={styles.characterSize}
             />
@@ -351,4 +370,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(MainScreen);
+export default connect(mapStateToProps, { setGardenID })(MainScreen);
