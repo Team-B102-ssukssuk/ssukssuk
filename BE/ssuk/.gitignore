@@ -39,7 +39,4 @@ out/
 #MacOs
 .DS_Store
 
-cloud.yml
-db.yml
-email.yml
-jwt.yml
+BE/ssuk/src/main/generated/**

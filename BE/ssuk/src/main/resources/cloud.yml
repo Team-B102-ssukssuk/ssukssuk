@@ -10,3 +10,8 @@ cloud:
     credentials:
       accessKey: ENC(1P2QSRUTh5e/EAINxmFclN9c8c4w63SzXCkSgp+plN0=)
       secretKey: ENC(m1Mtj/cxAwAE+sg3GSSUz0TP8Zkz/iqb4EY/jSjh4DJ12JOyoRz/wzq6fayyyRy3fRmiQj2Czcs=)
+spring:
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
