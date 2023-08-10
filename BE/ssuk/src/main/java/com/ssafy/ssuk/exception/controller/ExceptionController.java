@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.HashMap;
@@ -22,6 +23,11 @@ public class ExceptionController {
         return ErrorResponseEntity.toResponseEntity(e.getErrorCode());
     }
 
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<?> exceptionHandler(MaxUploadSizeExceededException e) {
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("사진 크기는 5MB를 초과할 수 없습니다.");
+    }
+
     //모든 예외를 처리할 메소드
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> exceptionHandler(Exception e) {
@@ -29,6 +35,7 @@ public class ExceptionController {
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("에러");
     }
+
 
     //404 (NoHandlerFoundException)
     @ExceptionHandler(NoHandlerFoundException.class)
