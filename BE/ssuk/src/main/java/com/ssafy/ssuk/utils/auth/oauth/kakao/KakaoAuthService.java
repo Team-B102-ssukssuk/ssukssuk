@@ -29,6 +29,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -134,7 +135,9 @@ public class KakaoAuthService {
     @Transactional
     public User saveOrGetUser(String accessToken) throws IOException {
         KakaoProfile profile = getUserInfo(accessToken);
+        log.debug("profile={}", profile);
         Optional<User> findUser = userRepository.findByEmail(profile.getKakaoAccount().email+".kakao");
+        log.debug("is findUser exist ??? {}", findUser.isPresent());
         if (findUser.isPresent()) return findUser.get();
         // 사용자가 프로필 사진, 닉네임 동의했는지 체크
         // 동의 안했으면 임시 닉네임 지어주기
@@ -166,6 +169,8 @@ public class KakaoAuthService {
                 profileImage = s3UploadService.upload(profileImage).getImageName();
             }
         }
+
+        log.debug("여기까지와야 저장을 시작할거고");
 
         User newUser = new User(
                 profile.getKakaoAccount().getEmail()+".kakao",
@@ -220,4 +225,34 @@ public class KakaoAuthService {
         log.debug("logoutId={}", response);
     }
 
+    public Map<String, String> getAccessToken2(String code) {
+        // 요청 파라미터
+        MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
+        parameters.add("grant_type", kakaoProperties.getAuthorizationGrantType());
+        parameters.add("client_id", kakaoProperties.getClientId());
+        parameters.add("redirect_uri", kakaoProperties.getRedirectUri());
+        parameters.add("code", code);
+        parameters.add("client_secret", kakaoProperties.getClientSecret());
+        // 요청보내고 응답 받기
+        String accessTokenUri = kakaoProviderProperties.getTokenUri();
+        WebClient webClient = WebClient.create(accessTokenUri);
+        String response = webClient.post()
+                .uri(accessTokenUri)
+                .bodyValue(parameters)
+                .header("Contnt-type", "application/x-www-form-urlencoded;charset=utf-8")
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+        log.debug("kakaoToken={}", response);
+        // 응답 파싱해서 토큰 반환
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        Map<String, String> map = null;
+        try {
+            map = objectMapper.readValue(response, Map.class);
+        } catch (JsonProcessingException e) {
+            throw new CustomException(ErrorCode.KAKAO_ERROR);
+        }
+        return map;
+    }
 }

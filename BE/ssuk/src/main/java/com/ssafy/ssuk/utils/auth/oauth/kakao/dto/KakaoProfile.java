@@ -15,6 +15,7 @@ public class KakaoProfile {
     @JsonProperty("kakao_account")
     public KakaoAccount kakaoAccount;
 
+    @Data
     public class Properties {
         public String nickname;
         @JsonProperty("profile_image")
