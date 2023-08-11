@@ -147,7 +147,7 @@ public class UserController {
 
         gardenService.findAllByUserId(userId).forEach(g -> {
             if (g.getIsUse()) infoResponseDto.addMyPlantCount();
-            else infoResponseDto.addGardenCount();
+            infoResponseDto.addGardenCount();
         });
 
         List<UserBadgeResponseDto> badges = badgeService.findAllWithUserId(userId);

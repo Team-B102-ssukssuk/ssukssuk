@@ -22,13 +22,14 @@ import java.util.Map;
 public class Weather {
 
     @Value("${weather.key}")
-    private static String KEY;
+    private String KEY;
 
     /**
      * 강수형태(PTY) 코드 : (초단기) 없음(0), 비(1), 비/눈(2), 눈(3), 빗방울(5), 빗방울눈날림(6), 눈날림(7)
      */
     public int getWeather(String date, String time, int nx, int ny) throws IOException, JSONException {
         log.debug("{} {} {} {}", date, time, nx, ny);
+//        log.debug("key={}", KEY);
         StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst"); /*URL*/
         urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=" + KEY); /*Service Key*/
         urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지번호*/
