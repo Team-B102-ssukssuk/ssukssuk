@@ -215,7 +215,7 @@ const GardenScreen = () => {
                   .map((_, emptyIndex) => (
                     <View
                       style={styles.gardenContainer}
-                      key={`empty_${emptyIndex}`}
+                      key={`empty_sd_${emptyIndex}`}
                     >
                       <View style={styles.gardenGround}>
                         {/* Garden ground image */}

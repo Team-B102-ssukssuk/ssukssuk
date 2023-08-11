@@ -39,7 +39,7 @@ const ModalPlantDelete = ({
             <CookieRunBold style={styles.closeButton}>삭제</CookieRunBold>
           </TouchableOpacity>
           <TouchableOpacity onPress={onClose}>
-            <CookieRunBold style={styles.cancelButton}>닫기</CookieRunBold>
+            <CookieRunBold style={styles.cancelButton}>취소</CookieRunBold>
           </TouchableOpacity>
         </View>
       </View>

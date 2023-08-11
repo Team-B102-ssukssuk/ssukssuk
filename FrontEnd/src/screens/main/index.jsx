@@ -32,6 +32,7 @@ const MainScreen = (props) => {
   const [backgroundImage, setBackgroundImage] = useState(
     require("../../assets/img/ProfileBackground.png")
   );
+  const [isNotificationData, setNotificationData] = useState([]);
 
   const [isCharacterData, setCharacterData] = useState({
     plantNickname: null,
@@ -54,6 +55,19 @@ const MainScreen = (props) => {
     } else {
       setBackgroundImage(require("../../assets/img/ProfileBackgroundDark.png"));
     }
+  };
+
+  const getNotificationData = () => {
+    customAxios
+      .get("/notification")
+      .then((response) => {
+        setIsLoading(false);
+
+        setNotificationData(response.data.data);
+      })
+      .catch(() => {
+        console.log("센서 불러오기 오류");
+      });
   };
 
   const registNotification = () => {
@@ -131,6 +145,7 @@ const MainScreen = (props) => {
     getPlantData(999);
     changeBackgroundImage();
     registNotification();
+    getNotificationData();
 
     setTimeout(() => {
       setIsLoading(false);
@@ -254,13 +269,22 @@ const MainScreen = (props) => {
           <View style={styles.IconContainer}>
             <TouchableOpacity
               style={styles.iconBackground}
-              onPress={() => navigation.navigate("Alarm")}
+              onPress={() =>
+                navigation.navigate("Alarm", {
+                  NotificationData: isNotificationData,
+                })
+              }
             >
               <Image
                 source={require("../../assets/img/alarmIcon.png")}
                 resizeMode="contain"
                 style={styles.iconSize}
               />
+              {isNotificationData.length !== 0 ? (
+                <View style={styles.notificationCircle}>
+                  {/* Red circle */}
+                </View>
+              ) : null}
             </TouchableOpacity>
             {/* <TouchableOpacity style={styles.iconBackground}>
               <Image

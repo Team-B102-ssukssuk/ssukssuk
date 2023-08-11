@@ -40,7 +40,7 @@ const ProfileScreen = ({ navigation }) => {
 
   const getUserData = () => {
     customAxios.get("/user/info").then((res) => {
-      // console.log(res.data.data);
+      console.log(res.data.data);
       setUserData(res.data.data);
       setTimeout(() => {
         setIsLoading(false);
@@ -247,7 +247,7 @@ const ProfileScreen = ({ navigation }) => {
             </TouchableOpacity>
           </View>
           <View style={styles.profileContent}>
-            <CookieRunBold style={styles.myPageTitle}>마이페이지</CookieRunBold>
+            <CookieRunBold style={styles.myPageTitle}>프로필</CookieRunBold>
             <View style={{ flexDirection: "row", marginTop: 15 }}>
               <TouchableOpacity onPress={handleImageUpload}>
                 <Image
@@ -317,13 +317,13 @@ const ProfileScreen = ({ navigation }) => {
           {rows.map((row, rowIndex) => (
             <View key={rowIndex} style={styles.badgeContent}>
               {/* Map through the badges in each row */}
-              {row.map((badge, colIndex) => {
+              {row.map((badge) => {
                 const badgeImageName = badge.isDone
                   ? `ActiveBadge${badge.badgeId}`
                   : "Badge";
                 return (
                   <TouchableOpacity
-                    key={colIndex}
+                    key={badge.badgeId}
                     onPress={() => handleBadgeClick(badge, badge.badgeId)}
                   >
                     <Image

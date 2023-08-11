@@ -266,24 +266,28 @@ const PotScreen = (props) => {
           opacity: 0.5, // Set opacity to make it transparent
         };
         pots.push(
-          <View key={`empty_pot_${endIndex}`} style={transparentPotStyle}>
-            <TouchableOpacity
-              style={styles.gardenCharacter}
-              onPress={toggleQRCodeScanner}
-            >
-              <Image
-                source={require("../../assets/img/pot.png")}
-                resizeMode="contain"
-                style={styles.potResize}
-              />
-              <Icon
-                name="pluscircle"
-                size={28}
-                color="#000"
-                style={{ position: "absolute" }}
-              />
-            </TouchableOpacity>
-          </View>
+          <>
+            {!isDeleteIconVisible ? (
+              <View key={`empty_pot_${endIndex}`} style={transparentPotStyle}>
+                <TouchableOpacity
+                  style={styles.gardenCharacter}
+                  onPress={toggleQRCodeScanner}
+                >
+                  <Image
+                    source={require("../../assets/img/pot.png")}
+                    resizeMode="contain"
+                    style={styles.potResize}
+                  />
+                  <Icon
+                    name="pluscircle"
+                    size={28}
+                    color="#000"
+                    style={{ position: "absolute" }}
+                  />
+                </TouchableOpacity>
+              </View>
+            ) : null}
+          </>
         );
       }
     }
@@ -330,9 +334,9 @@ const PotScreen = (props) => {
       })
       .catch((err) => {
         if (err.response.status === 409) {
-          setRegistMessage("중복된 시리얼 넘버");
+          setRegistMessage("이미 등록된 화분입니다...");
         } else if (err.response.status === 400) {
-          setRegistMessage("유효하지 않는 시리얼 넘버");
+          setRegistMessage("올바른 ID가 아니예요 다시 입력해주세요!");
         }
       });
   };
@@ -389,7 +393,10 @@ const PotScreen = (props) => {
             <TouchableOpacity onPress={visibleIcon}>
               <Image
                 source={require("../../assets/img/trashCan.png")}
-                style={styles.trashCan}
+                style={[
+                  styles.trashCan,
+                  !isDeleteIconVisible ? styles.trashCanClicked : null,
+                ]}
               />
             </TouchableOpacity>
           </View>

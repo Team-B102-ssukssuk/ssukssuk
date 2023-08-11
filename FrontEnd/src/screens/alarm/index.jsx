@@ -1,29 +1,58 @@
-import React, { useEffect } from "react";
-import { View, ImageBackground, TouchableOpacity } from "react-native";
+import React from "react";
+import {
+  View,
+  ImageBackground,
+  TouchableOpacity,
+  FlatList,
+} from "react-native";
 import Icon from "react-native-vector-icons/Octicons";
 import CookieRunBold from "../../components/common/CookieRunBold";
 import Icon2 from "react-native-vector-icons/MaterialIcons";
 import styles from "./style";
 import AlertWaterComponent from "../../components/alertwater";
 import AlertTankComponent from "../../components/alerttank";
-import { ScrollView } from "react-native-gesture-handler";
 import customAxios from "../../utils/axios";
 
-const AlarmScreen = ({ navigation }) => {
-  const getSensorData = () => {
+const AlarmScreen = ({ navigation, route }) => {
+  const deleteNotification = (notificationId) => {
+    console.log(notificationId);
     customAxios
-      .get("/notification")
-      .then((response) => {
-        console.log(response.data.data);
+      .put(`/notification/${notificationId}`)
+      .then(() => {
+        console.log("성공");
+        navigation.navigate("Main");
       })
       .catch(() => {
-        console.log("센서 불러오기 오류");
+        console.log("삭제 성공");
       });
   };
 
-  useEffect(() => {
-    getSensorData();
-  }, []); // The effect depends on the isFocused value
+  const renderNotificationItem = ({ item }) => {
+    const uniqueKey = item.notificationId;
+    if (item.notificationType === "W") {
+      return (
+        <TouchableOpacity
+          key={`water_need_${uniqueKey}`}
+          onPress={() => deleteNotification(item.notificationId)}
+        >
+          <AlertWaterComponent
+            date={item.notification_date}
+            nickname={item.ninckName}
+          />
+        </TouchableOpacity>
+      );
+    } else if (item.notificationType === "T") {
+      return (
+        <TouchableOpacity
+          key={`water_tank_${uniqueKey}`}
+          onPress={() => deleteNotification(item.notificationId)}
+        >
+          <AlertTankComponent date={item.notification_date} />
+        </TouchableOpacity>
+      );
+    }
+    return null;
+  };
 
   return (
     <ImageBackground
@@ -40,18 +69,18 @@ const AlarmScreen = ({ navigation }) => {
           </TouchableOpacity>
           <View style={styles.alarmSection}>
             <CookieRunBold style={styles.alarmText}>알림</CookieRunBold>
-            <View style={styles.notificationCircle}>{/* Red circle */}</View>
+            {route.params.NotificationData.length !== 0 ? (
+              <View style={styles.notificationCircle}>{/* Red circle */}</View>
+            ) : null}
             <Icon name="bell-fill" size={28} color="#FBFFE5" />
           </View>
         </View>
       </View>
-      <ScrollView>
-        <View>
-          <AlertWaterComponent />
-          <AlertWaterComponent />
-          <AlertTankComponent />
-        </View>
-      </ScrollView>
+      <FlatList
+        data={route.params.NotificationData}
+        renderItem={renderNotificationItem}
+        keyExtractor={(item) => item.notificationId.toString()} // Assuming notificationId is a number
+      />
     </ImageBackground>
   );
 };

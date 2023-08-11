@@ -2,7 +2,30 @@ import { View, Image } from "react-native";
 import styles from "./style";
 import CookieRunRegular from "../common/CookieRunRegular";
 
-const AlertTankComponent = () => {
+const AlertTankComponent = ({ date }) => {
+  function calculateTimeAgo(timestamp) {
+    // Convert the given timestamp to a Date object
+    const givenDate = new Date(timestamp);
+
+    // Get the current timestamp
+    const currentDate = new Date();
+
+    // Calculate the time difference in milliseconds
+    const timeDifference = currentDate - givenDate;
+
+    // Convert the time difference to minutes and hours
+    const minutesAgo = Math.floor(timeDifference / (1000 * 60)); // 1000 ms = 1 second, 60 seconds = 1 minute
+    const hoursAgo = Math.floor(minutesAgo / 60);
+
+    if (hoursAgo >= 1) {
+      return `${hoursAgo}시간 전`;
+    } else {
+      return `${minutesAgo}분 전`;
+    }
+  }
+
+  const minuteAgo = calculateTimeAgo(date);
+
   return (
     <View>
       <View style={styles.container}>
@@ -23,7 +46,7 @@ const AlertTankComponent = () => {
             </CookieRunRegular>
             <View style={styles.minuteStyle}>
               <CookieRunRegular style={styles.minuteColor}>
-                30분 전
+                {minuteAgo}
               </CookieRunRegular>
             </View>
           </View>

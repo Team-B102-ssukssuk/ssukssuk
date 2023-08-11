@@ -162,6 +162,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  trashCanClicked: {
+    opacity: 0.5, // Change the opacity when the trashcan is clicked
+  },
 });
 
 export default styles;
