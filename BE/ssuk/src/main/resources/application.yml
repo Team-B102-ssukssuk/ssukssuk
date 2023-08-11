@@ -29,7 +29,7 @@ spring:
         min-idle: 2
     host: localhost
     port: 6379
-    password: ENC(+1QeK/QWvLlXsLfsEGUTnJXo5ZxvGWji)
+    #password: ENC(+1QeK/QWvLlXsLfsEGUTnJXo5ZxvGWji)
 
   jpa:
     database: mysql   # 추가 해준 부분

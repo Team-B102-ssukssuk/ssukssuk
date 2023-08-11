@@ -79,8 +79,14 @@ public class Garden {
         this.orders = 0;
     }
 
-    public void updateLevel(Integer level) {
+    public void updateLevel2(Integer level) {
         this.level = level;
+        this.secondDate = LocalDateTime.now();
+    }
+
+    public void updateLevel3(Integer level) {
+        this.level = level;
+        this.thirdDate = LocalDateTime.now();
     }
 
     public void modifyOrders(Integer order) {

@@ -73,7 +73,7 @@ public class MeasurementServiceImpl implements MeasurementService {
 
                 LocalDateTime lastTime = gardens.get(0).getPot().getMoistureLastDate();
                 //push 알림
-                if(lastTime.plusMinutes(30).isBefore(LocalDateTime.now())) {
+                if (lastTime.plusMinutes(30).isBefore(LocalDateTime.now())) {
                     log.info("물 부족 푸쉬 전송");
                     fcmService.sendPushTo(userId, "물 부족", nickName + "이(가) 물이 부족해요");
                     gardens.get(0).getPot().updateMoistueLastDate(LocalDateTime.now());
@@ -96,7 +96,7 @@ public class MeasurementServiceImpl implements MeasurementService {
             log.info("물탱크에 물이 부족합니다");
 
             LocalDateTime lastTime = gardens.get(0).getPot().getTankLastDate();
-            if(lastTime.plusMinutes(30).isBefore(LocalDateTime.now())) {
+            if (lastTime.plusMinutes(30).isBefore(LocalDateTime.now())) {
                 log.info("물탱크 푸쉬 전송");
                 fcmService.sendPushTo(userId, "물탱크 물 부족", "응애 물 채워줘");
                 gardens.get(0).getPot().updateTankLastDate(LocalDateTime.now());
@@ -122,6 +122,7 @@ public class MeasurementServiceImpl implements MeasurementService {
     public Integer updateLevel(UploadRequestDto uploadRequestDto) {
         Garden findGarden = gardenRepository.findGardenByPotId(uploadRequestDto.getPotId()).get(0);
 
+        log.info("레벨업 서비스");
         if (findGarden.getLevel() < uploadRequestDto.getLevel()) { // 레벨업
             //푸시알림
             fcmService.sendPushTo(findGarden.getUser().getId(), "레벨 업", findGarden.getNickname() + "이(가) 레벨업했어요 !");
@@ -139,8 +140,14 @@ public class MeasurementServiceImpl implements MeasurementService {
             notificationRepository.save(notification);
 
             //테이블 갱신
-            findGarden.updateLevel(uploadRequestDto.getLevel());
+
+            if (findGarden.getLevel() == 1)
+                findGarden.updateLevel2(uploadRequestDto.getLevel());
+            else if (findGarden.getLevel() == 2)
+                findGarden.updateLevel3(uploadRequestDto.getLevel());
+
             gardenRepository.save(findGarden); // 갱신
+
 
             //식물 사진 테이블 insert
             return findGarden.getUser().getId();

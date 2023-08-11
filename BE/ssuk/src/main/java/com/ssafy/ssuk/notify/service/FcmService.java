@@ -39,10 +39,12 @@ public class FcmService {
         //save
         if (!findFcm.isPresent()) {
             log.info("응애 if에 걸렸ㄱ어요");
+            log.info("토큰 등록 if");
             Fcm fcm = fcmMapper.requestDtoToFcm(tokenRequestDto, userId);
             fcmRepository.save(fcm);
         } else {
             log.info("응애 else에 걸렸어요");
+            log.info("토큰 등록 변경");
             findFcm.get().setFcm_token(tokenRequestDto.getFcm_token());
             fcmRepository.save(findFcm.get());
             log.info(tokenRequestDto.getFcm_token());
