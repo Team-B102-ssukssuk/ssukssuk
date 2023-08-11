@@ -119,7 +119,7 @@ public class MeasurementServiceImpl implements MeasurementService {
      */
     @Override
     @Transactional
-    public void updateLevel(UploadRequestDto uploadRequestDto) {
+    public Integer updateLevel(UploadRequestDto uploadRequestDto) {
         Garden findGarden = gardenRepository.findGardenByPotId(uploadRequestDto.getPotId()).get(0);
 
         if (findGarden.getLevel() < uploadRequestDto.getLevel()) { // 레벨업
@@ -143,9 +143,11 @@ public class MeasurementServiceImpl implements MeasurementService {
             gardenRepository.save(findGarden); // 갱신
 
             //식물 사진 테이블 insert
+            return findGarden.getUser().getId();
         } else {
             //식물 사진 테이블 insert
 
         }
+        return null;
     }
 }

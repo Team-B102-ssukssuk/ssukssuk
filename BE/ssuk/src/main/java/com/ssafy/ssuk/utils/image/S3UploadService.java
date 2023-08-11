@@ -64,10 +64,11 @@ public class S3UploadService {
      * @param multipartFile : 변경할 사진
      */
     public ImageInfo modifyFile(String originName, MultipartFile multipartFile) throws IOException{
+        ImageInfo upload = upload(multipartFile);
         if (!originName.equals("default")) {
             removeOriginFile(originName);
         }
-        return upload(multipartFile);
+        return upload;
     }
 
     /**

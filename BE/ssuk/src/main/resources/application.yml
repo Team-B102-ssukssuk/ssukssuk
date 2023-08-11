@@ -55,13 +55,7 @@ spring:
 
 logging:
   level:
-#    root: debug
-#    org.hibernate.SQL: debug
-    # 일단 ssuk패키지 debug로 설정해놓을게요
     com.ssafy.ssuk: debug
-
-#jwt:
-#  secret: 6YCyHl8E+3j0FHz13dF4lNU6YFLx/8ZKdo/Z0rZzGps=
 
 # ? 없는 로그 출력
 # true가 default 운영환경에서는 false로 변경!!

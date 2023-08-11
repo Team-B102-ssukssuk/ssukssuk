@@ -12,6 +12,8 @@ public interface UserService {
     // 사용자 등록
     void createUser(RegisterUserRequestDto registerUserRequestDto);
 
+    public User createUser(User newUser);
+
     // 로그인
     TokenInfo login(LoginRequestDto loginRequestDto);
 

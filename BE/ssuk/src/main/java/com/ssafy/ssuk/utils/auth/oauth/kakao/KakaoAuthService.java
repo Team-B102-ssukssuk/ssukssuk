@@ -186,6 +186,53 @@ public class KakaoAuthService {
     }
 
     @Transactional
+    public User makeNewUser(KakaoProfile profile) throws IOException {
+        // 사용자가 프로필 사진, 닉네임 동의했는지 체크
+        // 동의 안했으면 임시 닉네임 지어주기
+        String nickname = null;
+        String profileImage = null;
+
+        // 1. 둘 다 동의안했을 때
+        if (profile.properties == null) {
+            nickname = "쑥쑥";
+            profileImage = "default";
+        }
+        // 2. 닉네임만 동의
+        else if (profile.kakaoAccount.profile.profileImageUrl == null) {
+            nickname = profile.getKakaoAccount().getProfile().getNickname();
+            profileImage = "default";
+        }
+        // 3. 프로필 사진만 동의
+        else if (profile.kakaoAccount.profile.nickname == null) {
+            nickname = "쑥쑥";
+            profileImage = s3UploadService.upload(profile.getKakaoAccount().getProfile().getProfileImageUrl()).getImageName();
+        }
+        // 4. 전체 동의
+        else {
+            nickname = profile.getKakaoAccount().getProfile().getNickname();
+            profileImage = profile.getKakaoAccount().getProfile().getProfileImageUrl();
+            if (profileImage.equals("http://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_640x640.jpg")) {
+                profileImage = "default";
+            } else {
+                profileImage = s3UploadService.upload(profileImage).getImageName();
+            }
+        }
+
+        log.debug("여기까지와야 저장을 시작할거고");
+
+        User newUser = new User(
+                profile.getKakaoAccount().getEmail()+".kakao",
+                passwordEncoder.encode(RAW_PASSWORD),
+                nickname,
+                profileImage);
+
+        Role userRole = roleRepository.findByRolename("USER");
+        log.debug("userRole={}", userRole);
+        newUser.addRole(userRole);
+        return newUser;
+    }
+
+    @Transactional
     public TokenInfo kakaoLogin(String email) {
         // 1. Login email/password를 기반으로 Authentication 객체 생성
         UsernamePasswordAuthenticationToken authenticationToken =
