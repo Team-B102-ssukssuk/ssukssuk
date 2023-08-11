@@ -71,6 +71,8 @@ dependencies {
 	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 	// jasypt
 	implementation "com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4"
+	// json
+	implementation group: 'org.json', name: 'json', version: '20200518'
 
 }
 

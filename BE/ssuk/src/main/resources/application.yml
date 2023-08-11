@@ -6,8 +6,8 @@ spring:
           kakao:
             client-id: ENC(lqouFcXjn9u4UJfNsWv/pDiEAN6MnK0vNQ2qXLnImojqXZEpxNeB1+213wRr99Pa)
             client-name: Kakao
-            client-secret: vKsnBevawpU8o8PXbRaBcQAkH7W3wCQT
-            redirect-uri: http://i9b102.p.ssafy.io:8080/user/kakao/callback
+            client-secret: ENC(+05K2oA2HR3sw3xqvZAfLczRYClfvXwb/kg/HMRUFcvm2rooSPMAPN9pLf/Zk1KM)
+            redirect-uri: http://i9b102.p.ssafy.io:8080/kakao
 #            redirect-uri: http://localhost:8080/user/kakao/callback
 #            logout-redirect-uri: http://localhost:8080
             scope: profile_nickname, profile_image, account_email
@@ -55,13 +55,7 @@ spring:
 
 logging:
   level:
-#    root: debug
-#    org.hibernate.SQL: debug
-    # 일단 ssuk패키지 debug로 설정해놓을게요
     com.ssafy.ssuk: debug
-
-#jwt:
-#  secret: 6YCyHl8E+3j0FHz13dF4lNU6YFLx/8ZKdo/Z0rZzGps=
 
 # ? 없는 로그 출력
 # true가 default 운영환경에서는 false로 변경!!
@@ -73,3 +67,6 @@ decorator:
 jasypt:
   encryptor:
     password: ${ENCODE_KEY}
+
+weather:
+  key: ENC(vr6HbA4oILDIj7sP83NS14O9oGkWqhactCoIzm1IIvCPr1Uv6RvY3ACyng9MLVMllBM1KWKzCD3CFw+tHKzf+hIlAidWBtqvze/dreYsLEppJNQS6pF72X+0hj9wTP3GX9s3VCNl9RTJ4K5MHegUaA==)

@@ -44,6 +44,8 @@ public class SensorSokcetController {
         measurementService.insertMeasurement(measurement);
 
         //센서값 비교 후 조건에 맞지 않으면 푸쉬
+        // 여기 예외처리해야함.
+        // 식물이 등록이 되어있지 않을때 문제 있음 시발
         measurementService.checkMeasurement(message);
 
         //template.convertAndSend("/sub/socket/room/" + message.getSerialNumber(), message);

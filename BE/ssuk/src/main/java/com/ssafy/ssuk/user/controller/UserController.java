@@ -1,5 +1,6 @@
 package com.ssafy.ssuk.user.controller;
 
+import com.ssafy.ssuk.badge.domain.BadgeCode;
 import com.ssafy.ssuk.badge.dto.response.UserBadgeResponseDto;
 import com.ssafy.ssuk.badge.service.BadgeService;
 import com.ssafy.ssuk.collection.service.CollectionService;
@@ -146,7 +147,7 @@ public class UserController {
 
         gardenService.findAllByUserId(userId).forEach(g -> {
             if (g.getIsUse()) infoResponseDto.addMyPlantCount();
-            else infoResponseDto.addGardenCount();
+            infoResponseDto.addGardenCount();
         });
 
         List<UserBadgeResponseDto> badges = badgeService.findAllWithUserId(userId);
@@ -269,6 +270,11 @@ public class UserController {
         String newImageName = s3UploadService.modifyFile(originImageName, multipartFile).getImageName();
         log.debug("newImage={}", newImageName);
         userService.updateProfileImage(userId, newImageName);
+
+        if (badgeService.checkUserBadge(BadgeCode.치즈.getCode(), userId) == false) {
+            badgeService.saveUserBadge(BadgeCode.치즈.getCode(), userId);
+        }
+
         return new ResponseEntity<>(newImageName, HttpStatus.OK);
     }
 

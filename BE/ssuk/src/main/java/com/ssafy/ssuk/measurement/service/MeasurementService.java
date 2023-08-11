@@ -16,5 +16,5 @@ public interface MeasurementService {
 
     void checkMeasurement(SensorMessageDto sensorMessageDto);
 
-    void updateLevel(UploadRequestDto uploadRequestDto);
+    Integer updateLevel(UploadRequestDto uploadRequestDto);
 }

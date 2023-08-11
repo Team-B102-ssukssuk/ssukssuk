@@ -58,6 +58,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+    public User createUser(User newUser) {
+        Role userRole = roleRepository.findByRolename("USER");
+        newUser.addRole(userRole);
+        return userRepository.save(newUser);
+    }
+
+    @Override
+    @Transactional
     public TokenInfo login(LoginRequestDto loginRequestDto) {
         // 1. Login email/password를 기반으로 Authentication 객체 생성
         UsernamePasswordAuthenticationToken authenticationToken =

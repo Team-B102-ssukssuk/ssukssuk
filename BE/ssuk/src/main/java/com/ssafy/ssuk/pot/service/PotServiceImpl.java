@@ -11,10 +11,12 @@ import com.ssafy.ssuk.user.domain.User;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.jdbc.Null;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -39,7 +41,7 @@ public class PotServiceImpl implements PotService {
     public void save(Pot pot) throws CustomException {
         Pot findPot = potRepository.findBySerialNumber(pot.getSerialNumber());
 
-        if(findPot == null)
+        if (findPot == null)
             throw new CustomException(ErrorCode.INVALID_SERIAL_NUMBER);
 
         //개선의 여지, user안에 내부적으로 클래스 만들까?
@@ -53,8 +55,7 @@ public class PotServiceImpl implements PotService {
             findPot.setRegistedDate(LocalDateTime.now());
             findPot.setIsRegisted(true);
             potRepository.save(findPot);
-        }
-        else {// 조회 후, 등록여부가 true면 등록이 불가능
+        } else {// 조회 후, 등록여부가 true면 등록이 불가능
             throw new CustomException(ErrorCode.DUPLICATE_RESOURCE);
         }
 
@@ -63,17 +64,17 @@ public class PotServiceImpl implements PotService {
     //화분 삭제
     @Override
     public void delete(Integer potId, Integer userId) {
-        Pot findPot = potRepository.selectPotBySerialNumAndUserId(potId, userId);
+        //Optional<Pot> findPot = potRepository.findPotByUser_IdAndPotId(potId, userId);
 
-        if(findPot != null) {
-            findPot.setUser(null);
-            findPot.setRegistedDate(null);
-            findPot.setIsRegisted(false);
-            potRepository.save(findPot);
-        }
-        else { // 예외처리
-            throw new CustomException(ErrorCode.POT_NOT_FOUND);
-        }
+        Pot updatePot = potRepository.findPotByUser_IdAndPotId(potId, userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.POT_NOT_FOUND));
+        updatePot.setUser(null);
+        updatePot.setRegistedDate(null);
+        updatePot.setIsRegisted(false);
+        if (updatePot.getGarden().get(0) != null)
+            updatePot.getGarden().get(0).removeFromGarden();
+
+        potRepository.save(updatePot);
     }
 
 }

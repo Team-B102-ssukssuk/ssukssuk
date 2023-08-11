@@ -156,8 +156,8 @@ public class GardenController {
             @PathVariable Integer gardenId) {
         gardenService.deleteFromGarden(userId, gardenId);
 
-        if (badgeService.checkUserBadge(BadgeCode.쑥쑥을_위하여.getCode(), userId) == false) {
-            badgeService.saveUserBadge(BadgeCode.쑥쑥을_위하여.getCode(), userId);
+        if (badgeService.checkUserBadge(BadgeCode.바람과_함께_사라지다.getCode(), userId) == false) {
+            badgeService.saveUserBadge(BadgeCode.바람과_함께_사라지다.getCode(), userId);
         }
         return CommonResponseEntity.getResponseEntity(SuccessCode.SUCCESS_CODE);
     }
