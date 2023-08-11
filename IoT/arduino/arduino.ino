@@ -14,7 +14,6 @@ void setup(){
   Serial.begin(9600);
   pinMode(MOISTURE_PIN,INPUT);
   pinMode(TANK_PIN,INPUT);
-  pinMode(WATER_PIN,OUTPUT);
   analogWrite(WATER_PIN, 0);
   dht.begin();
 }
@@ -47,7 +46,8 @@ void loop(){
     Serial.print(" ");
     Serial.print(moisturePercentage);
     Serial.print(" ");
-    Serial.print(waterTank);
+    if(waterTank < 400) Serial.print(0); // 물이 없으면 0
+    else Serial.print(1); // 물이 있으면 1
     Serial.print(" ");
     if(sensorTimeCount >= 10) {
       Serial.print(1);
