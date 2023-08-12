@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum SuccessCode {
     /* 기본 */
-    OK(HttpStatus.OK, "ok"),
+    OK(HttpStatus.OK, "OK"),
 
 
     SUCCESS_FCM(HttpStatus.OK, "OK"),
