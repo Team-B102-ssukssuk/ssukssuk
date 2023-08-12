@@ -8,18 +8,19 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum ErrorCode {
     /* 예시 */
-    TEST_NOT_FOUND(HttpStatus.NOT_FOUND, "대충 꼴받는 메시지"),
+    TEST_NOT_FOUND(HttpStatus.NOT_FOUND, "전달할 메시지"),
 
     //user 관련 예외
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당하는 정보의 사용자를 찾을 수 없습니다."),
-    DUPLICATE_USER_ID(HttpStatus.CONFLICT, "중복된 아이디입니다."), // 409 : CONFLICT
     DUPLICATE_USER_EMAIL(HttpStatus.CONFLICT, "중복된 이메일입니다."), // 409 : CONFLICT
     DUPLICATE_USER_NICKNAME(HttpStatus.CONFLICT, "중복된 닉네임입니다."), // 409 : CONFLICT
     INVALID_AUTH_TOKEN(HttpStatus.UNAUTHORIZED, "권한 정보가 없는 토큰입니다."),
     EXPIRED_AUTH_TOKEN(HttpStatus.CONFLICT, "토큰이 만료되었습니다."),
+    INVALID_AUTH_CODE(HttpStatus.NOT_FOUND, "인증코드가 일치하지 않습니다."),
+    INVALID_PASSWORD(HttpStatus.NOT_FOUND, "비밀번호가 일치하지 않습니다."),
 
     //추가할 것들은 여기에 작성해주세요.
-    //화분
+    //화분,
     INVALID_SERIAL_NUMBER(HttpStatus.BAD_REQUEST, "유효하지 않은 시리얼 넘버입니다."),
     POT_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 화분이 유효하지 않습니다."),
     POT_NOT_MATCH_USER(HttpStatus.FORBIDDEN, "해당 화분을 소유하지 않습니다."),

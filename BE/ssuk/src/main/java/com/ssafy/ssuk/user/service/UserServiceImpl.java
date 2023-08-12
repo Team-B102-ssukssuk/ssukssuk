@@ -9,7 +9,6 @@ import com.ssafy.ssuk.user.repository.RoleRepository;
 import com.ssafy.ssuk.user.repository.UserRepository;
 import com.ssafy.ssuk.utils.auth.jwt.JwtTokenProvider;
 import com.ssafy.ssuk.utils.auth.jwt.TokenInfo;
-import com.ssafy.ssuk.utils.image.S3UploadService;
 import com.ssafy.ssuk.utils.redis.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,10 +20,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
@@ -119,9 +115,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void updatePassword(UpdatePasswordDto updatePasswordDto) {
-        String encodePassword = passwordEncoder.encode(updatePasswordDto.getPassword());
-        userRepository.updatePassword(updatePasswordDto.getEmail(), encodePassword);
+    public void updatePassword(String email, String password) {
+        String encodePassword = passwordEncoder.encode(password);
+        userRepository.updatePassword(email, encodePassword);
     }
 
     @Override
@@ -165,4 +161,9 @@ public class UserServiceImpl implements UserService {
         redisService.deleteRefreshToken(String.valueOf(userId));
     }
 
+    @Override
+    @Transactional
+    public void deleteUser(Integer userId) {
+        userRepository.updateValidation(userId);
+    }
 }
