@@ -1,5 +1,7 @@
 package com.ssafy.ssuk.utils.email;
 
+import com.ssafy.ssuk.exception.dto.CustomException;
+import com.ssafy.ssuk.exception.dto.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,16 +25,13 @@ public class EmailMessage {
     private String email;
 
     public String sendMail(String to) throws Exception{
-
-
         log.debug("email={}", email);
         MimeMessage mimeMessage = createMessage(to);
-        System.out.println(mimeMessage);
         try {
             javaMailSender.send(mimeMessage);
         } catch (MailException e) {
             e.printStackTrace();
-            throw new IllegalArgumentException();
+            throw new CustomException(ErrorCode.INPUT_EXCEPTION);
         }
         return randomCode;
     }

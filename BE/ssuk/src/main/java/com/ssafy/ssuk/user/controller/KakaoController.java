@@ -10,6 +10,7 @@ import com.ssafy.ssuk.user.service.UserService;
 import com.ssafy.ssuk.utils.auth.jwt.TokenInfo;
 import com.ssafy.ssuk.utils.auth.oauth.kakao.KakaoAuthService;
 import com.ssafy.ssuk.utils.auth.oauth.kakao.dto.KakaoProfile;
+import com.ssafy.ssuk.utils.auth.oauth.kakao.dto.KakaoProperties;
 import com.ssafy.ssuk.utils.response.CommonResponseEntity;
 import com.ssafy.ssuk.utils.response.SuccessCode;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ import java.util.Optional;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/kakao")
+@RequestMapping("/user/kakao")
 public class KakaoController {
 
     private final KakaoAuthService kakaoAuthService;
@@ -33,23 +34,24 @@ public class KakaoController {
     private final UserService userService;
 
     private final String REDIRECT_URL = "http://i9b102.p.ssafy.io:8080";
+
     @GetMapping("")
     public String kakao(@RequestParam String code) throws Exception {
         log.debug("tmpcode={}", code);
         return "redirect:" + REDIRECT_URL + "?code=" + code;
     }
 
-    @PostMapping("/code")
-    public ResponseEntity<CommonResponseEntity> kakaoLogin(@RequestBody @Validated KakaoCodeRequsetDto kakaoCodeRequsetDto){
+    @PostMapping("/login")
+    public ResponseEntity<CommonResponseEntity> kakaoLogin(@RequestBody @Validated KakaoCodeRequsetDto kakaoCodeRequsetDto) {
         String code = kakaoCodeRequsetDto.getCode();
         log.debug("code={}", code);
-        String kakaoAccessToken = kakaoAuthService.getAccessToken2(code).get("access_token");
+        String kakaoAccessToken = kakaoAuthService.getAccessToken(code).getAccessToken();
         log.debug(kakaoAccessToken);
         // 사용자 정보 가져오거나 회원가입
         KakaoProfile profile = kakaoAuthService.getUserInfo(kakaoAccessToken);
         log.debug("profile={}", profile);
         User user = userService.findByEmail(profile.getKakaoAccount().email + ".kakao")
-                .orElse(kakaoSignUp(profile));
+                .orElseGet(() -> kakaoSignUp(profile));
         log.debug("User={}", user);
         TokenInfo tokenInfo = kakaoAuthService.kakaoLogin(user.getEmail());
         log.debug("loginTokenInfo={}", tokenInfo);

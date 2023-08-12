@@ -1,6 +1,7 @@
 package com.ssafy.ssuk.utils.auth.jwt;
 
 import com.ssafy.ssuk.exception.dto.CustomJwtException;
+import com.ssafy.ssuk.exception.dto.ErrorCode;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -100,18 +101,13 @@ public class JwtTokenProvider {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            log.info("Invalid JWT Token", e);
-            throw new CustomJwtException("Invalid JWT Token");
+            throw new CustomJwtException(ErrorCode.INVALID_AUTH_TOKEN);
         } catch (ExpiredJwtException e) {
-            log.info("Expired JWT Token", e);
-            log.info("hello");
-            throw new CustomJwtException("Expired JWT Token");
+            throw new CustomJwtException(ErrorCode.EXPIRED_AUTH_TOKEN);
         } catch (UnsupportedJwtException e) {
-            log.info("Unsupported JWT Token", e);
-            throw new CustomJwtException("Unsupported JWT Token");
+            throw new CustomJwtException(ErrorCode.INVALID_AUTH_TOKEN);
         } catch (IllegalArgumentException e) {
-            log.info("JWT claims string is empty.", e);
-            throw new CustomJwtException("JWT claims string is empty.");
+            throw new CustomJwtException(ErrorCode.INVALID_AUTH_TOKEN);
         }
     }
 

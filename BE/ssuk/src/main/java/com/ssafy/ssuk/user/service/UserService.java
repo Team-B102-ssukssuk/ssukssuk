@@ -3,7 +3,6 @@ package com.ssafy.ssuk.user.service;
 import com.ssafy.ssuk.user.domain.User;
 import com.ssafy.ssuk.user.dto.request.*;
 import com.ssafy.ssuk.utils.auth.jwt.TokenInfo;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
@@ -27,7 +26,7 @@ public interface UserService {
     User findById(Integer userId);
 
     // 비밀번호 재설정
-    void updatePassword(UpdatePasswordDto updatePasswordDto);
+    void resetPassword(String email, String password);
 
     // 닉네임 재설정
     void updateNickname(Integer userId, String newNickname);
