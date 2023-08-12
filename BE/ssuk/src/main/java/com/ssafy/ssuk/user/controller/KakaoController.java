@@ -10,7 +10,6 @@ import com.ssafy.ssuk.user.service.UserService;
 import com.ssafy.ssuk.utils.auth.jwt.TokenInfo;
 import com.ssafy.ssuk.utils.auth.oauth.kakao.KakaoAuthService;
 import com.ssafy.ssuk.utils.auth.oauth.kakao.dto.KakaoProfile;
-import com.ssafy.ssuk.utils.auth.oauth.kakao.dto.KakaoProperties;
 import com.ssafy.ssuk.utils.response.CommonResponseEntity;
 import com.ssafy.ssuk.utils.response.SuccessCode;
 import lombok.RequiredArgsConstructor;
@@ -21,12 +20,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.Optional;
 
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/user/kakao")
+@RequestMapping("/auth/kakao")
 public class KakaoController {
 
     private final KakaoAuthService kakaoAuthService;
