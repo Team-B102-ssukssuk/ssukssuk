@@ -26,6 +26,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -48,8 +49,8 @@ public class UserController {
     private final BadgeService badgeService;
     private final CollectionService collectionService;
     private final RedisService redisService;
-    private final KakaoAuthService kakaoAuthService;
     private final S3UploadService s3UploadService;
+    private final PasswordEncoder passwordEncoder;
 
     // 회원가입시 이메일 인증코드 발송
     @PostMapping("/join/email")
@@ -115,7 +116,8 @@ public class UserController {
 
     // 로그인
     @PostMapping
-    public ResponseEntity<?> login(@RequestBody @Validated LoginRequestDto loginRequestDto, BindingResult bindingResult) throws Exception {
+    public ResponseEntity<?> login
+    (@RequestBody @Validated LoginRequestDto loginRequestDto, BindingResult bindingResult) throws Exception {
         if (bindingResult.hasErrors())
             throw new CustomException(ErrorCode.INPUT_EXCEPTION);
         TokenInfo tokenInfo = userService.login(loginRequestDto);
@@ -206,7 +208,7 @@ public class UserController {
     (@RequestBody @Validated ResetPasswordDto resetPasswordDto, BindingResult bindingResult) throws Exception {
         if (bindingResult.hasErrors())
             throw new CustomException(ErrorCode.INPUT_EXCEPTION);
-        userService.resetPassword(resetPasswordDto.getEmail(), resetPasswordDto.getPassword());
+        userService.updatePassword(resetPasswordDto.getEmail(), resetPasswordDto.getPassword());
         return CommonResponseEntity.getResponseEntity(SuccessCode.OK);
     }
 
@@ -221,13 +223,13 @@ public class UserController {
         return CommonResponseEntity.getResponseEntity(SuccessCode.OK);
     }
 
-    // 카카오로그인
-    // 카카오 인가코드 받아서 카카오서버 accesstoken 발급
-    // accesstoken으로 사용자 정보 확인 후 쑥쑥 로그인 accesstoken 발급
+//    // 카카오로그인
+//    // 카카오 인가코드 받아서 카카오서버 accesstoken 발급
+//    // accesstoken으로 사용자 정보 확인 후 쑥쑥 로그인 accesstoken 발급
 //    @GetMapping("/kakao/callback")
 //    public ResponseEntity<?> kakaoLogin(@RequestParam String code) throws Exception {
 //        log.debug("code={}", code);
-//        String kakaoAccessToken = kakaoAuthService.getAccessToken(code).getAccessToken();
+//        String kakaoAccessToken = kakaoAuthService.getAccessTo                       ken(code).getAccessToken();
 //        // 사용자 정보 가져오거나 회원가입
 //        User user = kakaoAuthService.saveOrGetUser(kakaoAccessToken);
 ////        redisService.
@@ -252,7 +254,6 @@ public class UserController {
         if (badgeService.checkUserBadge(BadgeCode.치즈.getCode(), userId) == false) {
             badgeService.saveUserBadge(BadgeCode.치즈.getCode(), userId);
         }
-
         return CommonResponseEntity.getResponseEntity(SuccessCode.OK, newImageName);
     }
 
@@ -268,6 +269,7 @@ public class UserController {
         return CommonResponseEntity.getResponseEntity(SuccessCode.OK, tokenInfo);
     }
 
+    // 로그아웃
     @GetMapping
     public ResponseEntity<?> logout(@RequestAttribute Integer userId) {
         User loginUser = userService.findById(userId);
@@ -290,5 +292,37 @@ public class UserController {
 //    public ResponseEntity<CommonResponseEntity> testLogout() {
 //        return CommonResponseEntity.getResponseEntity(SuccessCode.SUCCESS_CODE, "please!!");
 //    }
-    
+
+    // 비밀번호 확인
+    @GetMapping("/password")
+    public ResponseEntity<?> checkPassword(@RequestAttribute Integer userId, @RequestBody @Validated CheckPasswordDto checkPasswordDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors())
+            throw new CustomException(ErrorCode.INPUT_EXCEPTION);
+        // 현재 로그인한 유저 정보 찾아오기, 입력한 비밀번호 맞는지 확인
+        User loginUser = userService.findById(userId);
+//        String inputPassword = passwordEncoder.encode(checkPasswordDto.getPassword());
+        if (!passwordEncoder.matches(checkPasswordDto.getPassword(), loginUser.getPassword()))
+            throw new CustomException(ErrorCode.INVALID_PASSWORD);
+        return CommonResponseEntity.getResponseEntity(SuccessCode.OK);
+    }
+
+    // 비밀번호 변경
+    @PutMapping("/password/alter")
+    public ResponseEntity<?> updatePassword(@RequestAttribute Integer userId, @RequestBody @Validated UpdatePasswordDto updatePasswordDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors())
+            throw new CustomException(ErrorCode.INPUT_EXCEPTION);
+        User loginUser = userService.findById(userId);
+        userService.updatePassword(loginUser.getEmail(), updatePasswordDto.getPassword());
+        return CommonResponseEntity.getResponseEntity(SuccessCode.OK);
+    }
+
+    // 회원 탈퇴퇴
+    @PutMapping("/quit")
+    public ResponseEntity<?> deleteUser(@RequestAttribute Integer userId) {
+        User loginUser = userService.findById(userId);
+        userService.deleteUser(loginUser.getId());
+        return CommonResponseEntity.getResponseEntity(SuccessCode.OK);
+    }
+
+
 }

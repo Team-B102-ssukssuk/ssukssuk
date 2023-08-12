@@ -115,7 +115,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void resetPassword(String email, String password) {
+    public void updatePassword(String email, String password) {
         String encodePassword = passwordEncoder.encode(password);
         userRepository.updatePassword(email, encodePassword);
     }
@@ -161,4 +161,9 @@ public class UserServiceImpl implements UserService {
         redisService.deleteRefreshToken(String.valueOf(userId));
     }
 
+    @Override
+    @Transactional
+    public void deleteUser(Integer userId) {
+        userRepository.updateValidation(userId);
+    }
 }

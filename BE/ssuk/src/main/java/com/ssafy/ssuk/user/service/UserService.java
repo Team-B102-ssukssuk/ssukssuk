@@ -26,7 +26,7 @@ public interface UserService {
     User findById(Integer userId);
 
     // 비밀번호 재설정
-    void resetPassword(String email, String password);
+    void updatePassword(String email, String password);
 
     // 닉네임 재설정
     void updateNickname(Integer userId, String newNickname);
@@ -39,4 +39,6 @@ public interface UserService {
 
     // 로그아웃
     void logout(Integer userId);
+
+    void deleteUser(Integer userId);
 }

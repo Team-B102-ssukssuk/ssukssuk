@@ -17,6 +17,7 @@ public enum ErrorCode {
     INVALID_AUTH_TOKEN(HttpStatus.UNAUTHORIZED, "권한 정보가 없는 토큰입니다."),
     EXPIRED_AUTH_TOKEN(HttpStatus.CONFLICT, "토큰이 만료되었습니다."),
     INVALID_AUTH_CODE(HttpStatus.NOT_FOUND, "인증코드가 일치하지 않습니다."),
+    INVALID_PASSWORD(HttpStatus.NOT_FOUND, "비밀번호가 일치하지 않습니다."),
 
     //추가할 것들은 여기에 작성해주세요.
     //화분,

@@ -36,8 +36,8 @@ public class AuthenticationConfig {
                 .authorizeRequests()
                 // 권한이 필요한 규칙 먼저 작성
                 .antMatchers(HttpMethod.POST,"/user/token").authenticated() // accessToken 재발급 요청에 대해 인증 필요
-                .antMatchers(HttpMethod.GET,"/user").authenticated() // 로그아웃 요청에 대해 인증 필요
-                .antMatchers(HttpMethod.PUT,"/user/nickname", "/user/image", "/user/quit", "/user/password/alter").authenticated()
+                .antMatchers(HttpMethod.GET,"/user", "/user/password").authenticated() // 로그아웃 요청에 대해 인증 필요
+                .antMatchers(HttpMethod.PUT,"/user/nickname", "/user/image", "/user/quit", "/user/password/**").authenticated()
                 // 권한이 필요하지 않은 넓은 범위의 규칙
 //                .antMatchers("/").permitAll() // 모든 사용자 접근 허용
                 .antMatchers("/user/**").permitAll() // 모든 사용자 접근 허용
