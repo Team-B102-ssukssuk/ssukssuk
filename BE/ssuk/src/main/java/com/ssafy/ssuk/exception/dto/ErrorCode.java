@@ -18,6 +18,7 @@ public enum ErrorCode {
     EXPIRED_AUTH_TOKEN(HttpStatus.CONFLICT, "토큰이 만료되었습니다."),
     INVALID_AUTH_CODE(HttpStatus.NOT_FOUND, "인증코드가 일치하지 않습니다."),
     INVALID_PASSWORD(HttpStatus.NOT_FOUND, "비밀번호가 일치하지 않습니다."),
+    NOT_FOUND_AUTH_TOKEN(HttpStatus.BAD_REQUEST, "토큰 정보가 없습니다."),
 
     //추가할 것들은 여기에 작성해주세요.
     //화분,
@@ -28,6 +29,8 @@ public enum ErrorCode {
     //정원
     GARDEN_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 심은 식물이 유효하지 않습니다."),
     GARDEN_NOT_MATCH_USER(HttpStatus.FORBIDDEN, "해당 식물을 소유하지 않습니다."),
+    GARDEN_LEVEL_ERROR(HttpStatus.BAD_REQUEST, "현재 식물 단계에 유효하지 않은 요청입니다."),
+    GARDEN_ALREADY_UNUSED(HttpStatus.BAD_REQUEST, "이미 화분에서 삭제된 식물입니다."),
 
     //식물 정보
     CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 카테고리가 유효하지 않습니다."),

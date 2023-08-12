@@ -1,31 +1,39 @@
 package com.ssafy.ssuk.utils.auth.jwt;
 
+import com.ssafy.ssuk.exception.dto.CustomException;
+import com.ssafy.ssuk.exception.dto.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.filter.GenericFilterBean;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
-public class JwtAuthenticationFilter extends GenericFilterBean {
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final static String whiteList = "/auth";
 
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-
+    @Override
+    protected void doFilterInternal (HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        log.debug("uri={}", request.getRequestURI());
+        if (request.getRequestURI().startsWith(whiteList) || request.getRequestURI().equals("/")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
         // 1. 요청 헤더에서 JWT 토큰 추출
         log.debug("토큰 추출");
-        String accesstoken = resolveToken((HttpServletRequest) request);
+        String accesstoken = Optional.ofNullable(resolveToken((HttpServletRequest) request))
+                .orElseThrow(() -> new CustomException(ErrorCode.INPUT_EXCEPTION));
         log.debug("token={}",accesstoken);
 
         // 2. 토큰 유효성 검사
@@ -39,7 +47,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             log.debug("허가완료");
         }
-        chain.doFilter(request, response);
+        filterChain.doFilter(request, response);
     }
 
     // 헤더에서 토큰 추출

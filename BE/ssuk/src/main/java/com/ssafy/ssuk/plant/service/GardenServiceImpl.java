@@ -5,6 +5,7 @@ import com.ssafy.ssuk.exception.dto.ErrorCode;
 import com.ssafy.ssuk.plant.domain.Garden;
 import com.ssafy.ssuk.plant.domain.Plant;
 import com.ssafy.ssuk.plant.dto.request.GardenOrdersRequestDto;
+import com.ssafy.ssuk.plant.dto.request.GardenRecordRequestDto;
 import com.ssafy.ssuk.plant.repository.domain.GardenRepository;
 import com.ssafy.ssuk.pot.domain.Pot;
 import com.ssafy.ssuk.user.domain.User;
@@ -52,6 +53,9 @@ public class GardenServiceImpl implements GardenService {
         Garden garden = Optional.ofNullable(gardenRepository.findOneById(gardenId)).orElseThrow(() -> new CustomException(ErrorCode.GARDEN_NOT_FOUND));
         if (garden.getUser().getId() != userId) {
             throw new CustomException(ErrorCode.GARDEN_NOT_MATCH_USER);
+        }
+        if (!garden.getIsUse()) {
+            throw new CustomException(ErrorCode.GARDEN_ALREADY_UNUSED);
         }
         garden.unUsePot();
     }
@@ -122,6 +126,19 @@ public class GardenServiceImpl implements GardenService {
             return true;
         } else {
             return false;
+        }
+    }
+
+    @Override
+    @Transactional
+    public void modifyRecord(Integer userId, GardenRecordRequestDto gardenRecordRequestDto) {
+        Integer gardenId = gardenRecordRequestDto.getGardenId();
+        Garden garden = Optional
+                .ofNullable(gardenRepository.findOneByIdAndUserId(gardenId, userId)).orElseThrow(() -> new CustomException(ErrorCode.GARDEN_NOT_FOUND));
+        Integer level = gardenRecordRequestDto.getLevel();
+        String record = gardenRecordRequestDto.getRecord();
+        if (!garden.modifyRecord(level, record)) {
+            throw new CustomException(ErrorCode.GARDEN_LEVEL_ERROR);
         }
     }
 }

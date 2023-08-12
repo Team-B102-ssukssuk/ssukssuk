@@ -44,6 +44,8 @@ public class Garden {
     private String nickname;
     @Column(name = "IS_USE")
     private Boolean isUse;
+    @Column(name = "UNUSED_DATE")
+    private LocalDateTime unusedDate;
     @Column(name = "FIRST_DATE")
     private LocalDateTime firstDate;
     @Column(name = "SECOND_DATE")
@@ -54,7 +56,12 @@ public class Garden {
     private Boolean isDeleted;
     @Column(name = "ORDERS")
     private Integer orders;
-
+    @Column(name = "FIRST_RECORD")
+    private String firstRecord;
+    @Column(name = "SECOND_RECORD")
+    private String secondRecord;
+    @Column(name = "THIRD_RECORD")
+    private String thirdRecord;
 
     public Garden(User user, Plant plant, Pot pot, String nickname, Integer orders) {
         this.plant = plant;
@@ -67,6 +74,7 @@ public class Garden {
     // 비즈니스 로직
     public void unUsePot() {
         this.isUse = false;
+        this.unusedDate = LocalDateTime.now();
     }
 
     public void rename(String nickname) {
@@ -91,5 +99,19 @@ public class Garden {
 
     public void modifyOrders(Integer order) {
         this.orders = order;
+    }
+
+    public boolean modifyRecord(Integer level, String record) {
+        if (this.level < level) {
+            return false;
+        }
+        if (level == 1) {
+            this.firstRecord = firstRecord;
+        } else if (level == 2) {
+            this.secondRecord = secondRecord;
+        } else if (level == 3) {
+            this.thirdRecord = thirdRecord;
+        }
+        return true;
     }
 }

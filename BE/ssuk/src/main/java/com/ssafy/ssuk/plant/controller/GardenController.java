@@ -6,10 +6,7 @@ import com.ssafy.ssuk.exception.dto.CustomException;
 import com.ssafy.ssuk.exception.dto.ErrorCode;
 import com.ssafy.ssuk.plant.domain.Garden;
 import com.ssafy.ssuk.plant.domain.Plant;
-import com.ssafy.ssuk.plant.dto.request.GardenDeleteRequestDto;
-import com.ssafy.ssuk.plant.dto.request.GardenOrdersRequestDto;
-import com.ssafy.ssuk.plant.dto.request.GardenRegisterRequestDto;
-import com.ssafy.ssuk.plant.dto.request.GardenRenameRequestDto;
+import com.ssafy.ssuk.plant.dto.request.*;
 import com.ssafy.ssuk.plant.dto.response.GardenRegisterResponseDto;
 import com.ssafy.ssuk.plant.dto.response.GardenSearchOneResponseDto;
 import com.ssafy.ssuk.plant.dto.response.ResponseDto;
@@ -54,9 +51,7 @@ public class GardenController {
             @RequestBody @Validated GardenRegisterRequestDto gardenRegisterRequestDto,
             BindingResult bindingResult) {
 
-        if (bindingResult.hasErrors()) {
-            throw new CustomException(ErrorCode.INPUT_EXCEPTION);
-        }
+        checkValidated(bindingResult);
 
         // 식물 확인(존재하는지)
         Plant plant = plantService.findOneById(gardenRegisterRequestDto.getPlantId());
@@ -100,9 +95,7 @@ public class GardenController {
             @RequestBody @Validated GardenRenameRequestDto gardenRenameRequestDto,
             BindingResult bindingResult) {
 
-        if (bindingResult.hasErrors()) {
-            throw new CustomException(ErrorCode.INPUT_EXCEPTION);
-        }
+        checkValidated(bindingResult);
 
 
         // 유저 확인(이건 믿고 가야하는거 같음, 수정도 자주 일어나지 않으니 확인해도 괜찮으려나)
@@ -120,9 +113,7 @@ public class GardenController {
             @RequestBody @Validated GardenDeleteRequestDto gardenDeleteRequestDto,
             BindingResult bindingResult) {
 
-        if (bindingResult.hasErrors()) {
-            throw new CustomException(ErrorCode.INPUT_EXCEPTION);
-        }
+        checkValidated(bindingResult);
 
         // 유저 확인(이건 믿고 가야하는거 같음, 삭제는 더더욱 자주 일어나지 않으니 확인해도 괜찮으려나)
         // 정원 확인(service에서 진행)
@@ -165,9 +156,26 @@ public class GardenController {
     @PutMapping("/orders")
     public ResponseEntity<CommonResponseEntity> ordersSave(
             @RequestAttribute(required = true) Integer userId,
-            @RequestBody @Validated GardenOrdersRequestDto gardenOrdersRequestDto) {
+            @RequestBody @Validated GardenOrdersRequestDto gardenOrdersRequestDto,
+            BindingResult bindingResult) {
+        checkValidated(bindingResult);
         gardenService.modifyOrders(userId, gardenOrdersRequestDto.getGardenIdsOrderBy());
         return CommonResponseEntity.getResponseEntity(SuccessCode.SUCCESS_CODE);
     }
 
+    @PutMapping("/record")
+    public ResponseEntity<CommonResponseEntity> updateRecord(
+            @RequestAttribute(required = true) Integer userId,
+            @RequestBody @Validated GardenRecordRequestDto gardenRecordRequestDto,
+            BindingResult bindingResult) {
+        checkValidated(bindingResult);
+        gardenService.modifyRecord(userId, gardenRecordRequestDto);
+        return CommonResponseEntity.getResponseEntity(SuccessCode.SUCCESS_CODE);
+    }
+
+    private static void checkValidated(BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new CustomException(ErrorCode.INPUT_EXCEPTION);
+        }
+    }
 }

@@ -34,13 +34,9 @@ public class AuthenticationConfig {
                 .csrf().disable()
                 .cors().and()
                 .authorizeRequests()
-                // 권한이 필요한 규칙 먼저 작성
-                .antMatchers(HttpMethod.POST,"/user/token").authenticated() // accessToken 재발급 요청에 대해 인증 필요
-                .antMatchers(HttpMethod.GET,"/user", "/user/password").authenticated() // 로그아웃 요청에 대해 인증 필요
-                .antMatchers(HttpMethod.PUT,"/user/nickname", "/user/image", "/user/quit", "/user/password/**").authenticated()
                 // 권한이 필요하지 않은 넓은 범위의 규칙
-                .antMatchers("/").permitAll() // 모든 사용자 접근 허용
-                .antMatchers("/user/**").permitAll() // 모든 사용자 접근 허용
+                .antMatchers("/").permitAll() // 메인 페이지 접근 허용
+                .antMatchers("/auth/**").permitAll() // 회원가입 및 로그인에 대해 접근 허용
                 .antMatchers("/stomp/**").permitAll() // 모든 센서값 요청에 대해 접근 허용
                 .antMatchers("/sensor/upload").permitAll() // 라즈베리에서 날라오는 이미지 변경 요청
 //                .antMatchers("/kakao/**").permitAll()
