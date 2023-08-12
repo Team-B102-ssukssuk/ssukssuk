@@ -3,6 +3,7 @@ package com.ssafy.ssuk.plant.service;
 import com.ssafy.ssuk.plant.domain.Garden;
 import com.ssafy.ssuk.plant.domain.Plant;
 import com.ssafy.ssuk.plant.dto.request.GardenOrdersRequestDto;
+import com.ssafy.ssuk.plant.dto.request.GardenRecordRequestDto;
 import com.ssafy.ssuk.plant.dto.request.GardenRenameRequestDto;
 import com.ssafy.ssuk.plant.dto.response.GardenSearchOneResponseDto;
 import com.ssafy.ssuk.pot.domain.Pot;
@@ -33,4 +34,6 @@ public interface GardenService {
     void modifyOrders(Integer userId, List<Integer> gardenIdsOrderBy);
 
     boolean isDuplicateUsingByPotId(Integer potId);
+
+    void modifyRecord(Integer userId, GardenRecordRequestDto gardenRecordRequestDto);
 }

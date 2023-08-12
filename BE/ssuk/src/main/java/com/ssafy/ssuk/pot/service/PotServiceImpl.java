@@ -72,7 +72,7 @@ public class PotServiceImpl implements PotService {
         updatePot.setRegistedDate(null);
         updatePot.setIsRegisted(false);
         if (updatePot.getGarden().get(0) != null)
-            updatePot.getGarden().get(0).removeFromGarden();
+            updatePot.getGarden().get(0).unUsePot();
 
         potRepository.save(updatePot);
     }
