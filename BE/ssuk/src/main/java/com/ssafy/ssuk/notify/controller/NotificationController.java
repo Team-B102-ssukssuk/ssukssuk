@@ -91,10 +91,16 @@ public class NotificationController {
 
     //알림 삭제
     @PutMapping("/{notification_id}")
-    public ResponseEntity<?> updateNotification(@PathVariable Integer notification_id)
-    {
+    public ResponseEntity<?> updateNotification(@PathVariable Integer notification_id) {
         notificationService.updateNotification(notification_id);
         return CommonResponseEntity.getResponseEntity(SuccessCode.SUCCESS_FCM, null);
+    }
+
+    //알림 전체 삭제
+    @PutMapping("")
+    public ResponseEntity<?> updateAll(@RequestAttribute Integer userId) {
+        notificationService.updateAllNotification(userId);
+        return CommonResponseEntity.getResponseEntity(SuccessCode.SUCCESS_FCM);
     }
 
     @PostMapping("/send") // 테스트용

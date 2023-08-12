@@ -5,6 +5,7 @@ import com.ssafy.ssuk.notify.dto.response.NotificationResponseDto;
 import com.ssafy.ssuk.notify.repository.NotificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -34,6 +35,11 @@ public class NotificationServiceImpl implements NotificationService {
             noti.setCheck_date(LocalDateTime.now());
             notificationRepository.save(noti);
         });
-        //notificationRepository.updateNotification(notificationId);
+    }
+
+    @Override
+    @Transactional
+    public void updateAllNotification(Integer userId) {
+        notificationRepository.updateAllNotification(userId);
     }
 }

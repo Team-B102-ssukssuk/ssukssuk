@@ -12,4 +12,6 @@ public interface NotificationService {
     List<NotificationResponseDto> findNotification(Integer userId);
 
     void updateNotification(Integer notificationId);
+
+    void updateAllNotification(Integer userId);
 }
