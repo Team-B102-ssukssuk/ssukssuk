@@ -7,6 +7,7 @@ import com.ssafy.ssuk.measurement.dto.response.MeasurementResponseDto;
 import com.ssafy.ssuk.measurement.dto.socket.SensorMessageDto;
 import org.springframework.data.repository.query.Param;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface MeasurementService {
@@ -19,7 +20,7 @@ public interface MeasurementService {
 
     void checkMeasurement(SensorMessageDto sensorMessageDto);
 
-    Integer updateLevel(UploadRequestDto uploadRequestDto);
+    Integer updateLevel(UploadRequestDto uploadRequestDto) throws IOException;
 
     List<MeasurementResponseDto> selectValueByPot_id(Integer potId, SensorType sensorType);
 }
