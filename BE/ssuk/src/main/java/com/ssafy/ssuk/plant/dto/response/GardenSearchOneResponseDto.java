@@ -48,8 +48,8 @@ public class GardenSearchOneResponseDto {
         this.firstRecord = garden.getFirstRecord();
         this.secondRecord = garden.getSecondRecord();
         this.thirdRecord = garden.getThirdRecord();
-        this.firstImage = garden.getFirstImage();
-        this.secondImage = garden.getSecondImage();
-        this.thirdImage = garden.getThirdImage();
+        this.firstImage = "https://ssook.s3.ap-northeast-2.amazonaws.com/plant/" + garden.getFirstImage();
+        this.secondImage = "https://ssook.s3.ap-northeast-2.amazonaws.com/plant/" + garden.getSecondImage();
+        this.thirdImage = "https://ssook.s3.ap-northeast-2.amazonaws.com/plant/" + garden.getThirdImage();
     }
 }

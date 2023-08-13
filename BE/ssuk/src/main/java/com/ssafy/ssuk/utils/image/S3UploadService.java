@@ -31,6 +31,7 @@ public class S3UploadService {
     private final AmazonS3Client amazonS3Client;
 
     private final static String IMAGE_URL = "https://ssook.s3.ap-northeast-2.amazonaws.com/image/";
+    private final static String PLANT_IMAGE_URL = "https://ssook.s3.ap-northeast-2.amazonaws.com/plant/";
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -95,6 +96,9 @@ public class S3UploadService {
 
     public static String imageUrl(String fileName) {
         return IMAGE_URL + fileName;
+    }
+    public static String PlantimageUrl(String fileName) {
+        return PLANT_IMAGE_URL + fileName;
     }
 
     private static File extracted(String url) throws IOException {
