@@ -2,7 +2,10 @@ cloud:
   aws:
     s3:
       bucket: ENC(BDzBNnakZEMIW5Nb+DAdDw==)
-      dir: ENC(/+vLVoEX2tS+RTvaPvGtRQ==)
+      profileDir: ENC(/+vLVoEX2tS+RTvaPvGtRQ==)
+      plantDir: ENC(z0KTk9usZyF0ttnplhvqQg==)
+
+
     region:
       static: ap-northeast-2
     stack:

@@ -94,12 +94,16 @@ public class GardenRepositoryImpl implements GardenRepository {
     }
 
     @Override     //지민
-    public List<Garden> findGardenByPotId(Integer potId) {
-        return em.createQuery("select g from Garden g " +
+    public Garden findGardenByPotId(Integer potId) {
+        List<Garden> resultList = em.createQuery("select g from Garden g " +
                         " join fetch g.plant" +
 //                        " join fetch g.user" +
                         " where g.pot.id = :potId and g.isDeleted = false and g.isUse = true ", Garden.class)
                 .setParameter("potId", potId).getResultList();
+        if (resultList.isEmpty()) {
+            return null;
+        }
+        return resultList.get(0);
     }
 
     @Override

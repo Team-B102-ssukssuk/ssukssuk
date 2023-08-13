@@ -1,5 +1,7 @@
 package com.ssafy.ssuk.measurement.service;
 
+import com.ssafy.ssuk.exception.dto.CustomException;
+import com.ssafy.ssuk.exception.dto.ErrorCode;
 import com.ssafy.ssuk.measurement.domain.Measurement;
 import com.ssafy.ssuk.measurement.domain.SensorType;
 import com.ssafy.ssuk.measurement.dto.request.UploadRequestDto;
@@ -13,6 +15,7 @@ import com.ssafy.ssuk.notify.service.FcmService;
 import com.ssafy.ssuk.plant.domain.Garden;
 import com.ssafy.ssuk.plant.repository.domain.GardenRepository;
 import com.ssafy.ssuk.user.domain.User;
+import com.ssafy.ssuk.utils.image.ImageInfo;
 import com.ssafy.ssuk.utils.image.S3UploadService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -65,28 +69,29 @@ public class MeasurementServiceImpl implements MeasurementService {
     @Override
     @Transactional
     public void checkMeasurement(SensorMessageDto sensorMessageDto) {
-        List<Garden> gardens = gardenRepository.findGardenByPotId(sensorMessageDto.getPotId());
-        Integer userId = gardens.get(0).getUser().getId();
+        Garden garden = Optional.ofNullable(gardenRepository.findGardenByPotId(sensorMessageDto.getPotId()))
+                .orElseThrow(() -> new CustomException(ErrorCode.GARDEN_NOT_FOUND));
+        Integer userId = garden.getUser().getId();
 
         if (sensorMessageDto.getSensorType().equals(SensorType.M)) {
-            if (gardens.get(0).getPlant().getMoistureMin() > sensorMessageDto.getMeasurementValue()) {
+            if (garden.getPlant().getMoistureMin() > sensorMessageDto.getMeasurementValue()) {
 
-                String nickName = gardens.get(0).getNickname();
+                String nickName = garden.getNickname();
 
                 log.info("물이 없네요 선생님");
 
-                LocalDateTime lastTime = gardens.get(0).getPot().getMoistureLastDate();
+                LocalDateTime lastTime = garden.getPot().getMoistureLastDate();
                 //push 알림
                 if (lastTime.plusMinutes(30).isBefore(LocalDateTime.now())) {
                     log.info("물 부족 푸쉬 전송");
                     fcmService.sendPushTo(userId, "물 부족", nickName + "이(가) 물이 부족해요");
-                    gardens.get(0).getPot().updateMoistueLastDate(LocalDateTime.now());
+                    garden.getPot().updateMoistueLastDate(LocalDateTime.now());
 
 
                     //알림 테이블 저장
-                    Notification notification = Notification.builder().user(gardens.get(0).getUser())
-                            .garden(gardens.get(0))
-                            .pot(gardens.get(0).getPot())
+                    Notification notification = Notification.builder().user(garden.getUser())
+                            .garden(garden)
+                            .pot(garden.getPot())
                             .title("test")
                             .body("hi")
                             .notificationType(NotificationType.W).build();
@@ -99,16 +104,16 @@ public class MeasurementServiceImpl implements MeasurementService {
         if (sensorMessageDto.getSensorType().equals(SensorType.W) && sensorMessageDto.getMeasurementValue() == 0) {
             log.info("물탱크에 물이 부족합니다");
 
-            LocalDateTime lastTime = gardens.get(0).getPot().getTankLastDate();
+            LocalDateTime lastTime = garden.getPot().getTankLastDate();
             if (lastTime.plusMinutes(30).isBefore(LocalDateTime.now())) {
                 log.info("물탱크 푸쉬 전송");
                 fcmService.sendPushTo(userId, "물탱크 물 부족", "응애 물 채워줘");
-                gardens.get(0).getPot().updateTankLastDate(LocalDateTime.now());
+                garden.getPot().updateTankLastDate(LocalDateTime.now());
 
 
-                Notification notification = Notification.builder().user(gardens.get(0).getUser())
-                        .garden(gardens.get(0))
-                        .pot(gardens.get(0).getPot())
+                Notification notification = Notification.builder().user(garden.getUser())
+                        .garden(garden)
+                        .pot(garden.getPot())
                         .title("물 탱크 부족")
                         .body("응애 물 채워줘")
                         .notificationType(NotificationType.T).build();
@@ -123,14 +128,14 @@ public class MeasurementServiceImpl implements MeasurementService {
      */
     @Override
     @Transactional
-    public Integer updateLevel(UploadRequestDto uploadRequestDto) throws IOException {
-        Garden findGarden = gardenRepository.findGardenByPotId(uploadRequestDto.getPotId()).get(0);
+    public Integer updateLevel(UploadRequestDto uploadRequestDto) {
+        Garden findGarden = Optional.ofNullable(gardenRepository.findGardenByPotId(uploadRequestDto.getPotId()))
+                .orElseThrow(() -> new CustomException(ErrorCode.GARDEN_NOT_FOUND));
 
         log.info("레벨업 서비스");
-        if (findGarden.getLevel() < uploadRequestDto.getLevel()) { // 레벨업
+        if (findGarden.getLevel() < uploadRequestDto.getLevel() && uploadRequestDto.getLevel() <= 3) { // 레벨업
             //푸시알림
             fcmService.sendPushTo(findGarden.getUser().getId(), "레벨 업", findGarden.getNickname() + "이(가) 레벨업했어요 !");
-
 
             //알림 갱신
             Notification notification = Notification.builder()
@@ -145,17 +150,32 @@ public class MeasurementServiceImpl implements MeasurementService {
 
             //테이블 갱신
 
-            if (findGarden.getLevel() == 1) {
-                findGarden.updateLevel2(uploadRequestDto.getLevel());
-
+            log.debug("이미지를 추출할거야!!");
+            ImageInfo imageInfo = null;
+            try {
+                imageInfo = s3UploadService.uploadPlant(uploadRequestDto.getFile());
+                log.debug("imageInfo.getImageName()={}", imageInfo.getImageName());
+                findGarden.updateImage(uploadRequestDto.getLevel(), imageInfo.getImageName());
+            } catch (IOException e) {
+                log.debug("2 또는 3단계 사진 업로드 실패...");
             }
-            else if (findGarden.getLevel() == 2) {
-                findGarden.updateLevel3(uploadRequestDto.getLevel());
+            if (findGarden.getLevel() == 1) {
+                findGarden.updateLevel2();
+            } else if (findGarden.getLevel() == 2) {
+                findGarden.updateLevel3();
             }
 
             gardenRepository.save(findGarden); // 갱신
 
-
+            return findGarden.getUser().getId();
+        } else if(uploadRequestDto.getLevel() == 1 && findGarden.getFirstImage() == null) {
+            ImageInfo imageInfo = null;
+            try {
+                imageInfo = s3UploadService.uploadPlant(uploadRequestDto.getFile());
+                findGarden.updateImage(uploadRequestDto.getLevel(), imageInfo.getImageName());
+            } catch (IOException e) {
+                log.debug("1단계 사진 업로드 실패...");
+            }
             return findGarden.getUser().getId();
         }
         return null;

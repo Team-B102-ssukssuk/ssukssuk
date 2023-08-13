@@ -20,7 +20,7 @@ public interface MeasurementService {
 
     void checkMeasurement(SensorMessageDto sensorMessageDto);
 
-    Integer updateLevel(UploadRequestDto uploadRequestDto) throws IOException;
+    Integer updateLevel(UploadRequestDto uploadRequestDto);
 
     List<MeasurementResponseDto> selectValueByPot_id(Integer potId, SensorType sensorType);
 }

@@ -90,7 +90,7 @@ public class UserController {
         String originImageName = userService.findById(userId).getProfileImage();
         log.debug("originImage={}", originImageName);
         log.debug("multipart={}", multipartFile);
-        String newImageName = s3UploadService.modifyFile(originImageName, multipartFile).getImageName();
+        String newImageName = s3UploadService.modifyProfileImage(originImageName, multipartFile).getImageName();
         log.debug("newImage={}", newImageName);
         userService.updateProfileImage(userId, newImageName);
 

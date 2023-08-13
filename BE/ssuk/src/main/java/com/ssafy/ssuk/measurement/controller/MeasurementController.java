@@ -22,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -66,7 +67,8 @@ public class MeasurementController {
 
     //나중에 시큐리티 필터 빼달라고 하기
     @PostMapping("/upload")
-    ResponseEntity<?> updateLevel(@RequestBody @Validated UploadRequestDto uploadRequestDto, BindingResult bindingResult) {
+    ResponseEntity<?> updateLevel(@RequestBody @Validated UploadRequestDto uploadRequestDto,
+                                  BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new CustomException(ErrorCode.INPUT_EXCEPTION);
         }
