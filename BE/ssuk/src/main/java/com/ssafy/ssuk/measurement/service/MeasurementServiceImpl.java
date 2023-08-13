@@ -3,6 +3,7 @@ package com.ssafy.ssuk.measurement.service;
 import com.ssafy.ssuk.measurement.domain.Measurement;
 import com.ssafy.ssuk.measurement.domain.SensorType;
 import com.ssafy.ssuk.measurement.dto.request.UploadRequestDto;
+import com.ssafy.ssuk.measurement.dto.response.MeasurementResponseDto;
 import com.ssafy.ssuk.measurement.dto.socket.SensorMessageDto;
 import com.ssafy.ssuk.measurement.repository.MeasurementRepository;
 import com.ssafy.ssuk.notify.domain.Notification;
@@ -156,5 +157,12 @@ public class MeasurementServiceImpl implements MeasurementService {
 
         }
         return null;
+    }
+
+    //온도 그래프
+    @Override
+    public List<MeasurementResponseDto> selectValueByPot_id(Integer potId, SensorType sensorType) {
+        List<MeasurementResponseDto> result = measurementRepository.selectValueByPot_id(potId, sensorType);
+        return result;
     }
 }
