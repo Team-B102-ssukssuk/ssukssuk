@@ -13,11 +13,13 @@ import com.ssafy.ssuk.notify.service.FcmService;
 import com.ssafy.ssuk.plant.domain.Garden;
 import com.ssafy.ssuk.plant.repository.domain.GardenRepository;
 import com.ssafy.ssuk.user.domain.User;
+import com.ssafy.ssuk.utils.image.S3UploadService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,13 +30,14 @@ public class MeasurementServiceImpl implements MeasurementService {
     private final GardenRepository gardenRepository;
     private final FcmService fcmService;
     private final NotificationRepository notificationRepository;
+    private final S3UploadService s3UploadService;
 
-    @Autowired
-    public MeasurementServiceImpl(MeasurementRepository measurementRepository, GardenRepository gardenRepository, FcmService fcmService, NotificationRepository notificationRepository) {
+    public MeasurementServiceImpl(MeasurementRepository measurementRepository, GardenRepository gardenRepository, FcmService fcmService, NotificationRepository notificationRepository, S3UploadService s3UploadService) {
         this.measurementRepository = measurementRepository;
         this.gardenRepository = gardenRepository;
         this.fcmService = fcmService;
         this.notificationRepository = notificationRepository;
+        this.s3UploadService = s3UploadService;
     }
 
     @Override
@@ -120,7 +123,7 @@ public class MeasurementServiceImpl implements MeasurementService {
      */
     @Override
     @Transactional
-    public Integer updateLevel(UploadRequestDto uploadRequestDto) {
+    public Integer updateLevel(UploadRequestDto uploadRequestDto) throws IOException {
         Garden findGarden = gardenRepository.findGardenByPotId(uploadRequestDto.getPotId()).get(0);
 
         log.info("레벨업 서비스");
@@ -142,19 +145,18 @@ public class MeasurementServiceImpl implements MeasurementService {
 
             //테이블 갱신
 
-            if (findGarden.getLevel() == 1)
+            if (findGarden.getLevel() == 1) {
                 findGarden.updateLevel2(uploadRequestDto.getLevel());
-            else if (findGarden.getLevel() == 2)
+
+            }
+            else if (findGarden.getLevel() == 2) {
                 findGarden.updateLevel3(uploadRequestDto.getLevel());
+            }
 
             gardenRepository.save(findGarden); // 갱신
 
 
-            //식물 사진 테이블 insert
             return findGarden.getUser().getId();
-        } else {
-            //식물 사진 테이블 insert
-
         }
         return null;
     }
