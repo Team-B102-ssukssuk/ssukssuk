@@ -23,6 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 @Transactional(readOnly = true) // 읽기 전용
@@ -93,8 +95,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> findByEmail(String email) {
+        if (!isValidEmail(email))
+            throw new CustomException(ErrorCode.INVALID_EMAIL);
         Optional<User> findUser = userRepository.findByEmail(email);
         return findUser;
+    }
+
+    private boolean isValidEmail(String email) {
+        String regex = "[0-9a-zA-Z]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 
     @Override
@@ -166,4 +177,6 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(Integer userId) {
         userRepository.updateValidation(userId);
     }
+
+
 }
