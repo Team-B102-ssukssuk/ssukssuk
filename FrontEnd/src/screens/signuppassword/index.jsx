@@ -15,16 +15,21 @@ const SignUpPasswordScreen = ({ route, navigation }) => {
   const [password, setPassword] = useState("");
   // const [nickname] = useState("");
   const [PasswordRe, setPasswordRe] = useState("");
-  const [errorOpacity, setErrorOpacity] = useState(0);
+  const [errorOpacity, setErrorOpacity] = useState(100);
+  const [verifyError, setVerifyError] = useState(
+    "최소 8글자 대소문자, 특수문자, 숫자 포함"
+  );
   const [nextButtonColor, setNextButtonColor] = useState("#CACACA");
+  const [isPasswordValid, setIsPasswordValid] = useState(false);
 
   const { SignUpData } = route.params;
   // const { email } = SignUpData;
-
   // 세팅된 비밀번호 값이 동일하면 서버로 데이터 보내주기
 
   const checkPassword = () => {
-    if (password === PasswordRe && password !== "") {
+    if (password === PasswordRe && password !== "" && isPasswordValid) {
+      setErrorOpacity(0);
+      setNextButtonColor("#2DD0AF");
       const updatedSignUpData = {
         ...SignUpData,
         password: password,
@@ -33,19 +38,67 @@ const SignUpPasswordScreen = ({ route, navigation }) => {
         SignUpData: updatedSignUpData,
       });
       console.log(SignUpData);
+    } else if (password === PasswordRe && password !== "" && !isPasswordValid) {
+      setErrorOpacity(100);
+      setNextButtonColor("#CACACA");
+      setVerifyError("최소 8글자 대소문자, 특수문자, 숫자 포함");
+    } else if (password !== PasswordRe && password !== "" && isPasswordValid) {
+      setErrorOpacity(100);
+      setNextButtonColor("#CACACA");
+      setVerifyError("비밀번호가 일치하지 않습니다.");
     } else {
       setErrorOpacity(100);
+      setNextButtonColor("#CACACA");
       console.log(SignUpData);
+    }
+  };
+
+  const validatePasswordComplexity = () => {
+    const minLength = 8;
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password); // 추가된 부분
+
+    const isComplexEnough =
+      password.length >= minLength &&
+      hasUpperCase &&
+      hasLowerCase &&
+      hasNumber &&
+      hasSpecial; // 모든 조건을 충족해야 true가 됩니다
+
+    setIsPasswordValid(isComplexEnough);
+
+    if (isComplexEnough) {
+      setErrorOpacity(0);
+      setVerifyError("");
+      setIsPasswordValid(true);
+    } else {
+      setErrorOpacity(100);
+      setIsPasswordValid(false);
     }
   };
 
   useEffect(() => {
     if (password === "" && PasswordRe === "") {
       setNextButtonColor("#CACACA");
+      setErrorOpacity(100);
+      setVerifyError("최소 8글자 대소문자, 특수문자, 숫자 포함");
+    } else if (password === PasswordRe && password !== "" && isPasswordValid) {
+      setNextButtonColor("#CACACA");
+      setErrorOpacity(100);
+      setVerifyError("비밀번호가 일치하지 않습니다.");
+    } else if (password === PasswordRe && password !== "" && !isPasswordValid) {
+      setErrorOpacity(100);
+      setNextButtonColor("#CACACA");
+      setVerifyError("최소 8글자 대소문자, 특수문자, 숫자 포함");
     } else {
-      setNextButtonColor("#2DD0AF");
+      setNextButtonColor("#CACACA");
+      setErrorOpacity(100);
+      setVerifyError("비밀번호가 일치하지 않습니다.");
     }
-  }, [password, PasswordRe]);
+    validatePasswordComplexity();
+  }, [password, PasswordRe, isPasswordValid]);
 
   return (
     <ImageBackground
@@ -85,7 +138,7 @@ const SignUpPasswordScreen = ({ route, navigation }) => {
           secureTextEntry={true}
         ></TextInput>
         <Text style={[styles.verifyErrorMessage, { opacity: errorOpacity }]}>
-          비밀번호가 일치하지 않습니다.
+          {verifyError}
         </Text>
         <TouchableOpacity
           style={[styles.emailNextButton, { backgroundColor: nextButtonColor }]}

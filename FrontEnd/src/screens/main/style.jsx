@@ -94,10 +94,26 @@ const styles = StyleSheet.create({
     width: 93,
     height: 84,
   },
+  Heart: {
+    position: "absolute",
+    top: -15,
+  },
   characterName: {
     position: "absolute",
     color: COLORS.lightYellow,
     fontSize: 20,
+  },
+  notificationCircle: {
+    width: 16,
+    height: 16,
+    backgroundColor: COLORS.Coral,
+    borderRadius: 8,
+    position: "absolute",
+    top: -4,
+    right: -4,
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 1,
   },
 });
 

@@ -17,6 +17,7 @@ import styles from "./style";
 import CookieRunRegular from "../../components/common/CookieRunRegular";
 import LoadingScreen from "../loading";
 import * as ImagePicker from "expo-image-picker";
+import { Alert, Linking } from "react-native";
 
 const ProfileScreen = ({ navigation }) => {
   const [isEditModalVisible, setEditModalVisible] = useState(false);
@@ -40,7 +41,7 @@ const ProfileScreen = ({ navigation }) => {
 
   const getUserData = () => {
     customAxios.get("/user/info").then((res) => {
-      // console.log(res.data.data);
+      console.log(res.data.data);
       setUserData(res.data.data);
       setTimeout(() => {
         setIsLoading(false);
@@ -54,8 +55,23 @@ const ProfileScreen = ({ navigation }) => {
 
   const handleImageUpload = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== "granted") {
-      console.error("Permission denied to access media library");
+
+    if (status === "denied") {
+      const shouldOpenSettings = await Alert.alert(
+        "권한이 거부되었습니다",
+        "갤러리 접근 권한을 허용하려면 설정으로 이동하시겠습니까?",
+        [
+          { text: "취소", style: "cancel" },
+          { text: "설정 열기", onPress: () => Linking.openSettings() },
+        ]
+      );
+
+      if (!shouldOpenSettings) {
+        console.log("Permission denied to access media library");
+        return;
+      }
+    } else if (status !== "granted") {
+      console.log("Permission denied to access media library");
       return;
     }
 
@@ -247,7 +263,7 @@ const ProfileScreen = ({ navigation }) => {
             </TouchableOpacity>
           </View>
           <View style={styles.profileContent}>
-            <CookieRunBold style={styles.myPageTitle}>마이페이지</CookieRunBold>
+            <CookieRunBold style={styles.myPageTitle}>프로필</CookieRunBold>
             <View style={{ flexDirection: "row", marginTop: 15 }}>
               <TouchableOpacity onPress={handleImageUpload}>
                 <Image
@@ -317,13 +333,13 @@ const ProfileScreen = ({ navigation }) => {
           {rows.map((row, rowIndex) => (
             <View key={rowIndex} style={styles.badgeContent}>
               {/* Map through the badges in each row */}
-              {row.map((badge, colIndex) => {
+              {row.map((badge) => {
                 const badgeImageName = badge.isDone
                   ? `ActiveBadge${badge.badgeId}`
                   : "Badge";
                 return (
                   <TouchableOpacity
-                    key={colIndex}
+                    key={badge.badgeId}
                     onPress={() => handleBadgeClick(badge, badge.badgeId)}
                   >
                     <Image

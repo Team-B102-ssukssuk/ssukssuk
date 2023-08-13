@@ -28,6 +28,16 @@ const ModalMap = ({ isVisible, onClose, navigation }) => {
     return () => clearTimeout(delayNavigation);
   };
 
+  const goMain = () => {
+    onClose(false);
+
+    const delayNavigation = setTimeout(() => {
+      navigation.navigate("Main");
+    }, 300);
+
+    return () => clearTimeout(delayNavigation);
+  };
+
   const goGarden = () => {
     onClose(false);
 
@@ -77,7 +87,7 @@ const ModalMap = ({ isVisible, onClose, navigation }) => {
             source={require("../../assets/img/mapBoard.png")}
             style={styles.mapBoardSize}
           ></Image>
-          <TouchableOpacity style={styles.mapMainLocation} onPress={onClose}>
+          <TouchableOpacity style={styles.mapMainLocation} onPress={goMain}>
             <Image
               resizeMode="contain"
               source={require("../../assets/img/mapMain.png")}

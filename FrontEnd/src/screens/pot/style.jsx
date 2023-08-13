@@ -151,9 +151,16 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginVertical: 40,
   },
+  mapSize: {
+    width: 50,
+    height: 50,
+    marginHorizontal: 30,
+    marginVertical: 40,
+  },
   trashCanMargin: {
+    flexDirection: "row",
     alignItems: "flex-end",
-    justifyContent: "flex-end",
+    justifyContent: "space-between",
   },
   alignCenterContainer: {
     alignItems: "center",
@@ -161,6 +168,9 @@ const styles = StyleSheet.create({
   gardenCharacter: {
     alignItems: "center",
     justifyContent: "center",
+  },
+  trashCanClicked: {
+    opacity: 0.5, // Change the opacity when the trashcan is clicked
   },
 });
 

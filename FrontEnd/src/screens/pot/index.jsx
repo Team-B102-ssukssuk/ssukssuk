@@ -18,6 +18,8 @@ import LoadingScreen from "../loading";
 import * as Notifications from "expo-notifications";
 import { useIsFocused } from "@react-navigation/native";
 import plantImages from "../../assets/img/plantImages";
+import ModalMap from "../../components/modalmap";
+import { BarCodeScanner } from "expo-barcode-scanner";
 
 const PotScreen = (props) => {
   const isFocused = useIsFocused();
@@ -35,6 +37,15 @@ const PotScreen = (props) => {
   const [toastContent, setToastContent] = useState("");
   const [toastIconName, setToastIconName] = useState("");
   const [isTrashcanVisible, setTrashcanVisible] = useState("true");
+  const [isOpenMapModalVisible, setIsOpenMapModalVisible] = useState(false);
+  const [cameraPermission, setCameraPermission] = useState(false); // Default to false
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await BarCodeScanner.requestPermissionsAsync();
+      setCameraPermission(status === "granted");
+    })();
+  }, []);
 
   const getPlantImageSource = (plantId, level) => {
     const imageName = `${plantId}_${level}.gif`;
@@ -80,7 +91,9 @@ const PotScreen = (props) => {
     customAxios
       .get("/pot")
       .then((res) => {
-        console.log("화분" + res.data);
+        props.storePotID(res.data[0].potId);
+        props.setGardenID(res.data[0].gardenId);
+
         setPotData(res.data);
         setTimeout(() => {
           setIsLoading(false);
@@ -134,8 +147,12 @@ const PotScreen = (props) => {
   };
 
   const toggleQRCodeScanner = () => {
-    showTrashcan();
-    setQRcodeVisible(!isQRcodeVisible);
+    if (cameraPermission === true) {
+      showTrashcan();
+      setQRcodeVisible(!isQRcodeVisible);
+    } else {
+      setRegistModalVisible(true);
+    }
   };
 
   const showTrashcan = () => {
@@ -266,24 +283,28 @@ const PotScreen = (props) => {
           opacity: 0.5, // Set opacity to make it transparent
         };
         pots.push(
-          <View key={`empty_pot_${endIndex}`} style={transparentPotStyle}>
-            <TouchableOpacity
-              style={styles.gardenCharacter}
-              onPress={toggleQRCodeScanner}
-            >
-              <Image
-                source={require("../../assets/img/pot.png")}
-                resizeMode="contain"
-                style={styles.potResize}
-              />
-              <Icon
-                name="pluscircle"
-                size={28}
-                color="#000"
-                style={{ position: "absolute" }}
-              />
-            </TouchableOpacity>
-          </View>
+          <>
+            {!isDeleteIconVisible ? (
+              <View key={`empty_pot_${endIndex}`} style={transparentPotStyle}>
+                <TouchableOpacity
+                  style={styles.gardenCharacter}
+                  onPress={toggleQRCodeScanner}
+                >
+                  <Image
+                    source={require("../../assets/img/pot.png")}
+                    resizeMode="contain"
+                    style={styles.potResize}
+                  />
+                  <Icon
+                    name="pluscircle"
+                    size={28}
+                    color="#000"
+                    style={{ position: "absolute" }}
+                  />
+                </TouchableOpacity>
+              </View>
+            ) : null}
+          </>
         );
       }
     }
@@ -330,9 +351,9 @@ const PotScreen = (props) => {
       })
       .catch((err) => {
         if (err.response.status === 409) {
-          setRegistMessage("중복된 시리얼 넘버");
+          setRegistMessage("이미 등록된 화분입니다...");
         } else if (err.response.status === 400) {
-          setRegistMessage("유효하지 않는 시리얼 넘버");
+          setRegistMessage("올바른 ID가 아니예요 다시 입력해주세요!");
         }
       });
   };
@@ -386,10 +407,19 @@ const PotScreen = (props) => {
         </ScrollView>
         {isTrashcanVisible && (
           <View style={styles.trashCanMargin}>
+            <TouchableOpacity onPress={() => setIsOpenMapModalVisible(true)}>
+              <Image
+                source={require("../../assets/img/map.png")}
+                style={[styles.mapSize]}
+              />
+            </TouchableOpacity>
             <TouchableOpacity onPress={visibleIcon}>
               <Image
                 source={require("../../assets/img/trashCan.png")}
-                style={styles.trashCan}
+                style={[
+                  styles.trashCan,
+                  !isDeleteIconVisible ? styles.trashCanClicked : null,
+                ]}
               />
             </TouchableOpacity>
           </View>
@@ -427,6 +457,11 @@ const PotScreen = (props) => {
           iconName={toastIconName}
         />
       )}
+      <ModalMap
+        isVisible={isOpenMapModalVisible}
+        onClose={() => setIsOpenMapModalVisible(false)}
+        navigation={navigation}
+      />
     </View>
   );
 };
