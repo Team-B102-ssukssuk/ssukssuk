@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Getter
@@ -15,6 +16,6 @@ public class UploadRequestDto {
     private Integer potId;
     @NotNull
     private Integer level;
-    @NotNull
-    private MultipartFile file;
+    @NotBlank
+    private String file;
 }

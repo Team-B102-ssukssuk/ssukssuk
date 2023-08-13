@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Base64;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -34,8 +35,11 @@ public class S3UploadService {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    @Value("${cloud.aws.s3.dir}")
-    private String dir;
+    @Value("${cloud.aws.s3.profileDir}")
+    private String profileDir;
+
+    @Value("${cloud.aws.s3.plantDir}")
+    private String plantDir;
 
     /**
      * 사진 처음 업로드할 때 사용하시면 됩니다.
@@ -43,17 +47,24 @@ public class S3UploadService {
      *          imageUrl에는 url이 있습니다.
      * @param multipartFile : 이미지 파일
      */
-    public ImageInfo upload(MultipartFile multipartFile) throws IOException {
+    public ImageInfo uploadProfile(MultipartFile multipartFile) throws IOException {
         File uploadFile = convert(multipartFile)
                 .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File로 전환이 실패했습니다."));
 
-        return upload(uploadFile);
+        return upload(profileDir, uploadFile);
     }
 
-    public void uploadForce(MultipartFile multipartFile) throws IOException {
+    public ImageInfo uploadForce(MultipartFile multipartFile) throws IOException {
         File uploadFile = convert(multipartFile)
                 .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File로 전환이 실패했습니다."));
-        uploadOne(uploadFile);
+        return uploadOne(uploadFile);
+    }
+
+    public ImageInfo uploadPlant(String bytesStr) throws IOException {
+        File uploadFile = convert(bytesStr)
+                .orElseThrow(() -> new IllegalArgumentException("String -> File로 전환이 실패했습니다."));
+        log.debug("이미지를 추출했어!!");
+        return upload(plantDir, uploadFile);
     }
 
     /**
@@ -63,10 +74,10 @@ public class S3UploadService {
      * @param originName    : db에 저장되어 있는 원래 사진 이름
      * @param multipartFile : 변경할 사진
      */
-    public ImageInfo modifyFile(String originName, MultipartFile multipartFile) throws IOException{
-        ImageInfo upload = upload(multipartFile);
+    public ImageInfo modifyProfileImage(String originName, MultipartFile multipartFile) throws IOException{
+        ImageInfo upload = uploadProfile(multipartFile);
         if (!originName.equals("default")) {
-            removeOriginFile(originName);
+            removeOriginFile(profileDir, originName);
         }
         return upload;
     }
@@ -77,9 +88,9 @@ public class S3UploadService {
      * 프론트에는 imageUrl을 보내주면 될것 같습니다
      * @param url 카카오 url 넣으시면 됩니다!!
      */
-    public ImageInfo upload(String url) throws IOException {
+    public ImageInfo uploadProfile(String url) throws IOException {
         File tempFile = extracted(url);
-        return upload(tempFile);
+        return upload(profileDir, tempFile);
     }
 
     public static String imageUrl(String fileName) {
@@ -101,14 +112,15 @@ public class S3UploadService {
         return tempFile;
     }
 
-    private void uploadOne(File uploadFile) {
+    private ImageInfo uploadOne(File uploadFile) {
         String fileName = uploadFile.getName();
         String uploadImageUrl = putS3(uploadFile, fileName);
         log.debug("uploadImageUrl={}", uploadImageUrl);
         removeNewFile(uploadFile);  // 로컬에 생성된 파일 삭제
+        return new ImageInfo(fileName, uploadImageUrl);
     }
 
-    private ImageInfo upload(File uploadFile) {
+    private ImageInfo upload(String dir, File uploadFile) {
         String fileName = UUID.randomUUID() + "";
         String uploadImageUrl = putS3(uploadFile, dir + fileName);
         log.debug("uploadImageUrl={}", uploadImageUrl);
@@ -144,7 +156,20 @@ public class S3UploadService {
         return Optional.empty();
     }
 
-    private void removeOriginFile(String originName) {
+    private Optional<File> convert(String bytesStr) throws IOException {
+        File tempFile = new File("plant.jpg");
+        if(tempFile.createNewFile()) {
+            try (FileOutputStream fileOutputStream = new FileOutputStream(tempFile)) {
+                byte[] dataBuffer = Base64.getDecoder().decode(bytesStr);
+                fileOutputStream.write(dataBuffer);
+                log.debug("dataBuffer.length={}", dataBuffer.length);
+            }
+            return Optional.of(tempFile);
+        }
+        return Optional.empty();
+    }
+
+    private void removeOriginFile(String dir, String originName) {
         try {
             amazonS3Client.deleteObject(bucket, dir + originName);
         } catch (SdkClientException e) {

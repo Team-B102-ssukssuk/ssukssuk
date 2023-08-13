@@ -158,7 +158,7 @@ public class KakaoAuthService {
         // 3. 프로필 사진만 동의
         else if (profile.kakaoAccount.profile.nickname == null) {
             nickname = "쑥쑥";
-            profileImage = s3UploadService.upload(profile.getKakaoAccount().getProfile().getProfileImageUrl()).getImageName();
+            profileImage = s3UploadService.uploadProfile(profile.getKakaoAccount().getProfile().getProfileImageUrl()).getImageName();
         }
         // 4. 전체 동의
         else {
@@ -167,7 +167,7 @@ public class KakaoAuthService {
             if (profileImage.equals("http://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_640x640.jpg")) {
                 profileImage = "default";
             } else {
-                profileImage = s3UploadService.upload(profileImage).getImageName();
+                profileImage = s3UploadService.uploadProfile(profileImage).getImageName();
             }
         }
 
@@ -206,7 +206,7 @@ public class KakaoAuthService {
         // 3. 프로필 사진만 동의
         else if (profile.kakaoAccount.profile.nickname == null) {
             nickname = "쑥쑥";
-            profileImage = s3UploadService.upload(profile.getKakaoAccount().getProfile().getProfileImageUrl()).getImageName();
+            profileImage = s3UploadService.uploadProfile(profile.getKakaoAccount().getProfile().getProfileImageUrl()).getImageName();
         }
         // 4. 전체 동의
         else {
@@ -215,7 +215,7 @@ public class KakaoAuthService {
             if (profileImage.equals("http://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_640x640.jpg")) {
                 profileImage = "default";
             } else {
-                profileImage = s3UploadService.upload(profileImage).getImageName();
+                profileImage = s3UploadService.uploadProfile(profileImage).getImageName();
             }
         }
 

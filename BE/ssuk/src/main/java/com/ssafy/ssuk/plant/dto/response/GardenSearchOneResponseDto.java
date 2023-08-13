@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import java.time.LocalDateTime;
 
 @Data
@@ -26,7 +27,9 @@ public class GardenSearchOneResponseDto {
     private String firstRecord;
     private String secondRecord;
     private String thirdRecord;
-//    private Str
+    private String firstImage;
+    private String secondImage;
+    private String thirdImage;
 
     public GardenSearchOneResponseDto(Garden garden) {
         this.gardenId = garden.getId();
@@ -45,5 +48,8 @@ public class GardenSearchOneResponseDto {
         this.firstRecord = garden.getFirstRecord();
         this.secondRecord = garden.getSecondRecord();
         this.thirdRecord = garden.getThirdRecord();
+        this.firstImage = garden.getFirstImage();
+        this.secondImage = garden.getSecondImage();
+        this.thirdImage = garden.getThirdImage();
     }
 }

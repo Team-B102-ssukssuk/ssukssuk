@@ -62,6 +62,12 @@ public class Garden {
     private String secondRecord;
     @Column(name = "THIRD_RECORD")
     private String thirdRecord;
+    @Column(name = "FIRST_IMAGE")
+    private String firstImage;
+    @Column(name = "SECOND_IMAGE")
+    private String secondImage;
+    @Column(name = "THIRD_IMAGE")
+    private String thirdImage;
 
     public Garden(User user, Plant plant, Pot pot, String nickname, Integer orders) {
         this.plant = plant;
@@ -87,13 +93,13 @@ public class Garden {
         this.orders = 0;
     }
 
-    public void updateLevel2(Integer level) {
-        this.level = level;
+    public void updateLevel2() {
+        this.level = 2;
         this.secondDate = LocalDateTime.now();
     }
 
-    public void updateLevel3(Integer level) {
-        this.level = level;
+    public void updateLevel3() {
+        this.level = 3;
         this.thirdDate = LocalDateTime.now();
     }
 
@@ -113,5 +119,15 @@ public class Garden {
             this.thirdRecord = thirdRecord;
         }
         return true;
+    }
+
+    public void updateImage(Integer level, String image) {
+        if (level == 1) {
+            this.firstImage = image;
+        } else if (level == 2) {
+            this.secondImage = image;
+        } else if (level == 3) {
+            this.thirdImage = image;
+        }
     }
 }
