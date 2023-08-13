@@ -21,7 +21,6 @@ public interface PotRepository extends JpaRepository<Pot, Integer> {
     Pot selectPotBySerialNumAndUserId(@Param("pot_id") Integer potId, @Param("user_id") Integer user_id);
 
     @Query(value = "select p from Pot p " +
-            " join fetch p.garden" +
             " where p.id = :pot_id and p.user.id =:user_id")
     Optional<Pot> findPotByUser_IdAndPotId(@Param("pot_id") Integer potId, @Param("user_id") Integer userId);
 
