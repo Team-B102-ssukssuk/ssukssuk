@@ -3,6 +3,7 @@ package com.ssafy.ssuk.pot.service;
 import com.ssafy.ssuk.exception.dto.CustomException;
 import com.ssafy.ssuk.exception.dto.ErrorCode;
 import com.ssafy.ssuk.plant.domain.Garden;
+import com.ssafy.ssuk.plant.repository.domain.GardenRepository;
 import com.ssafy.ssuk.pot.domain.Pot;
 import com.ssafy.ssuk.pot.dto.requset.PotInsertDto;
 import com.ssafy.ssuk.pot.dto.response.PotResponseDto;
@@ -13,6 +14,7 @@ import org.apache.ibatis.jdbc.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,10 +25,12 @@ import java.util.Optional;
 public class PotServiceImpl implements PotService {
 
     PotRepository potRepository;
+    GardenRepository gardenRepository;
 
     @Autowired
-    public PotServiceImpl(PotRepository potRepository) {
+    public PotServiceImpl(PotRepository potRepository, GardenRepository gardenRepository) {
         this.potRepository = potRepository;
+        this.gardenRepository = gardenRepository;
     }
 
     //화분 조회 (유저가 가지고 있는 전체 화분 조회)
@@ -63,6 +67,7 @@ public class PotServiceImpl implements PotService {
 
     //화분 삭제
     @Override
+    @Transactional
     public void delete(Integer potId, Integer userId) {
         //Optional<Pot> findPot = potRepository.findPotByUser_IdAndPotId(potId, userId);
 
@@ -71,8 +76,8 @@ public class PotServiceImpl implements PotService {
         updatePot.setUser(null);
         updatePot.setRegistedDate(null);
         updatePot.setIsRegisted(false);
-        if (updatePot.getGarden().get(0) != null)
-            updatePot.getGarden().get(0).unUsePot();
+
+        gardenRepository.deleteFromPot(userId, potId);
 
         potRepository.save(updatePot);
     }

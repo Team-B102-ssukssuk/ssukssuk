@@ -101,4 +101,15 @@ public class GardenRepositoryImpl implements GardenRepository {
                         " where g.pot.id = :potId and g.isDeleted = false and g.isUse = true ", Garden.class)
                 .setParameter("potId", potId).getResultList();
     }
+
+    @Override
+    public void deleteFromPot(Integer userId, Integer potId) {
+        em.createNativeQuery("update GARDEN" +
+                        " set IS_USE = 0" +
+                        " where USER_ID = :userId" +
+                        " and POT_ID = :potId")
+                .setParameter("userId", userId)
+                .setParameter("potId", potId)
+                .executeUpdate();
+    }
 }

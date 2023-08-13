@@ -25,4 +25,6 @@ public interface GardenRepository {
     void minusOrders(int userId, int orders);
 
     List<Garden> findGardenByPotId(Integer potId); //지민
+
+    void deleteFromPot(Integer userId, Integer potId);
 }
