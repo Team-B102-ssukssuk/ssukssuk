@@ -1,6 +1,7 @@
 package com.ssafy.ssuk.collection.service;
 
 import com.ssafy.ssuk.collection.domain.Collection;
+import com.ssafy.ssuk.collection.domain.id.CollectionId;
 import com.ssafy.ssuk.collection.dto.response.CollectionSearchResponseDto;
 import com.ssafy.ssuk.collection.repository.CollectionRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,5 +23,21 @@ public class CollectionServiceImpl implements CollectionService {
         return collectionRepository.findAllByUserId(userId)
                 .stream()
                 .map(c -> new CollectionSearchResponseDto(c)).collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean checkExists(Integer userId, Integer plantId, int level) {
+        if (collectionRepository.findOneByUserIdAndPlantIdAndLevel(userId, plantId, level) == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    @Override
+    @Transactional
+    public void save(Integer userId, Integer plantId, int level) {
+        Collection collection = new Collection(new CollectionId(userId, plantId, level));
+        collectionRepository.save(collection);
     }
 }

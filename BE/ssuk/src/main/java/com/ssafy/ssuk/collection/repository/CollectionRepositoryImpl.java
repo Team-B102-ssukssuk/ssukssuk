@@ -19,4 +19,23 @@ public class CollectionRepositoryImpl implements CollectionRepository{
                 .setParameter("userId", userId)
                 .getResultList();
     }
+
+    @Override
+    public Collection findOneByUserIdAndPlantIdAndLevel(Integer userId, Integer plantId, int level) {
+        List<Collection> resultList = em.createQuery("select c from Collection c where c.id.userId = :userId and c.id.plantId = :plantId and c.id.level=:level", Collection.class)
+                .setParameter("userId", userId)
+                .setParameter("plantId", plantId)
+                .setParameter("level", level)
+                .getResultList();
+        if (resultList.isEmpty()) {
+            return null;
+        } else {
+            return resultList.get(0);
+        }
+    }
+
+    @Override
+    public void save(Collection collection) {
+        em.persist(collection);
+    }
 }
