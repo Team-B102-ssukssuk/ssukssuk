@@ -31,13 +31,15 @@ const SignUpScreen = ({ navigation }) => {
   const [toastContent, setToastContent] = useState("");
   const [toastIconName, setToastIconName] = useState("");
 
+  const isNextButtonDisabled = verifyNumber.length < 8;
+
   const sendVerificationCode = async () => {
     try {
       const requestData = {
         email: email,
       };
       const response = await axios.post(
-        "http://i9b102.p.ssafy.io:8080/user/join/email",
+        "http://i9b102.p.ssafy.io:8080/auth/join/email",
         requestData
       );
       console.log("인증번호 전송 성공:", response.data);
@@ -104,7 +106,7 @@ const SignUpScreen = ({ navigation }) => {
       console.log(requestData.verificationCode);
       console.log("222");
       const response = await axios.post(
-        "http://i9b102.p.ssafy.io:8080/user/join/emailcheck",
+        "http://i9b102.p.ssafy.io:8080/auth/join/emailcheck",
         requestData
       );
       console.log("인증번호 확인 성공:", response.data);
@@ -143,10 +145,6 @@ const SignUpScreen = ({ navigation }) => {
       setNextButtonColor("#2DD0AF");
       setVerifyError("");
       setErrorOpacity(0);
-    } else if (verifyNumber.length > 8) {
-      setNextButtonColor("#CACACA");
-      setErrorOpacity(100);
-      setVerifyError("인증번호가 일치하지 않습니다.");
     } else if (verifyNumber === "") {
       setErrorOpacity(0);
     } else {
@@ -204,14 +202,20 @@ const SignUpScreen = ({ navigation }) => {
           onChangeText={setVerifyNumber}
           value={verifyNumber}
           placeholder="인증번호를 입력해주세요."
+          maxLength={8}
         ></TextInput>
         <Text style={[styles.verifyErrorMessage, { opacity: errorOpacity }]}>
           {verifyError}
         </Text>
         <TouchableOpacity
-          style={[styles.emailNextButton, { backgroundColor: nextButtonColor }]}
+          style={[
+            styles.emailNextButton,
+            { backgroundColor: nextButtonColor },
+            isNextButtonDisabled ? { opacity: 0.5 } : {},
+          ]}
           activeOpacity={0.3}
           onPress={goToSignUpPassword}
+          disabled={isNextButtonDisabled}
         >
           <CookieRunRegular style={styles.emailNextButtonText}>
             다음

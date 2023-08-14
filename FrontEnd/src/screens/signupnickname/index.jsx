@@ -18,8 +18,10 @@ const SignUpNicknameScreen = ({ navigation, route }) => {
   const [showCheckcircle, setShowCheckcircle] = useState(0);
   const [nextButtonColor, setNextButtonColor] = useState("#CACACA");
   const [nicknameVerify, setNicknameVerify] = useState(false);
-  const [nicknameError] = useState("닉네임은 최대 5글자입니다.");
+  const [nicknameError] = useState("닉네임은 최소 1글자, 최대 5글자입니다.");
   const { SignUpData } = route.params;
+
+  const isNextButtonDisabled = nickname.length === 0;
 
   // const response = {
   //   message: "OK",
@@ -68,7 +70,7 @@ const SignUpNicknameScreen = ({ navigation, route }) => {
           nickname: nickname,
         };
         const response = await axios.post(
-          "http://i9b102.p.ssafy.io:8080/user/join",
+          "http://i9b102.p.ssafy.io:8080/auth/join",
           updatedSignUpData
         );
         navigation.navigate("Login");
@@ -87,18 +89,15 @@ const SignUpNicknameScreen = ({ navigation, route }) => {
       setNextButtonColor("#CACACA");
       setShowCheckcircle(0);
       setNicknameVerify(false);
-    } else if (nickname.length > 5) {
-      setNextButtonColor("#CACACA");
+    } else if (nickname.length === 5) {
       setErrorOpacity(100);
-      setShowCheckcircle(0);
-      setNicknameVerify(false);
     } else if (nickname.length <= 5 && nickname !== "") {
       setNicknameVerify(true);
       setErrorOpacity(0);
       setShowCheckcircle(100);
-      setNextButtonColor("#CACACA");
-    } else {
       setNextButtonColor("#2DD0AF");
+    } else {
+      setNextButtonColor("#CACACA");
       setShowCheckcircle(0);
       setErrorOpacity(0);
       setNicknameVerify(false);
@@ -131,6 +130,7 @@ const SignUpNicknameScreen = ({ navigation, route }) => {
               onChangeText={setNickname}
               value={nickname}
               placeholder="닉네임"
+              maxLength={5}
             ></TextInput>
             <Icon2
               name="checkcircle"
@@ -147,9 +147,14 @@ const SignUpNicknameScreen = ({ navigation, route }) => {
           {nicknameError}
         </Text>
         <TouchableOpacity
-          style={[styles.emailNextButton, { backgroundColor: nextButtonColor }]}
+          style={[
+            styles.emailNextButton,
+            { backgroundColor: nextButtonColor },
+            isNextButtonDisabled ? { opacity: 0.5 } : {},
+          ]}
           activeOpacity={0.3}
           onPress={signUpSuccess}
+          disabled={isNextButtonDisabled}
         >
           <Text style={styles.emailNextButtonText}>완료</Text>
         </TouchableOpacity>
