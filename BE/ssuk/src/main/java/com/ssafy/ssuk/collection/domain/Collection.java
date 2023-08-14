@@ -4,6 +4,7 @@ import com.ssafy.ssuk.collection.domain.id.CollectionId;
 import com.ssafy.ssuk.plant.domain.Info;
 import com.ssafy.ssuk.user.domain.User;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
@@ -16,6 +17,7 @@ import static javax.persistence.FetchType.*;
 @Table(name = "COLLECTION")
 @Getter
 @DynamicInsert
+@NoArgsConstructor
 public class Collection {
     @EmbeddedId
     private CollectionId id;
