@@ -102,7 +102,7 @@ public class S3UploadService {
     }
 
     private static File extracted(String url) throws IOException {
-        File tempFile = new File("test.jpg");
+        File tempFile = new File(UUID.randomUUID() + "");
         if(tempFile.createNewFile()) {
             try (BufferedInputStream bufferedInputStream = new BufferedInputStream(new URL(url).openStream());
                  FileOutputStream fileOutputStream = new FileOutputStream(tempFile)) {
@@ -149,7 +149,7 @@ public class S3UploadService {
 
     // s3에는 multipartfile이 전송이 안된다함
     private Optional<File> convert(MultipartFile file) throws IOException {
-        File convertFile = new File(file.getOriginalFilename());
+        File convertFile = new File(UUID.randomUUID() + "");
         if(convertFile.createNewFile()) {
             try (FileOutputStream fos = new FileOutputStream(convertFile)) {
                 fos.write(file.getBytes());
@@ -161,7 +161,7 @@ public class S3UploadService {
     }
 
     private Optional<File> convert(String bytesStr) throws IOException {
-        File tempFile = new File("plant.jpg");
+        File tempFile = new File(UUID.randomUUID() + "");
         if(tempFile.createNewFile()) {
             try (FileOutputStream fileOutputStream = new FileOutputStream(tempFile)) {
                 byte[] dataBuffer = Base64.getDecoder().decode(bytesStr);
