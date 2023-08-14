@@ -112,11 +112,11 @@ public class Garden {
             return false;
         }
         if (level == 1) {
-            this.firstRecord = firstRecord;
+            this.firstRecord = record;
         } else if (level == 2) {
-            this.secondRecord = secondRecord;
+            this.secondRecord = record;
         } else if (level == 3) {
-            this.thirdRecord = thirdRecord;
+            this.thirdRecord = record;
         }
         return true;
     }
