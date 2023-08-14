@@ -38,7 +38,7 @@ const IntroScreen = ({ navigation }) => {
         <View style={{ width: "100%", padding: 25 }}>
           <TouchableOpacity
             activeOpacity={1}
-            onPress={() => navigation.navigate("Login")}
+            onPress={() => navigation.navigate("Pot")}
           >
             <Text style={[styles.skipTextStyle, { color: doneButtonColor }]}>
               {skipText}

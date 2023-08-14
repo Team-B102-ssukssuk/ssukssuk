@@ -12,6 +12,7 @@ import styles from "./style";
 import CookieRunRegular from "../../components/common/CookieRunRegular";
 import axios from "axios";
 import ToastNotification from "../../components/toast";
+import { setTokenExpiredCallback } from "../../utils/axios";
 // import axios from "axios";
 
 // navigation 등록
@@ -70,6 +71,13 @@ const SignUpScreen = ({ navigation }) => {
       }
     }
   };
+
+  React.useEffect(() => {
+    setTokenExpiredCallback(() => {
+      console.log("토큰 만료 혹은 충돌");
+      navigation.navigate("Login");
+    });
+  }, []);
 
   const showToast = (title, content, iconName) => {
     setIsToastVisible(true);
