@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.PostConstruct;
+import java.util.TimeZone;
+
 @SpringBootApplication(exclude = {
         org.springframework.cloud.aws.autoconfigure.context.ContextInstanceDataAutoConfiguration.class,
         org.springframework.cloud.aws.autoconfigure.context.ContextStackAutoConfiguration.class,
@@ -31,6 +34,12 @@ public class SsukApplication {
     String testPost()
     {
         return "testPost";
+    }
+
+    @PostConstruct
+    public void started()
+    {
+        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
     }
 
     public static void main(String[] args) {

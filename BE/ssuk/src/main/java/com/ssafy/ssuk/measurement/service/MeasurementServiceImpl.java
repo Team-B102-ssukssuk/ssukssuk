@@ -161,6 +161,10 @@ public class MeasurementServiceImpl implements MeasurementService {
             }
             if (findGarden.getLevel() == 1) {
                 findGarden.updateLevel2();
+            }
+            else if (findGarden.getLevel() == 2) {
+                findGarden.updateLevel3();
+                findGarden.updateLevel2();
             } else if (findGarden.getLevel() == 2) {
                 findGarden.updateLevel3();
             }

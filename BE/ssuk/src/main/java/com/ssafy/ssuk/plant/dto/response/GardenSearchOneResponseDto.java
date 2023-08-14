@@ -1,5 +1,6 @@
 package com.ssafy.ssuk.plant.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.ssuk.plant.domain.Garden;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,9 +8,13 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Data
 public class GardenSearchOneResponseDto {
+
+    @JsonIgnore
+    private final static String IMAGE_URL = "https://ssook.s3.ap-northeast-2.amazonaws.com/plant/";
 
     private Integer gardenId;
     private Integer potId;
@@ -19,11 +24,11 @@ public class GardenSearchOneResponseDto {
     private String categoryName;
     private String plantNickname;
     private Integer level;
-    private LocalDateTime firstDate;
-    private LocalDateTime secondDate;
-    private LocalDateTime thirdDate;
+    private String firstDate;
+    private String secondDate;
+    private String thirdDate;
     private Boolean isUse;
-    private LocalDateTime unusedDate;
+    private String unusedDate;
     private String firstRecord;
     private String secondRecord;
     private String thirdRecord;
@@ -40,16 +45,30 @@ public class GardenSearchOneResponseDto {
         this.categoryName = garden.getPlant().getCategory().getName();
         this.plantNickname = garden.getNickname();
         this.level = garden.getLevel();
-        this.firstDate = garden.getFirstDate();
-        this.secondDate = garden.getSecondDate();
-        this.thirdDate = garden.getThirdDate();
+        if (garden.getFirstDate() != null) {
+            this.firstDate = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(garden.getFirstDate());
+        }
+        if (garden.getSecondDate() != null) {
+            this.secondDate = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(garden.getSecondDate());
+        }
+        if (garden.getThirdDate() != null) {
+            this.thirdDate = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(garden.getThirdDate());
+        }
+        if (garden.getUnusedDate() != null) {
+            this.unusedDate = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(garden.getUnusedDate());
+        }
         this.isUse = garden.getIsUse();
-        this.unusedDate = garden.getUnusedDate();
         this.firstRecord = garden.getFirstRecord();
         this.secondRecord = garden.getSecondRecord();
         this.thirdRecord = garden.getThirdRecord();
-        this.firstImage = "https://ssook.s3.ap-northeast-2.amazonaws.com/plant/" + garden.getFirstImage();
-        this.secondImage = "https://ssook.s3.ap-northeast-2.amazonaws.com/plant/" + garden.getSecondImage();
-        this.thirdImage = "https://ssook.s3.ap-northeast-2.amazonaws.com/plant/" + garden.getThirdImage();
+        if (garden.getFirstImage() != null) {
+            this.firstImage = IMAGE_URL + garden.getFirstImage();
+        }
+        if (garden.getSecondImage() != null) {
+            this.secondImage = IMAGE_URL + garden.getSecondImage();
+        }
+        if (garden.getThirdImage() != null) {
+            this.thirdImage = IMAGE_URL + garden.getThirdImage();
+        }
     }
 }

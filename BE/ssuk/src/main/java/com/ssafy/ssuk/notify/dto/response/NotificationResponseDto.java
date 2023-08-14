@@ -1,5 +1,6 @@
 package com.ssafy.ssuk.notify.dto.response;
 
+import com.ssafy.ssuk.notify.domain.Notification;
 import com.ssafy.ssuk.notify.domain.NotificationType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,20 +26,28 @@ public class NotificationResponseDto {
 
     private Boolean visible;
 
-    private LocalDateTime notification_date;
+    private String notification_date;
 
     private String ninckName;
 
-    public NotificationResponseDto(Integer notificationId, Integer userId, Integer gardenId, Integer potId, String title, NotificationType notificationType, String body, Boolean visible, LocalDateTime notification_date, String ninckName) {
-        this.notificationId = notificationId;
-        this.userId = userId;
-        this.gardenId = gardenId;
-        this.potId = potId;
-        this.title = title;
-        this.notificationType = notificationType;
-        this.body = body;
-        this.visible = visible;
-        this.notification_date = notification_date;
-        this.ninckName = ninckName;
+    private Integer badgeId;
+
+    public NotificationResponseDto(Notification n) {
+        this.notificationId = n.getId();
+        this.userId = n.getUser().getId();
+        if(n.getGarden() != null) {
+            this.ninckName = n.getGarden().getNickname();
+            this.gardenId = n.getGarden().getId();
+        }
+        if(n.getPot() != null) {
+            this.potId = n.getPot().getId();
+        }
+        this.title = n.getTitle();
+        this.notificationType = n.getNotificationType();
+        this.body = n.getBody();
+        this.visible = n.getVisible();
+        this.notification_date = String.valueOf(n.getNotification_date());
+        if(n.getBadge() != null)
+            this.badgeId = n.getBadge().getId();
     }
 }

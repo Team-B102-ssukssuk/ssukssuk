@@ -11,6 +11,7 @@ import com.ssafy.ssuk.measurement.dto.request.UploadRequestDto;
 import com.ssafy.ssuk.measurement.dto.response.MeasurementResponseDto;
 import com.ssafy.ssuk.measurement.dto.socket.SensorMessageDto;
 import com.ssafy.ssuk.measurement.service.MeasurementService;
+import com.ssafy.ssuk.notify.service.NotificationService;
 import com.ssafy.ssuk.utils.response.CommonResponseEntity;
 import com.ssafy.ssuk.utils.response.SuccessCode;
 import lombok.extern.slf4j.Slf4j;
@@ -22,8 +23,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,12 +36,14 @@ public class MeasurementController {
     private final MeasurementService mesurementService;
     private final SimpMessagingTemplate template;
     private final BadgeService badgeService;
+    private final NotificationService notificationService;
 
     @Autowired
-    public MeasurementController(MeasurementService mesurementService, SimpMessagingTemplate template, BadgeService badgeService) {
+    public MeasurementController(MeasurementService mesurementService, SimpMessagingTemplate template, BadgeService badgeService, NotificationService notificationService) {
         this.mesurementService = mesurementService;
         this.template = template;
         this.badgeService = badgeService;
+        this.notificationService = notificationService;
     }
 
     //조회
@@ -67,8 +70,7 @@ public class MeasurementController {
 
     //나중에 시큐리티 필터 빼달라고 하기
     @PostMapping("/upload")
-    ResponseEntity<?> updateLevel(@RequestBody @Validated UploadRequestDto uploadRequestDto,
-                                  BindingResult bindingResult) {
+    ResponseEntity<?> updateLevel(@RequestBody @Validated UploadRequestDto uploadRequestDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new CustomException(ErrorCode.INPUT_EXCEPTION);
         }
@@ -78,10 +80,15 @@ public class MeasurementController {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         Integer level = uploadRequestDto.getLevel();
-        if (level == 3 && badgeService.checkUserBadge(BadgeCode.쑥쑥을_위하여.getCode(), userId) == false) {
+        if (level == 3 && !badgeService.checkUserBadge(BadgeCode.쑥쑥을_위하여.getCode(), userId)) {
             badgeService.saveUserBadge(BadgeCode.쑥쑥을_위하여.getCode(), userId);
-        } else if (level == 2 && badgeService.checkUserBadge(BadgeCode.오잉_쑥쑥이의_상태가.getCode(), userId) == false) {
+            notificationService.pushAndInsertNotificationForBadge(userId, BadgeCode.쑥쑥을_위하여);
+            log.info("업적달성");
+
+        } else if (level == 2 && !badgeService.checkUserBadge(BadgeCode.오잉_쑥쑥이의_상태가.getCode(), userId)) {
             badgeService.saveUserBadge(BadgeCode.오잉_쑥쑥이의_상태가.getCode(), userId);
+            notificationService.pushAndInsertNotificationForBadge(userId, BadgeCode.오잉_쑥쑥이의_상태가);
+            log.info("업적 달성");
         }
 
 

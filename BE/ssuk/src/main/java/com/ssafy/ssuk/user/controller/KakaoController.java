@@ -4,6 +4,7 @@ import com.ssafy.ssuk.badge.domain.BadgeCode;
 import com.ssafy.ssuk.badge.service.BadgeService;
 import com.ssafy.ssuk.exception.dto.CustomException;
 import com.ssafy.ssuk.exception.dto.ErrorCode;
+import com.ssafy.ssuk.notify.service.NotificationService;
 import com.ssafy.ssuk.user.domain.User;
 import com.ssafy.ssuk.user.dto.request.KakaoCodeRequsetDto;
 import com.ssafy.ssuk.user.service.UserService;
@@ -30,6 +31,7 @@ public class KakaoController {
     private final KakaoAuthService kakaoAuthService;
     private final BadgeService badgeService;
     private final UserService userService;
+    private final NotificationService notificationService;
 
     private final String REDIRECT_URL = "http://i9b102.p.ssafy.io:8080";
 
@@ -62,6 +64,7 @@ public class KakaoController {
             User user = userService.createUser(kakaoAuthService.makeNewUser(profile));
             if (!user.getProfileImage().equals("default") && badgeService.checkUserBadge(BadgeCode.치즈.getCode(), user.getId()) == false) {
                 badgeService.saveUserBadge(BadgeCode.치즈.getCode(), user.getId());
+                notificationService.pushAndInsertNotificationForBadge(user.getId(), BadgeCode.치즈);
             }
             return user;
         } catch (IOException e) {
