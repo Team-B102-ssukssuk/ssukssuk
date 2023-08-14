@@ -17,4 +17,10 @@ public class CollectionId implements Serializable {
     private Integer plantId;
     @Column(name = "LEVEL")
     private Integer level;
+
+    public CollectionId(Integer userId, Integer plantId, Integer level) {
+        this.userId = userId;
+        this.plantId = plantId;
+        this.level = level;
+    }
 }

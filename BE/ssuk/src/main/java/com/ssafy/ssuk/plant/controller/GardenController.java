@@ -2,6 +2,7 @@ package com.ssafy.ssuk.plant.controller;
 
 import com.ssafy.ssuk.badge.domain.BadgeCode;
 import com.ssafy.ssuk.badge.service.BadgeService;
+import com.ssafy.ssuk.collection.service.CollectionService;
 import com.ssafy.ssuk.exception.dto.CustomException;
 import com.ssafy.ssuk.exception.dto.ErrorCode;
 import com.ssafy.ssuk.notify.service.NotificationService;
@@ -44,6 +45,7 @@ public class GardenController {
     private final UserRepository userRepository;
     private final BadgeService badgeService;
     private final NotificationService notificationService;
+    private final CollectionService collectionService;
 
     private final String SUCCESS = "OK";
     private final String FAIL = "false";
@@ -92,6 +94,13 @@ public class GardenController {
             badgeService.saveUserBadge(BadgeCode.시작이반.getCode(), userId);
             notificationService.pushAndInsertNotificationForBadge(userId, BadgeCode.시작이반);
         }
+
+        // 식물이 도감 1단계에 등록되었는지 확인하고
+        if (!collectionService.checkExists(userId, gardenRegisterRequestDto.getPlantId(), 1)) {
+            // 없으면 등록 있으면 아무것도 안함
+            collectionService.save(userId, gardenRegisterRequestDto.getPlantId(), 1);
+        }
+
         return CommonResponseEntity.getResponseEntity(SuccessCode.SUCCESS_CODE, new GardenRegisterResponseDto(newGarden.getId()));
     }
 

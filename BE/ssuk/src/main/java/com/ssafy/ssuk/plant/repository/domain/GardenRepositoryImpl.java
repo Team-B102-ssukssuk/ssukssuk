@@ -42,7 +42,7 @@ public class GardenRepositoryImpl implements GardenRepository {
         List<Garden> resultList = em.createQuery("select g from Garden g" +
                         " join fetch g.plant plant" +
                         " join fetch plant.category pc" +
-                        " where g.id = :gardenId and g.user.id = :userId", Garden.class)
+                        " where g.id = :gardenId and g.user.id = :userId and g.isDeleted=false", Garden.class)
                 .setParameter("gardenId", gardenId)
                 .setParameter("userId", userId)
                 .getResultList();

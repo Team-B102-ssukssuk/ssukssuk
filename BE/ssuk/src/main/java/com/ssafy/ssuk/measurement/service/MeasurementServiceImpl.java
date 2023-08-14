@@ -1,5 +1,6 @@
 package com.ssafy.ssuk.measurement.service;
 
+import com.ssafy.ssuk.collection.service.CollectionService;
 import com.ssafy.ssuk.exception.dto.CustomException;
 import com.ssafy.ssuk.exception.dto.ErrorCode;
 import com.ssafy.ssuk.measurement.domain.Measurement;
@@ -17,6 +18,7 @@ import com.ssafy.ssuk.plant.repository.domain.GardenRepository;
 import com.ssafy.ssuk.user.domain.User;
 import com.ssafy.ssuk.utils.image.ImageInfo;
 import com.ssafy.ssuk.utils.image.S3UploadService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,20 +31,14 @@ import java.util.Optional;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class MeasurementServiceImpl implements MeasurementService {
     private final MeasurementRepository measurementRepository;
     private final GardenRepository gardenRepository;
     private final FcmService fcmService;
     private final NotificationRepository notificationRepository;
     private final S3UploadService s3UploadService;
-
-    public MeasurementServiceImpl(MeasurementRepository measurementRepository, GardenRepository gardenRepository, FcmService fcmService, NotificationRepository notificationRepository, S3UploadService s3UploadService) {
-        this.measurementRepository = measurementRepository;
-        this.gardenRepository = gardenRepository;
-        this.fcmService = fcmService;
-        this.notificationRepository = notificationRepository;
-        this.s3UploadService = s3UploadService;
-    }
+    private final CollectionService collectionService;
 
     @Override
     public List<Measurement> findRecentValueByPot_Id(Integer user_id, Integer pot_id) {
@@ -133,7 +129,8 @@ public class MeasurementServiceImpl implements MeasurementService {
                 .orElseThrow(() -> new CustomException(ErrorCode.GARDEN_NOT_FOUND));
 
         log.info("레벨업 서비스");
-        if (findGarden.getLevel() < uploadRequestDto.getLevel() && uploadRequestDto.getLevel() <= 3) { // 레벨업
+        Integer level = uploadRequestDto.getLevel();
+        if (findGarden.getLevel() < level && level <= 3) { // 레벨업
             //푸시알림
             fcmService.sendPushTo(findGarden.getUser().getId(), "레벨 업", findGarden.getNickname() + "이(가) 레벨업했어요 !");
 
@@ -155,28 +152,30 @@ public class MeasurementServiceImpl implements MeasurementService {
             try {
                 imageInfo = s3UploadService.uploadPlant(uploadRequestDto.getFile());
                 log.debug("imageInfo.getImageName()={}", imageInfo.getImageName());
-                findGarden.updateImage(uploadRequestDto.getLevel(), imageInfo.getImageName());
+                findGarden.updateImage(level, imageInfo.getImageName());
             } catch (IOException e) {
                 log.debug("2 또는 3단계 사진 업로드 실패...");
             }
-            if (findGarden.getLevel() == 1) {
-                findGarden.updateLevel2();
-            }
-            else if (findGarden.getLevel() == 2) {
-                findGarden.updateLevel3();
-                findGarden.updateLevel2();
-            } else if (findGarden.getLevel() == 2) {
-                findGarden.updateLevel3();
+            if (findGarden.getLevel() <= 2) {
+                if (findGarden.getLevel() == 1) {
+                    findGarden.updateLevel2();
+                } else if (findGarden.getLevel() == 2) {
+                    findGarden.updateLevel3();
+                }
+                if (!collectionService.checkExists(findGarden.getUser().getId(), findGarden.getPlant().getId(), level)) {
+                    // 없으면 등록 있으면 아무것도 안함
+                    collectionService.save(findGarden.getUser().getId(), findGarden.getPlant().getId(), level);
+                }
             }
 
             gardenRepository.save(findGarden); // 갱신
 
             return findGarden.getUser().getId();
-        } else if(uploadRequestDto.getLevel() == 1 && findGarden.getFirstImage() == null) {
+        } else if(level == 1 && findGarden.getFirstImage() == null) {
             ImageInfo imageInfo = null;
             try {
                 imageInfo = s3UploadService.uploadPlant(uploadRequestDto.getFile());
-                findGarden.updateImage(uploadRequestDto.getLevel(), imageInfo.getImageName());
+                findGarden.updateImage(level, imageInfo.getImageName());
             } catch (IOException e) {
                 log.debug("1단계 사진 업로드 실패...");
             }
