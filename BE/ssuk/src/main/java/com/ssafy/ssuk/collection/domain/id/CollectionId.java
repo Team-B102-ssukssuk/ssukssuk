@@ -3,6 +3,7 @@ package com.ssafy.ssuk.collection.domain.id;
 import com.ssafy.ssuk.plant.domain.Info;
 import com.ssafy.ssuk.plant.domain.id.InfoId;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -10,6 +11,7 @@ import java.io.Serializable;
 
 @Data
 @Embeddable
+@NoArgsConstructor
 public class CollectionId implements Serializable {
     @Column(name = "USER_ID")
     private Integer userId;
