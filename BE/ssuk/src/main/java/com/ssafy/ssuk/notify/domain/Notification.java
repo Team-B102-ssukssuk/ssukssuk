@@ -1,5 +1,7 @@
 package com.ssafy.ssuk.notify.domain;
 
+import com.ssafy.ssuk.badge.domain.Badge;
+import com.ssafy.ssuk.badge.domain.BadgeCode;
 import com.ssafy.ssuk.plant.domain.Garden;
 import com.ssafy.ssuk.pot.domain.Pot;
 import com.ssafy.ssuk.user.domain.User;
@@ -43,6 +45,10 @@ public class Notification {
     @Column(name = "NOTIFICATION_TYPE")
     @Enumerated(EnumType.STRING)
     private NotificationType notificationType;
+
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "BADGE_ID")
+    private Badge badge;
 
     @Column(name = "BODY")
     private String body;

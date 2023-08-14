@@ -4,6 +4,7 @@ import com.ssafy.ssuk.badge.domain.BadgeCode;
 import com.ssafy.ssuk.badge.service.BadgeService;
 import com.ssafy.ssuk.exception.dto.CustomException;
 import com.ssafy.ssuk.exception.dto.ErrorCode;
+import com.ssafy.ssuk.notify.service.NotificationService;
 import com.ssafy.ssuk.plant.domain.Garden;
 import com.ssafy.ssuk.plant.domain.Plant;
 import com.ssafy.ssuk.plant.dto.request.*;
@@ -42,9 +43,11 @@ public class GardenController {
     private final PotRepository potRepository;
     private final UserRepository userRepository;
     private final BadgeService badgeService;
+    private final NotificationService notificationService;
 
     private final String SUCCESS = "OK";
     private final String FAIL = "false";
+
     @PostMapping("")
     public ResponseEntity<CommonResponseEntity> registerGarden(
             @RequestAttribute(required = true) Integer userId,
@@ -67,7 +70,7 @@ public class GardenController {
         }
 
         // 정원 확인(해당 화분이 사용중인지)
-        if(!gardenService.isDuplicateUsingByPotId(potId)){
+        if (!gardenService.isDuplicateUsingByPotId(potId)) {
             throw new CustomException(ErrorCode.DUPLICATE_RESOURCE);
         }
 
@@ -81,10 +84,13 @@ public class GardenController {
         int plantCount = user.getPlantCount();
         if (plantCount >= 10 && badgeService.checkUserBadge(BadgeCode.정신차리고보니.getCode(), userId) == false) {
             badgeService.saveUserBadge(BadgeCode.정신차리고보니.getCode(), userId);
+            notificationService.pushAndInsertNotificationForBadge(userId, BadgeCode.정신차리고보니);
         } else if (plantCount >= 5 && badgeService.checkUserBadge(BadgeCode.가만히_있어도_절반은_간다.getCode(), userId) == false) {
             badgeService.saveUserBadge(BadgeCode.가만히_있어도_절반은_간다.getCode(), userId);
+            notificationService.pushAndInsertNotificationForBadge(userId, BadgeCode.가만히_있어도_절반은_간다);
         } else if (plantCount >= 1 && badgeService.checkUserBadge(BadgeCode.시작이반.getCode(), userId) == false) {
             badgeService.saveUserBadge(BadgeCode.시작이반.getCode(), userId);
+            notificationService.pushAndInsertNotificationForBadge(userId, BadgeCode.시작이반);
         }
         return CommonResponseEntity.getResponseEntity(SuccessCode.SUCCESS_CODE, new GardenRegisterResponseDto(newGarden.getId()));
     }
@@ -149,6 +155,7 @@ public class GardenController {
 
         if (badgeService.checkUserBadge(BadgeCode.바람과_함께_사라지다.getCode(), userId) == false) {
             badgeService.saveUserBadge(BadgeCode.바람과_함께_사라지다.getCode(), userId);
+            notificationService.pushAndInsertNotificationForBadge(userId,BadgeCode.바람과_함께_사라지다);
         }
         return CommonResponseEntity.getResponseEntity(SuccessCode.SUCCESS_CODE);
     }

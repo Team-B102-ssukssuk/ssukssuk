@@ -6,6 +6,7 @@ import com.ssafy.ssuk.badge.service.BadgeService;
 import com.ssafy.ssuk.collection.service.CollectionService;
 import com.ssafy.ssuk.exception.dto.CustomException;
 import com.ssafy.ssuk.exception.dto.ErrorCode;
+import com.ssafy.ssuk.notify.service.NotificationService;
 import com.ssafy.ssuk.plant.service.GardenService;
 import com.ssafy.ssuk.user.domain.User;
 import com.ssafy.ssuk.user.dto.request.CheckPasswordDto;
@@ -44,6 +45,7 @@ public class UserController {
     private final RedisService redisService;
     private final S3UploadService s3UploadService;
     private final PasswordEncoder passwordEncoder;
+    private final NotificationService notificationService;
 
     // 유저 프로필 페이지 정보
     @GetMapping("/info")
@@ -96,6 +98,7 @@ public class UserController {
 
         if (badgeService.checkUserBadge(BadgeCode.치즈.getCode(), userId) == false) {
             badgeService.saveUserBadge(BadgeCode.치즈.getCode(), userId);
+            notificationService.pushAndInsertNotificationForBadge(userId, BadgeCode.치즈);
         }
         return CommonResponseEntity.getResponseEntity(SuccessCode.OK, newImageName);
     }
