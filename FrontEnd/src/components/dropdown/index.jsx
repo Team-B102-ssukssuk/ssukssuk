@@ -54,9 +54,9 @@ const CustomDropdown = ({ options, onSelect }) => {
     console.log(rows);
 
     return rows.map((row, rowIndex) => (
-      <View key={rowIndex} style={styles.rowContainer}>
+      <View key={`dropdown_${rowIndex}`} style={styles.rowContainer}>
         {row.map((subcategory, columnIndex) => (
-          <View key={columnIndex} style={styles.rowItem}>
+          <View key={`dropdown_${columnIndex}`} style={styles.rowItem}>
             <TouchableOpacity
               onPress={() => handleSubcategoryPress(subcategory)}
             >

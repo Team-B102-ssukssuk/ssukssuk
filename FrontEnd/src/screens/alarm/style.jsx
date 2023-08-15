@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 45,
+    paddingVertical: 50,
     paddingHorizontal: 30,
     // Add other header styles as needed
   },

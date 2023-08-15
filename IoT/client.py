@@ -5,11 +5,10 @@ import serial
 import requests
 import re
 import os
+import io
 import cv2
 from time import sleep
-# from keras.models import load_model  # TensorFlow is required for Keras to work
-# from PIL import Image, ImageOps  # Install pillow instead of PIL
-# import numpy as np
+import base64
 from datetime import datetime
 import tflite_runtime.interpreter as tflite
 import numpy as np
@@ -50,7 +49,7 @@ async def connect():
 		# Send STOMP SUBSCRIBE frame to subscribe to the destination
 		subscribe_frame = f"SUBSCRIBE\ndestination:{recv_destination}\nid:sub-1\nack:auto\n\n\x00"
 		await websocket.send(subscribe_frame.encode())
-		image_cnt = 59;
+		image_cnt = 0
 		while True: # 통신
 			# Server -> Raspberry PI Request
 			try:
@@ -60,6 +59,10 @@ async def connect():
 					command = "A"
 					print("ARD WRITE : ", response)
 					ARD.write(command.encode())
+				elif "사진" in response:
+					# ommand : "B" -> 사진 찍기
+					print("ARD WRITE : ", response)
+					send_image_to_server()
 			except Exception as e:
 				print(e)
 				
@@ -83,9 +86,9 @@ async def connect():
 						await websocket.send(send_frame.encode())
 						# print("Send data")
 					image_cnt+=1
-					if image_cnt == 60: # 사진 30분 간격으로 전송
+					if image_cnt == 12: # 사진 30분 간격으로 전송
 						send_image_to_server()
-						cnt = 0
+						image_cnt = 0
 			except Exception as e:
 				print(e)
 				break
@@ -212,15 +215,23 @@ def send_image_to_server():
 	# TM() # PC 버전
 	result = TM(frame) # Raspberry PI 버전
 	print("Camera tflite result : ", result)
+	if result == 4:
+		return
 	# 이미지 전송 할 uri
 	url = "http://i9b102.p.ssafy.io:8080/sensor/upload"
-	
+	image_string = ""
+	with open(img_path, "rb") as img_file:
+		image_string = img_file.read()
+	image_string = base64.b64encode(image_string).decode("utf-8")
 	dto = {
-		'pot_id' : 1,
-		'level' : result
+		'potId' : 1,
+		'level' : result,
+		'file' : image_string
 	}
+	print(dto)
 	dto = json.dumps(dto)
-	response = requests.post(url, 
+	print(dto)
+	response = requests.post(url,
 		data=dto, 
 		headers={'Content-Type': 'application/json; charset=UTF-8'}
 	)

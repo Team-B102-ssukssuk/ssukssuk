@@ -128,7 +128,7 @@ public class MeasurementServiceImpl implements MeasurementService {
         Garden findGarden = Optional.ofNullable(gardenRepository.findGardenByPotId(uploadRequestDto.getPotId()))
                 .orElseThrow(() -> new CustomException(ErrorCode.GARDEN_NOT_FOUND));
 
-        log.info("레벨업 서비스");
+        log.info("레벨업 서비스ttttttt");
         Integer level = uploadRequestDto.getLevel();
         if(!(level == 1 && findGarden.getLevel() == 1) && level - findGarden.getLevel() != 1) {
             throw new CustomException(ErrorCode.INPUT_EXCEPTION);
@@ -145,6 +145,7 @@ public class MeasurementServiceImpl implements MeasurementService {
                     .title("레벨업")
                     .body(findGarden.getNickname() + "이(가) 레벨업했어요 !")
                     .notificationType(NotificationType.L)
+                    .level(findGarden.getLevel() + 1)
                     .build();
             notificationRepository.save(notification);
 

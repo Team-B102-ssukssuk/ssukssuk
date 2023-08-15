@@ -123,6 +123,13 @@ const styles = StyleSheet.create({
   logoPadding: {
     padding: 35,
   },
+  toastnotice: {
+    position: "absolute",
+    top: "13%", // 위치 조정을 통해 화면 상단에 오도록 설정
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });
 
 export default styles;

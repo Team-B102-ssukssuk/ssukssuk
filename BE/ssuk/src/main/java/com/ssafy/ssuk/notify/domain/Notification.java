@@ -62,4 +62,7 @@ public class Notification {
     @Column(name = "CHECK_DATE")
     private LocalDateTime check_date;
 
+    @Column(name = "LEVEL")
+    private Integer level;
+
 }

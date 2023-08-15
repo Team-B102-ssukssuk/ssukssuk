@@ -21,8 +21,7 @@ import java.util.TimeZone;
 public class SsukApplication {
 
     @GetMapping("")
-    String home()
-    {
+    String home() {
         return "<div style='display: flex; width: 100%; height: 100vh;\n" +
                 "    align-items: center;\n" +
                 "    justify-content: center;'>\n" +
@@ -31,14 +30,12 @@ public class SsukApplication {
     }
 
     @PostMapping("")
-    String testPost()
-    {
+    String testPost() {
         return "testPost";
     }
 
     @PostConstruct
-    public void started()
-    {
+    public void started() {
         TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
     }
 

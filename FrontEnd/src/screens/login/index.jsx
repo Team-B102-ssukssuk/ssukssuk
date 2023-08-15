@@ -57,12 +57,13 @@ const LoginScreen = ({ navigation }) => {
       };
 
       const response = await axios.post(
-        "http://i9b102.p.ssafy.io:8080/user",
+        "http://i9b102.p.ssafy.io:8080/auth",
         requestData
       );
 
       console.log(response.data);
-      const { accessToken, refreshToken } = response.data;
+      const { accessToken, refreshToken } = response.data.data;
+
       // 받아온 토큰 정보를 AsyncStorage에 저장합니다.
       await AsyncStorage.setItem("accessToken", accessToken);
       await AsyncStorage.setItem("refreshToken", refreshToken);

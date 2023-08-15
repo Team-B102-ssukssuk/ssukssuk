@@ -32,12 +32,15 @@ public class NotificationResponseDto {
 
     private Integer badgeId;
 
+    private Integer level;
+
     public NotificationResponseDto(Notification n) {
         this.notificationId = n.getId();
         this.userId = n.getUser().getId();
         if(n.getGarden() != null) {
             this.ninckName = n.getGarden().getNickname();
             this.gardenId = n.getGarden().getId();
+            this.level = n.getLevel();
         }
         if(n.getPot() != null) {
             this.potId = n.getPot().getId();

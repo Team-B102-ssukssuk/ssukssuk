@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
 
   emailJoinInputBox: {
     height: 40,
-    width: 230,
+    width: 320,
     margin: 5,
     padding: 10,
     borderRadius: 10,
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
   },
   checkcircle: {
     position: "absolute",
-    marginLeft: 205,
+    marginLeft: 290,
     opacity: 0,
   },
   iconPlaceholder: {
