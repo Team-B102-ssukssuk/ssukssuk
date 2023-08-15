@@ -25,6 +25,4 @@ public class InfoRegisterRequestDto {
     private String characterName;
     @NotBlank
     private String characterComment;
-    @NotBlank
-    private String characterImage;
 }

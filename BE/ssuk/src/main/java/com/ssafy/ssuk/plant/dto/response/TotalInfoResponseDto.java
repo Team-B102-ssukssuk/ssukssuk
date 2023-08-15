@@ -15,10 +15,9 @@ public class TotalInfoResponseDto {
     private Integer waterAmount;
     private String characterName;
     private String characterComment;
-    private String characterImage;
     private LocalDateTime createdDate;
 
-    public TotalInfoResponseDto(Integer plantId, Integer level, String plantGuide, Integer waterTerm, Integer waterAmount, String characterName, String characterComment, String characterImage) {
+    public TotalInfoResponseDto(Integer plantId, Integer level, String plantGuide, Integer waterTerm, Integer waterAmount, String characterName, String characterComment) {
         this.plantId = plantId;
         this.level = level;
         this.plantGuide = plantGuide;
@@ -26,10 +25,9 @@ public class TotalInfoResponseDto {
         this.waterAmount = waterAmount;
         this.characterName = characterName;
         this.characterComment = characterComment;
-        this.characterImage = characterImage;
     }
 
-    public TotalInfoResponseDto(Integer plantId, Integer level, String plantGuide, Integer waterTerm, Integer waterAmount, String characterName, String characterComment, String characterImage, LocalDateTime createdDate) {
+    public TotalInfoResponseDto(Integer plantId, Integer level, String plantGuide, Integer waterTerm, Integer waterAmount, String characterName, String characterComment, LocalDateTime createdDate) {
         this.plantId = plantId;
         this.level = level;
         this.plantGuide = plantGuide;
@@ -37,7 +35,6 @@ public class TotalInfoResponseDto {
         this.waterAmount = waterAmount;
         this.characterName = characterName;
         this.characterComment = characterComment;
-        this.characterImage = characterImage;
         this.createdDate = createdDate;
     }
 }

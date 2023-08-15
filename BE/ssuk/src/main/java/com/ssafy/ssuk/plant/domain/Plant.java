@@ -5,6 +5,7 @@ import com.ssafy.ssuk.plant.domain.Info;
 import com.ssafy.ssuk.plant.dto.request.PlantUpdateRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 
@@ -16,6 +17,7 @@ import static javax.persistence.FetchType.*;
 @Entity
 @Getter
 @Table(name = "PLANT")
+@DynamicInsert
 @NoArgsConstructor  // 디폴트 생성자(한줄로 대체하는게 깔끔해보여서 써봤음)
 public class Plant {
     @Id @GeneratedValue
@@ -34,6 +36,8 @@ public class Plant {
     private Float moistureMax;
     @Column(name = "MOISTURE_MIN")
     private Float moistureMin;
+    @Column(name = "IS_DONE")
+    private Boolean isDone;
     @OneToMany(mappedBy = "plant", cascade = CascadeType.ALL)
     private List<Info> infos = new ArrayList<>();
 

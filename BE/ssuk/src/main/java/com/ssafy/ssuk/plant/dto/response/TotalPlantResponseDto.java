@@ -16,9 +16,10 @@ public class TotalPlantResponseDto {
     private Float tempMin;
     private Float moistureMax;
     private Float moistureMin;
+    private Boolean isDone;
     private List<TotalInfoResponseDto> plantInfos = new ArrayList<>();
 
-    public TotalPlantResponseDto(Integer categoryId, Integer plantId, String plantName, Float tempMax, Float tempMin, Float moistureMax, Float moistureMin) {
+    public TotalPlantResponseDto(Integer categoryId, Integer plantId, String plantName, Float tempMax, Float tempMin, Float moistureMax, Float moistureMin, Boolean isDone) {
         this.categoryId = categoryId;
         this.plantId = plantId;
         this.plantName = plantName;
@@ -26,5 +27,6 @@ public class TotalPlantResponseDto {
         this.tempMin = tempMin;
         this.moistureMax = moistureMax;
         this.moistureMin = moistureMin;
+        this.isDone = isDone;
     }
 }
