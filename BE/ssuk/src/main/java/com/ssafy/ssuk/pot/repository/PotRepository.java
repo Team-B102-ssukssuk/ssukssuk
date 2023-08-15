@@ -38,5 +38,5 @@ public interface PotRepository extends JpaRepository<Pot, Integer> {
     @Query(value = "select new com.ssafy.ssuk.pot.dto.response.PotSlideResponseDto(p.id, g.id) "
             + "from Pot p left join Garden g on g.pot.id = p.id and g.isUse = true "
             + " where p.user.id = :userId order by p.id" )
-    List<PotSlideResponseDto> getSlidePotList(Integer userId);
+    List<PotSlideResponseDto> getSlidePotList(@Param("userId") Integer userId);
 }

@@ -25,6 +25,4 @@ public class InfoUpdateRequestDto {
     private String characterName;
     @NotBlank
     private String characterComment;
-    @NotBlank
-    private String characterImage;
 }

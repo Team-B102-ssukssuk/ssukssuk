@@ -16,18 +16,21 @@ import java.util.TimeZone;
         org.springframework.cloud.aws.autoconfigure.context.ContextStackAutoConfiguration.class,
         org.springframework.cloud.aws.autoconfigure.context.ContextRegionProviderAutoConfiguration.class
 })
-@RestController // 테스트용
+//@RestController // 테스트용
 @RequestMapping("/")
+@Controller
 public class SsukApplication {
 
     @GetMapping("")
-    String home() {
-        return "<div style='display: flex; width: 100%; height: 100vh;\n" +
-                "    align-items: center;\n" +
-                "    justify-content: center;'>\n" +
-                "    <img src='https://ssook.s3.ap-northeast-2.amazonaws.com/image/Loading.gif' loop='infinite'/>\n" +
-                "</div>";
+    String loading() {
+        return "loading";
     }
+
+    @GetMapping("/ssook-ssook")
+    String welcome() {
+        return "home";
+    }
+
 
     @PostMapping("")
     String testPost() {

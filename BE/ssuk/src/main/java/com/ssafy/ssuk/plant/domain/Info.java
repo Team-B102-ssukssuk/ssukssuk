@@ -33,8 +33,6 @@ public class Info {
     private String characterName;
     @Column(name = "CHARACTER_COMMENT")
     private String characterComment;
-    @Column(name = "CHARACTER_IMAGE")
-    private String characterImage;
 
     public Info(InfoRegisterRequestDto infoRegisterRequestDto, Plant plant) {
         this.plant = plant;
@@ -44,7 +42,6 @@ public class Info {
         this.waterAmount = infoRegisterRequestDto.getWaterAmount();
         this.characterName = infoRegisterRequestDto.getCharacterName();
         this.characterComment = infoRegisterRequestDto.getCharacterComment();
-        this.characterImage = infoRegisterRequestDto.getCharacterImage();
     }
 
     public void modifyInfo(InfoUpdateRequestDto infoUpdateRequestDto) {
@@ -53,6 +50,5 @@ public class Info {
         this.waterAmount = infoUpdateRequestDto.getWaterAmount();
         this.characterName = infoUpdateRequestDto.getCharacterName();
         this.characterComment = infoUpdateRequestDto.getCharacterComment();
-        this.characterImage = infoUpdateRequestDto.getCharacterImage();
     }
 }

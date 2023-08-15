@@ -39,6 +39,7 @@ public class AuthenticationConfig {
                 .antMatchers("/auth/**").permitAll() // 회원가입 및 로그인에 대해 접근 허용
                 .antMatchers("/stomp/**").permitAll() // 모든 센서값 요청에 대해 접근 허용
                 .antMatchers("/sensor/upload").permitAll() // 라즈베리에서 날라오는 이미지 변경 요청
+                .antMatchers("/ssook-ssook").permitAll() // 웰컴 페이지(발표할 때 qr코드)
 //                .antMatchers("/kakao/**").permitAll()
                 // 그 외의 모든 요청에 대해 인증 필요
                 .anyRequest().authenticated()

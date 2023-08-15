@@ -11,7 +11,6 @@ public class InfoSearchResponseDto {
     private Integer waterAmount;
     private String characterName;
     private String characterComment;
-    private String characterImage;
 
     public InfoSearchResponseDto(Info info) {
         this.level = info.getLevel();
@@ -20,6 +19,5 @@ public class InfoSearchResponseDto {
         this.waterAmount = info.getWaterAmount();
         this.characterName = info.getCharacterName();
         this.characterComment = info.getCharacterComment();
-        this.characterImage = info.getCharacterImage();
     }
 }

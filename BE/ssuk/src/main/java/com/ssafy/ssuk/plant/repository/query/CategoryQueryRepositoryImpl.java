@@ -58,7 +58,7 @@ public class CategoryQueryRepositoryImpl implements CategoryQueryRepository {
     }
 
     private List<TotalPlantResponseDto> findPlants() {
-        return em.createQuery("select new com.ssafy.ssuk.plant.dto.response.TotalPlantResponseDto(pc.id, p.id, p.name, p.tempMax, p.tempMin, p.moistureMax, p.moistureMin)" +
+        return em.createQuery("select new com.ssafy.ssuk.plant.dto.response.TotalPlantResponseDto(pc.id, p.id, p.name, p.tempMax, p.tempMin, p.moistureMax, p.moistureMin, p.isDone)" +
                         " from Plant p" +
                         " join p.category pc", TotalPlantResponseDto.class)
                 .getResultList();
@@ -66,7 +66,7 @@ public class CategoryQueryRepositoryImpl implements CategoryQueryRepository {
 
     private List<TotalInfoResponseDto> findInfos() {
         return em.createQuery("select new com.ssafy.ssuk.plant.dto.response.TotalInfoResponseDto(" +
-                        "p.id, pi.level, pi.guide, pi.waterTerm, pi.waterAmount, pi.characterName, pi.characterComment, pi.characterImage" +
+                        "p.id, pi.level, pi.guide, pi.waterTerm, pi.waterAmount, pi.characterName, pi.characterComment" +
                         ")" +
                         " from Info pi" +
                         " join pi.plant p", TotalInfoResponseDto.class)
@@ -88,7 +88,7 @@ public class CategoryQueryRepositoryImpl implements CategoryQueryRepository {
      * 그래도 나중에 쓸 일이 있을까 싶어서 놔둠
      */
     private List<TotalPlantResponseDto> findPlants(List<Integer> categoryIds) {
-        return em.createQuery("select new com.ssafy.ssuk.plant.dto.response.TotalPlantResponseDto(pc.id, p.id, p.name, p.tempMax, p.tempMin, p.moistureMax, p.moistureMin)" +
+        return em.createQuery("select new com.ssafy.ssuk.plant.dto.response.TotalPlantResponseDto(pc.id, p.id, p.name, p.tempMax, p.tempMin, p.moistureMax, p.moistureMin, p.isDone)" +
                         " from Plant p" +
                         " join p.category pc" +
                         " where pc.id in :categoryIds", TotalPlantResponseDto.class)
@@ -101,7 +101,7 @@ public class CategoryQueryRepositoryImpl implements CategoryQueryRepository {
      */
     private List<TotalInfoResponseDto> findInfos(List<Integer> plantIds, int userId) {
         return em.createQuery("select new com.ssafy.ssuk.plant.dto.response.TotalInfoResponseDto(" +
-                        "p.id, pi.level, pi.guide, pi.waterTerm, pi.waterAmount, pi.characterName, pi.characterComment, pi.characterImage, c.createdDate" +
+                        "p.id, pi.level, pi.guide, pi.waterTerm, pi.waterAmount, pi.characterName, pi.characterComment, c.createdDate" +
                         ")" +
                         " from Info pi" +
                         " join pi.plant p" +

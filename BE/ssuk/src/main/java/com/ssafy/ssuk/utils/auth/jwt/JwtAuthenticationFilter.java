@@ -37,7 +37,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String requestURI = request.getRequestURI();
         log.debug("uri={}", requestURI);
 
-        if (requestURI.equals(main) || checkWhiteList(requestURI)) {
+        if (requestURI.equals(main) || checkWhiteList(requestURI) || requestURI.equals("/ssook-ssook")) {
             filterChain.doFilter(request, response);
             return;
         }
