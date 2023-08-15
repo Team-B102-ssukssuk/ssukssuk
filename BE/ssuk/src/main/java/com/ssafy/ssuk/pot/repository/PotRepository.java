@@ -1,8 +1,8 @@
 package com.ssafy.ssuk.pot.repository;
 
-import com.ssafy.ssuk.plant.domain.Garden;
 import com.ssafy.ssuk.pot.domain.Pot;
 import com.ssafy.ssuk.pot.dto.response.PotResponseDto;
+import com.ssafy.ssuk.pot.dto.response.PotSlideResponseDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -34,4 +34,9 @@ public interface PotRepository extends JpaRepository<Pot, Integer> {
     // 감사합니다 -덕용-
     @Override
     Pot getReferenceById(Integer integer);
+
+    @Query(value = "select new com.ssafy.ssuk.pot.dto.response.PotSlideResponseDto(p.id, g.id) "
+            + "from Pot p left join Garden g on g.pot.id = p.id and g.isUse = true "
+            + " where p.user.id = :userId" )
+    List<PotSlideResponseDto> getSlidePotList(Integer userId);
 }
