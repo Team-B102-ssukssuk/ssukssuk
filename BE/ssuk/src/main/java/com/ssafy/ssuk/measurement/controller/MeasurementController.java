@@ -9,7 +9,6 @@ import com.ssafy.ssuk.measurement.domain.SensorType;
 import com.ssafy.ssuk.measurement.dto.request.RaspberryRequestDto;
 import com.ssafy.ssuk.measurement.dto.request.UploadRequestDto;
 import com.ssafy.ssuk.measurement.dto.response.MeasurementResponseDto;
-import com.ssafy.ssuk.measurement.dto.socket.SensorMessageDto;
 import com.ssafy.ssuk.measurement.service.MeasurementService;
 import com.ssafy.ssuk.notify.service.NotificationService;
 import com.ssafy.ssuk.utils.response.CommonResponseEntity;
@@ -17,14 +16,12 @@ import com.ssafy.ssuk.utils.response.SuccessCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,7 +54,7 @@ public class MeasurementController {
 
     //급수 요청
     @GetMapping("/water/{potId}")
-    ResponseEntity<?> insertWater(@PathVariable Integer potId) {
+    ResponseEntity<?> insertWater(@RequestAttribute Integer userId, @PathVariable Integer potId) {
         log.info("물급수 요청");
         Measurement findMeasurement = mesurementService.findByPot_Id(potId).get(0);
 
@@ -65,6 +62,12 @@ public class MeasurementController {
         log.info("물 급수 요청 : " + serialNumber);
         template.convertAndSend("/sub/socket/room/" + serialNumber, new RaspberryRequestDto(1, "물 급수 요청"));
 
+        // 여기에 업적확인하고 추가하자
+        if (!badgeService.checkUserBadge(BadgeCode.정원의_수호자.getCode(), userId)) {
+            badgeService.saveUserBadge(BadgeCode.정원의_수호자.getCode(), userId);
+            notificationService.pushAndInsertNotificationForBadge(userId, BadgeCode.정원의_수호자);
+            log.info("업적달성");
+        }
         return ResponseEntity.ok("물 급수 완료");
     }
 
@@ -84,7 +87,6 @@ public class MeasurementController {
             badgeService.saveUserBadge(BadgeCode.쑥쑥을_위하여.getCode(), userId);
             notificationService.pushAndInsertNotificationForBadge(userId, BadgeCode.쑥쑥을_위하여);
             log.info("업적달성");
-
         } else if (level == 2 && !badgeService.checkUserBadge(BadgeCode.오잉_쑥쑥이의_상태가.getCode(), userId)) {
             badgeService.saveUserBadge(BadgeCode.오잉_쑥쑥이의_상태가.getCode(), userId);
             notificationService.pushAndInsertNotificationForBadge(userId, BadgeCode.오잉_쑥쑥이의_상태가);
