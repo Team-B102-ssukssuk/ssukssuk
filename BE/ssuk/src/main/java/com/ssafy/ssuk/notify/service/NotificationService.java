@@ -17,4 +17,7 @@ public interface NotificationService {
     void updateAllNotification(Integer userId);
 
     void pushAndInsertNotificationForBadge(Integer userId, BadgeCode badgeCode);
+
+    void deleteAllNotificationWithGardenId(Integer gardenId);
+    void deleteAllNotificationWithPotId(Integer potId);
 }

@@ -64,6 +64,16 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
+    public void deleteAllNotificationWithGardenId(Integer gardenId) {
+        notificationRepository.updateAllNotificationWithGardenId(gardenId);
+    }
+
+    @Override
+    public void deleteAllNotificationWithPotId(Integer potId) {
+        notificationRepository.updateAllNotificationWithPotId(potId);
+    }
+
+    @Override
     @Transactional
     public void updateAllNotification(Integer userId) {
         notificationRepository.updateAllNotification(userId);
