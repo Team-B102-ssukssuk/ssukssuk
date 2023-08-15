@@ -62,4 +62,8 @@ public class Pot {
     public void updateTankLastDate(LocalDateTime tankLastDate) {
         this.tankLastDate = tankLastDate;
     }
+
+    public Pot (Integer potId) {
+        this.id = potId;
+    }
 }

@@ -27,7 +27,7 @@ public interface PotRepository extends JpaRepository<Pot, Integer> {
     //조회
     @Query(value = "select new com.ssafy.ssuk.pot.dto.response.PotResponseDto(p.id, p.user.id, p.registedDate, g.level, g.nickname, g.isUse, g.plant.id, g.id) "
             + "from Pot p left join Garden g on g.pot.id = p.id and g.isUse != false "
-            + " where p.user.id = :userId" )
+            + " where p.user.id = :userId order by p.id" )
     List<PotResponseDto> findByUser_Id(@Param("userId") Integer user_id);
 
 
@@ -37,6 +37,6 @@ public interface PotRepository extends JpaRepository<Pot, Integer> {
 
     @Query(value = "select new com.ssafy.ssuk.pot.dto.response.PotSlideResponseDto(p.id, g.id) "
             + "from Pot p left join Garden g on g.pot.id = p.id and g.isUse = true "
-            + " where p.user.id = :userId" )
+            + " where p.user.id = :userId order by p.id" )
     List<PotSlideResponseDto> getSlidePotList(Integer userId);
 }
