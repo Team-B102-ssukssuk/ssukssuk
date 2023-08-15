@@ -130,6 +130,9 @@ public class MeasurementServiceImpl implements MeasurementService {
 
         log.info("레벨업 서비스");
         Integer level = uploadRequestDto.getLevel();
+        if(level - findGarden.getLevel() != 1) {
+            throw new CustomException(ErrorCode.INPUT_EXCEPTION);
+        }
         if (findGarden.getLevel() < level && level <= 3) { // 레벨업
             //푸시알림
             fcmService.sendPushTo(findGarden.getUser().getId(), "레벨 업", findGarden.getNickname() + "이(가) 레벨업했어요 !");
