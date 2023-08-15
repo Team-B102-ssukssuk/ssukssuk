@@ -62,7 +62,7 @@ const PotScreen = (props) => {
   useEffect(() => {
     setTokenExpiredCallback(() => {
       console.log("토큰 만료 혹은 충돌");
-      navigation.navigate("Login");
+      navigation.navigate("Intro");
     });
   }, []);
 
