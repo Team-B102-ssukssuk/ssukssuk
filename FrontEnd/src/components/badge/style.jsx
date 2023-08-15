@@ -23,8 +23,8 @@ const styles = StyleSheet.create({
     color: COLORS.brown,
     fontSize: 15,
   },
-  fontRed: {
-    color: COLORS.Red,
+  fontGreen: {
+    color: "#52C756",
   },
   waterIcon: {
     width: 75,
@@ -34,9 +34,6 @@ const styles = StyleSheet.create({
   textBlock: {
     width: 210,
     marginRight: 20,
-  },
-  fontGreen: {
-    color: "#52C756",
   },
   alignLeft: {
     justifyContent: "flex-start",

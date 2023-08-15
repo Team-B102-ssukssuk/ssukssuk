@@ -16,9 +16,13 @@ import axios from "axios";
 import plantImages from "../../assets/img/plantImages";
 import CookieRunBold from "../../components/common/CookieRunBold";
 import { setGardenID } from "../../redux/action";
+import ModalSensor from "../../components/SensorModal";
+import { useIsFocused } from "@react-navigation/native";
+import ModalPlantRegist from "../../components/modalplantregist";
 
 const MainScreen = (props) => {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const [isSettingModalVisible, setSettingModalVisible] = useState(false);
   const [isCharacterModalVisible, setCharacterModalVisible] = useState(false);
   const [isOpenMapModalVisible, setIsOpenMapModalVisible] = useState(false);
@@ -32,11 +36,15 @@ const MainScreen = (props) => {
   const [backgroundImage, setBackgroundImage] = useState(
     require("../../assets/img/ProfileBackground.png")
   );
+  const [isEditModalVisible, setEditModalVisible] = useState(false);
   const [isNotificationData, setNotificationData] = useState([]);
 
   const [isCharacterData, setCharacterData] = useState({
     plantNickname: null,
   });
+  const [isHeartVisible, setHeartVisible] = useState(false);
+  const [selectedSensorType, setSelectedSensorType] = useState(null);
+  const [isOpenSensorModalVisible, setOpenSensorModalVisible] = useState(false);
 
   const getPlantImageSource = (plantId, level) => {
     const imageName = `${plantId}_${level}.gif`;
@@ -44,6 +52,15 @@ const MainScreen = (props) => {
     const resolvedImage = Image.resolveAssetSource(image);
 
     return resolvedImage;
+  };
+
+  const toggleEditModal = () => {
+    setEditModalVisible(!isEditModalVisible);
+  };
+
+  const handleSensorPress = (sensorType) => {
+    setSelectedSensorType(sensorType);
+    toggleOpenSensorModal();
   };
 
   const changeBackgroundImage = () => {
@@ -140,32 +157,60 @@ const MainScreen = (props) => {
   };
 
   useEffect(() => {
-    // 컴포넌트가 마운트될 때 getUserData 함수 호출
-    getUserData();
-    getPlantData(999);
-    changeBackgroundImage();
-    registNotification();
-    getNotificationData();
-
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 500);
-
-    // 30초마다 getUserData 함수 호출하는 interval 설정
-    const sensorInterval = setInterval(() => {
+    if (isFocused) {
+      console.log("정원ID: " + props.gardenID);
+      getNotificationData();
       getUserData();
-    }, 30000); // 30초를 밀리초로 변환
-
-    const interval = setInterval(() => {
+      getPlantData(999);
       changeBackgroundImage();
-    }, 3600000); // 매 시간마다 호출 (밀리초 단위)
+      registNotification();
 
-    // 컴포넌트가 언마운트될 때 interval 정리
-    return () => {
-      clearInterval(sensorInterval);
-      clearInterval(interval);
-    };
-  }, []);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 500);
+
+      // 30초마다 getUserData 함수 호출하는 interval 설정
+      const sensorInterval = setInterval(() => {
+        getUserData();
+      }, 30000); // 30초를 밀리초로 변환
+
+      const interval = setInterval(() => {
+        changeBackgroundImage();
+      }, 3600000); // 매 시간마다 호출 (밀리초 단위)
+
+      return () => {
+        clearInterval(sensorInterval);
+        clearInterval(interval);
+      };
+    }
+  }, [isFocused]);
+
+  // useEffect(() => {
+  //   // 컴포넌트가 마운트될 때 getUserData 함수 호출
+  //   getUserData();
+  //   getPlantData(999);
+  //   changeBackgroundImage();
+  //   registNotification();
+
+  //   setTimeout(() => {
+  //     setIsLoading(false);
+  //   }, 500);
+
+  //   // 30초마다 getUserData 함수 호출하는 interval 설정
+  //   const sensorInterval = setInterval(() => {
+  //     getUserData();
+  //   }, 30000); // 30초를 밀리초로 변환
+
+  //   const interval = setInterval(() => {
+  //     changeBackgroundImage();
+  //   }, 3600000); // 매 시간마다 호출 (밀리초 단위)
+
+  //   // 컴포넌트가 언마운트될 때 interval 정리
+  //   return () => {
+  //     clearInterval(sensorInterval);
+  //     clearInterval(interval);
+  //   };
+  // }, []);
 
   const toggleSettingModal = () => {
     setSettingModalVisible(!isSettingModalVisible);
@@ -181,6 +226,10 @@ const MainScreen = (props) => {
 
   const toggleOpenDictionary = () => {
     setIsDictionaryModalVisible(!isDictionaryModalVisible);
+  };
+
+  const toggleOpenSensorModal = () => {
+    setOpenSensorModalVisible(!isOpenSensorModalVisible);
   };
 
   const handleSeedPlant = (plantId, plantName, nickname) => {
@@ -207,11 +256,29 @@ const MainScreen = (props) => {
     console.log("Selected plantName: " + plantName);
   };
 
+  const handleEdit = (inputValue) => {
+    customAxios
+      .put("/plant", {
+        gardenId: props.gardenID,
+        nickname: inputValue,
+      })
+      .then((res) => {
+        console.log(res.data);
+        getPlantData(999);
+      });
+    setEditModalVisible(false);
+  };
+
   const handleWateringPlant = () => {
     customAxios
       .get(`/sensor/water/${props.potID}`)
       .then(() => {
         console.log("성공");
+        setHeartVisible(true);
+
+        setTimeout(() => {
+          setHeartVisible(false);
+        }, 3000);
       })
       .catch(() => {
         console.log("물 급수 관련 오류");
@@ -228,36 +295,48 @@ const MainScreen = (props) => {
       <ImageBackground source={backgroundImage} style={styles.container}>
         <View style={styles.userInfoSection}>
           <View style={styles.SensorContainer}>
-            <View style={styles.tmp}>
+            <TouchableOpacity
+              onPress={() => handleSensorPress("temperature")}
+              style={styles.tmp}
+            >
               <Image
                 source={require("../../assets/img/tmpSensor.png")}
                 resizeMode="contain"
                 style={styles.sensorSize}
               />
+
               <CookieRunRegular style={styles.tmpText}>
                 {temperature} C°
               </CookieRunRegular>
-            </View>
-            <View style={styles.tmp}>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => handleSensorPress("humidity")}
+              style={styles.tmp}
+            >
               <Image
                 source={require("../../assets/img/humiditySensor.png")}
                 resizeMode="contain"
                 style={styles.sensorSize}
               />
+
               <CookieRunRegular style={styles.tmpText}>
                 {humidity} %
               </CookieRunRegular>
-            </View>
-            <View style={styles.tmp}>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => handleSensorPress("ground")}
+              style={styles.tmp}
+            >
               <Image
                 source={require("../../assets/img/moistureSensor.png")}
                 resizeMode="contain"
                 style={styles.sensorSize}
               />
+
               <CookieRunRegular style={styles.tmpText}>
                 {moisture} %
               </CookieRunRegular>
-            </View>
+            </TouchableOpacity>
             <TouchableOpacity onPress={toggleOpenMap}>
               <Image
                 source={require("../../assets/img/map.png")}
@@ -269,11 +348,7 @@ const MainScreen = (props) => {
           <View style={styles.IconContainer}>
             <TouchableOpacity
               style={styles.iconBackground}
-              onPress={() =>
-                navigation.navigate("Alarm", {
-                  NotificationData: isNotificationData,
-                })
-              }
+              onPress={() => navigation.navigate("Alarm")}
             >
               <Image
                 source={require("../../assets/img/alarmIcon.png")}
@@ -318,9 +393,25 @@ const MainScreen = (props) => {
         {isCharacterData.plantNickname != null ? (
           <View style={styles.nameTagSection}>
             <Image
-              source={require("../../assets/img/nameTag.png")}
+              source={require("../../assets/img/LeftArrow.png")}
               resizeMode="contain"
+              style={styles.rightArrowSize}
+            ></Image>
+            <TouchableOpacity
+              onPress={toggleEditModal}
               style={styles.nameTagSize}
+            >
+              <Image
+                source={require("../../assets/img/nameTag.png")}
+                resizeMode="contain"
+                style={{ width: "100%", height: "100%" }}
+              ></Image>
+            </TouchableOpacity>
+
+            <Image
+              source={require("../../assets/img/RightArrow.png")}
+              resizeMode="contain"
+              style={styles.leftArrowSize}
             ></Image>
             <CookieRunBold style={styles.characterName}>
               {isCharacterData.plantNickname}
@@ -329,7 +420,6 @@ const MainScreen = (props) => {
         ) : (
           <View style={styles.nameTagSection}></View>
         )}
-
         {isCharacterTrue ? (
           <View style={styles.characterSection}>
             <Image
@@ -340,6 +430,13 @@ const MainScreen = (props) => {
               resizeMode="contain"
               style={styles.characterSize}
             />
+            {isHeartVisible && (
+              <Image
+                source={require("../../assets/img/Heart.gif")}
+                resizeMode="contain"
+                style={styles.Heart}
+              ></Image>
+            )}
           </View>
         ) : (
           <TouchableOpacity
@@ -381,6 +478,21 @@ const MainScreen = (props) => {
         isVisible={isDictionaryModalVisible}
         onClose={toggleOpenDictionary}
         navigation={navigation}
+      />
+      <ModalSensor
+        isVisible={isOpenSensorModalVisible}
+        onClose={() => setOpenSensorModalVisible(false)}
+        navigation={navigation}
+        selectedSensorType={selectedSensorType} // 선택한 센서 종류 전달
+        selectedPotId={props.potID}
+      />
+      <ModalPlantRegist
+        isVisible={isEditModalVisible}
+        onClose={() => setEditModalVisible(false)}
+        onRegist={handleEdit}
+        title="애칭 수정"
+        placeholder="변경하시려는 애칭을 말씀해주세요"
+        maxInputLength={5}
       />
     </View>
   );

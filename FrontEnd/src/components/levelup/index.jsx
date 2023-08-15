@@ -1,8 +1,22 @@
 import { View, Image } from "react-native";
 import styles from "./style";
 import CookieRunRegular from "../common/CookieRunRegular";
+import customAxios from "../../utils/axios";
+import { useEffect, useState } from "react";
+import plantImages from "../../assets/img/plantImages";
 
-const AlertTankComponent = ({ date, nickname }) => {
+const LevelUpComponent = ({ date, nickname, gardenId }) => {
+  const [isPlantId, setPlantId] = useState(null);
+  const [isLevel, setLevel] = useState(null);
+
+  const getPlantImageSource = (plantId, level) => {
+    const imageName = `${plantId}_${level}.gif`;
+    const image = plantImages[imageName];
+    const resolvedImage = Image.resolveAssetSource(image);
+
+    return resolvedImage;
+  };
+
   function calculateTimeAgo(timestamp) {
     // Convert the given timestamp to a Date object
     const givenDate = new Date(timestamp);
@@ -24,6 +38,22 @@ const AlertTankComponent = ({ date, nickname }) => {
     }
   }
 
+  const getLevelUp = () => {
+    customAxios
+      .get(`/plant/${gardenId}`)
+      .then((res) => {
+        setPlantId(res.data.data.plantId);
+        setLevel(res.data.data.level);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    getLevelUp();
+  }, []);
+
   const minuteAgo = calculateTimeAgo(date);
 
   return (
@@ -32,20 +62,21 @@ const AlertTankComponent = ({ date, nickname }) => {
         <View style={styles.alertContainer}>
           <View style={styles.alignLeft}>
             <Image
-              source={require("../../assets/img/alertTank.png")}
+              source={getPlantImageSource(isPlantId, isLevel)}
               style={styles.waterIcon}
             />
           </View>
           <View style={styles.textBlock}>
             <CookieRunRegular style={styles.fontBrown}>
+              &apos;
               <CookieRunRegular style={styles.fontGreen}>
-                &apos;{nickname}&apos;&nbsp;
+                {nickname}
               </CookieRunRegular>
-              화분에&nbsp;
-              <CookieRunRegular style={styles.fontBlue}>물</CookieRunRegular>
-              <CookieRunRegular>이&nbsp;</CookieRunRegular>
-              <CookieRunRegular style={styles.fontRed}>부족</CookieRunRegular>
-              <CookieRunRegular>해요!! 물탱크를 채워주세요.</CookieRunRegular>
+              &apos;가 &nbsp;
+              <CookieRunRegular style={styles.fontBlue}>
+                레벨업
+              </CookieRunRegular>
+              &nbsp;했습니다!! 확인해 주세요
             </CookieRunRegular>
             <View style={styles.minuteStyle}>
               <CookieRunRegular style={styles.minuteColor}>
@@ -59,4 +90,4 @@ const AlertTankComponent = ({ date, nickname }) => {
   );
 };
 
-export default AlertTankComponent;
+export default LevelUpComponent;

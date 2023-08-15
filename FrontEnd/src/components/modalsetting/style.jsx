@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   },
   settingText: {
     fontSize: SIZES.h3,
-    width: 100,
+    width: 120,
     color: COLORS.brown,
   },
   onText: {

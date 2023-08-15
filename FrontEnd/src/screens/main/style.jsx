@@ -90,9 +90,21 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  rightArrowSize: {
+    width: 30,
+    height: 40,
+  },
+  leftArrowSize: {
+    width: 30,
+    height: 40,
+  },
   wateringCanSize: {
     width: 93,
     height: 84,
+  },
+  Heart: {
+    position: "absolute",
+    top: -15,
   },
   characterName: {
     position: "absolute",

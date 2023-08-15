@@ -71,6 +71,7 @@ const LoginScreen = ({ navigation }) => {
 
       console.log("console3 :" + response.data);
       const { accessToken, refreshToken } = response.data.data;
+
       // 받아온 토큰 정보를 AsyncStorage에 저장합니다.
       await AsyncStorage.setItem("accessToken", accessToken);
       await AsyncStorage.setItem("refreshToken", refreshToken);

@@ -34,8 +34,6 @@ export async function postRefreshToken() {
   try {
     const refreshToken = await AsyncStorage.getItem("refreshToken");
 
-    console.log("refreshToken : " + refreshToken);
-
     const response = await axios.post(
       "http://i9b102.p.ssafy.io:8080/user/token",
       {},
@@ -67,7 +65,7 @@ customAxios.interceptors.response.use(
     console.log("응답 : " + status);
     // console.log(error.response.data.message);
 
-    if (status === 400) {
+    if (status === 400 || status === 409) {
       if (tokenExpiredCallback) {
         const response = await postRefreshToken();
         console.log(response.status);

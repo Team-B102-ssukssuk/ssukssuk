@@ -27,6 +27,7 @@ const ModalDictionary = ({ isVisible, onClose }) => {
     customAxios
       .get("/plantinfo")
       .then((res) => {
+        console.log(res.data.data[1].plants[0]);
         setDictionaryData(res.data.data);
       })
       .catch(() => {
@@ -37,7 +38,7 @@ const ModalDictionary = ({ isVisible, onClose }) => {
   useEffect(() => {
     // 컴포넌트가 마운트될 때 getUserData 함수 호출
     getDictionaryData();
-  }, []);
+  }, [isVisible]);
 
   const toggleContentModal = (plant, plantImg) => {
     setSelectedPlant(plant);

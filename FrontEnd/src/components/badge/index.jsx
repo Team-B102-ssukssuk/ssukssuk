@@ -2,7 +2,20 @@ import { View, Image } from "react-native";
 import styles from "./style";
 import CookieRunRegular from "../common/CookieRunRegular";
 
-const AlertTankComponent = ({ date, nickname }) => {
+const BadgeComponent = ({ date, title, badgeId }) => {
+  console.log("아이디" + badgeId);
+  const badgeImages = {
+    1: require("../../assets/img/ActiveBadge1.png"),
+    2: require("../../assets/img/ActiveBadge2.png"),
+    3: require("../../assets/img/ActiveBadge3.png"),
+    4: require("../../assets/img/ActiveBadge4.png"),
+    5: require("../../assets/img/ActiveBadge5.png"),
+    6: require("../../assets/img/ActiveBadge6.png"),
+    7: require("../../assets/img/ActiveBadge7.png"),
+    8: require("../../assets/img/ActiveBadge8.png"),
+    9: require("../../assets/img/ActiveBadge9.png"),
+  };
+
   function calculateTimeAgo(timestamp) {
     // Convert the given timestamp to a Date object
     const givenDate = new Date(timestamp);
@@ -31,21 +44,11 @@ const AlertTankComponent = ({ date, nickname }) => {
       <View style={styles.container}>
         <View style={styles.alertContainer}>
           <View style={styles.alignLeft}>
-            <Image
-              source={require("../../assets/img/alertTank.png")}
-              style={styles.waterIcon}
-            />
+            <Image source={badgeImages[badgeId]} style={styles.waterIcon} />
           </View>
           <View style={styles.textBlock}>
             <CookieRunRegular style={styles.fontBrown}>
-              <CookieRunRegular style={styles.fontGreen}>
-                &apos;{nickname}&apos;&nbsp;
-              </CookieRunRegular>
-              화분에&nbsp;
-              <CookieRunRegular style={styles.fontBlue}>물</CookieRunRegular>
-              <CookieRunRegular>이&nbsp;</CookieRunRegular>
-              <CookieRunRegular style={styles.fontRed}>부족</CookieRunRegular>
-              <CookieRunRegular>해요!! 물탱크를 채워주세요.</CookieRunRegular>
+              {title}
             </CookieRunRegular>
             <View style={styles.minuteStyle}>
               <CookieRunRegular style={styles.minuteColor}>
@@ -59,4 +62,4 @@ const AlertTankComponent = ({ date, nickname }) => {
   );
 };
 
-export default AlertTankComponent;
+export default BadgeComponent;

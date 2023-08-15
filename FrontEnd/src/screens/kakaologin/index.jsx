@@ -20,8 +20,8 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const REST_API_KEY = "a12d292510e3111fe093a99ff91e118b";
-const URI = "http://i9b102.p.ssafy.io:8082/kakao/code";
-const REDIRECT_URI = "http://i9b102.p.ssafy.io:8082/kakao";
+const URI = "http://i9b102.p.ssafy.io:8080/auth/kakao/login";
+const REDIRECT_URI = "http://i9b102.p.ssafy.io:8080/auth/kakao";
 
 const KakaoLoginScreen = ({ navigation }) => {
   const runFirst = `window.ReactNativeWebView.postMessage("this is message from web");`;

@@ -1,10 +1,10 @@
 import { StyleSheet } from "react-native";
-import { COLORS, SIZES } from "../../constants/theme";
+import { COLORS } from "../../constants/theme";
 
 const styles = StyleSheet.create({
   container: {
-    width: SIZES.width,
-    height: SIZES.height,
+    flex: 1,
+    // Add other container styles as needed
   },
   userInfoSection: {
     paddingHorizontal: 30,
@@ -14,14 +14,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   lineSection: {
-    width: SIZES.width - 50,
+    width: "100%",
     marginHorizontal: 20,
     marginVertical: 10,
     borderBottomColor: "white",
     borderBottomWidth: 1,
   },
   rankText: {
-    width: SIZES.width - 40,
+    width: "100%",
   },
   title: {
     fontSize: 24,
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   profileContent: {
-    width: SIZES.width - 60,
+    width: "100%",
   },
   barContent: {
     padding: 30,
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     margin: 7,
   },
   header: {
-    width: SIZES.width - 40,
+    width: "100%",
     paddingTop: 50,
     flexDirection: "row",
     alignItems: "center",
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   Profile_bar: {
-    width: SIZES.width - 40,
+    width: "100%",
     height: 100,
     alignItems: "center",
     justifyContent: "center",

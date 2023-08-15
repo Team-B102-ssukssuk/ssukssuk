@@ -25,7 +25,7 @@ const ModalExit = ({ isVisible, onClose }) => {
   // Function to handle deletion and app exit
   const handleDeleteAndExit = () => {
     // Close the modal
-    onClose();
+    BackHandler.exitApp(); // 앱 종료
     // Perform the deletion logic here (onDelete(potID))
 
     // Exit the app

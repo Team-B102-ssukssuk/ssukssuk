@@ -99,6 +99,9 @@ const styles = StyleSheet.create({
     height: 170,
     opacity: 0.7,
   },
+  trashCanClicked: {
+    opacity: 0.5, // Change the opacity when the trashcan is clicked
+  },
 });
 
 export default styles;

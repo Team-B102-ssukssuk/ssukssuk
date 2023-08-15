@@ -11,6 +11,7 @@ const ModalPlantRegist = ({
   title,
   placeholder,
   errormessage,
+  maxInputLength,
 }) => {
   const [inputValue, setInputValue] = useState("");
 
@@ -45,7 +46,7 @@ const ModalPlantRegist = ({
           onChangeText={handleInputChange}
           value={inputValue}
           placeholder={placeholder}
-          maxLength={8}
+          maxLength={maxInputLength}
         />
         {errormessage != null ? (
           <CookieRunBold style={styles.loginErrorMessageActive}>

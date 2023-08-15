@@ -18,6 +18,8 @@ import LoadingScreen from "../loading";
 import * as Notifications from "expo-notifications";
 import { useIsFocused } from "@react-navigation/native";
 import plantImages from "../../assets/img/plantImages";
+import ModalMap from "../../components/modalmap";
+import { BarCodeScanner } from "expo-barcode-scanner";
 
 const PotScreen = (props) => {
   const isFocused = useIsFocused();
@@ -35,6 +37,15 @@ const PotScreen = (props) => {
   const [toastContent, setToastContent] = useState("");
   const [toastIconName, setToastIconName] = useState("");
   const [isTrashcanVisible, setTrashcanVisible] = useState("true");
+  const [isOpenMapModalVisible, setIsOpenMapModalVisible] = useState(false);
+  const [cameraPermission, setCameraPermission] = useState(false); // Default to false
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await BarCodeScanner.requestPermissionsAsync();
+      setCameraPermission(status === "granted");
+    })();
+  }, []);
 
   const getPlantImageSource = (plantId, level) => {
     const imageName = `${plantId}_${level}.gif`;
@@ -87,7 +98,11 @@ const PotScreen = (props) => {
     customAxios
       .get("/pot")
       .then((res) => {
-        console.log("화분" + res.data);
+        if (res.data.length !== 0) {
+          props.storePotID(res.data[0].potId);
+          props.setGardenID(res.data[0].gardenId);
+        }
+
         setPotData(res.data);
         setTimeout(() => {
           setIsLoading(false);
@@ -101,6 +116,7 @@ const PotScreen = (props) => {
   useEffect(() => {
     if (isFocused) {
       getPotData(); // Fetch data only when the screen is focused
+      setDeleteIconVisible(false);
     }
   }, [isFocused]); // The effect depends on the isFocused value
 
@@ -141,8 +157,13 @@ const PotScreen = (props) => {
   };
 
   const toggleQRCodeScanner = () => {
-    showTrashcan();
-    setQRcodeVisible(!isQRcodeVisible);
+    if (cameraPermission === true) {
+      showTrashcan();
+      setQRcodeVisible(!isQRcodeVisible);
+    } else {
+      setRegistModalVisible(true);
+      setTrashcanVisible(true);
+    }
   };
 
   const showTrashcan = () => {
@@ -337,8 +358,9 @@ const PotScreen = (props) => {
           "성공적으로 화분이 등록되었습니다.",
           "checkmark-circle-sharp"
         );
+        setRegistMessage(null);
         getPotData();
-        showTrashcan(true);
+        setTrashcanVisible(true);
       })
       .catch((err) => {
         if (err.response.status === 409) {
@@ -398,6 +420,12 @@ const PotScreen = (props) => {
         </ScrollView>
         {isTrashcanVisible && (
           <View style={styles.trashCanMargin}>
+            <TouchableOpacity onPress={() => setIsOpenMapModalVisible(true)}>
+              <Image
+                source={require("../../assets/img/map.png")}
+                style={[styles.mapSize]}
+              />
+            </TouchableOpacity>
             <TouchableOpacity onPress={visibleIcon}>
               <Image
                 source={require("../../assets/img/trashCan.png")}
@@ -421,12 +449,14 @@ const PotScreen = (props) => {
         isVisible={isRegistModalVisible}
         onClose={() => {
           setRegistModalVisible(false);
-          showTrashcan(true);
+          setTrashcanVisible(true);
+          setRegistMessage(null);
         }}
         onRegist={handleRegist}
         title="화분 등록"
         placeholder="화분 고유 ID를 입력해주세요"
         errormessage={isRegistMessage}
+        maxInputLength={8}
       />
       {isQRcodeVisible && (
         <QRCodeScanner
@@ -442,6 +472,11 @@ const PotScreen = (props) => {
           iconName={toastIconName}
         />
       )}
+      <ModalMap
+        isVisible={isOpenMapModalVisible}
+        onClose={() => setIsOpenMapModalVisible(false)}
+        navigation={navigation}
+      />
     </View>
   );
 };

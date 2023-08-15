@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import Icon from "react-native-vector-icons/MaterialIcons";
@@ -8,15 +8,15 @@ const QRCodeScanner = ({
   onCloseQRCodeScanner,
   onOpenInputModal,
 }) => {
-  const [hasPermission, setHasPermission] = useState(null);
+  // const [hasPermission, setHasPermission] = useState(null);
   const [isScannedData, setScannedData] = useState(null);
 
-  useEffect(() => {
-    (async () => {
-      const { status } = await BarCodeScanner.requestPermissionsAsync();
-      setHasPermission(status === "granted");
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     const { status } = await BarCodeScanner.requestPermissionsAsync();
+  //     setHasPermission(status === "granted");
+  //   })();
+  // }, []);
 
   const handleBarCodeScanned = ({ type, data }) => {
     setScannedData(data);
@@ -24,12 +24,12 @@ const QRCodeScanner = ({
     onScannedData(data);
   };
 
-  if (hasPermission === null) {
-    return null;
-  }
-  if (hasPermission === false) {
-    // return <Text>Unable to access camera</Text>;
-  }
+  // if (hasPermission === null) {
+  //   return null;
+  // }
+  // if (hasPermission === false) {
+  //   // return <Text>Unable to access camera</Text>;
+  // }
 
   return (
     <View style={styles.container}>
