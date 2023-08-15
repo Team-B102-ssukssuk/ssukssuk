@@ -2,23 +2,19 @@ package com.ssafy.ssuk.pot.service;
 
 import com.ssafy.ssuk.exception.dto.CustomException;
 import com.ssafy.ssuk.exception.dto.ErrorCode;
-import com.ssafy.ssuk.plant.domain.Garden;
 import com.ssafy.ssuk.plant.repository.domain.GardenRepository;
 import com.ssafy.ssuk.pot.domain.Pot;
-import com.ssafy.ssuk.pot.dto.requset.PotInsertDto;
 import com.ssafy.ssuk.pot.dto.response.PotResponseDto;
+import com.ssafy.ssuk.pot.dto.response.PotSlideResponseDto;
 import com.ssafy.ssuk.pot.repository.PotRepository;
 import com.ssafy.ssuk.user.domain.User;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.jdbc.Null;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -80,6 +76,12 @@ public class PotServiceImpl implements PotService {
         gardenRepository.deleteFromPot(userId, potId);
 
         potRepository.save(updatePot);
+    }
+
+    @Override
+    public List<PotSlideResponseDto> getSlidePotList(Integer userId) {
+        List<PotSlideResponseDto> potSlideList = potRepository.getSlidePotList(userId);
+        return potSlideList;
     }
 
 }

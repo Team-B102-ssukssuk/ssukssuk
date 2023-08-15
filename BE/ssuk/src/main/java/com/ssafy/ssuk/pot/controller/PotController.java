@@ -2,14 +2,16 @@ package com.ssafy.ssuk.pot.controller;
 
 import com.ssafy.ssuk.exception.dto.CustomException;
 import com.ssafy.ssuk.exception.dto.ErrorCode;
-import com.ssafy.ssuk.plant.domain.Garden;
 import com.ssafy.ssuk.plant.service.GardenService;
 import com.ssafy.ssuk.pot.domain.Pot;
 import com.ssafy.ssuk.pot.dto.requset.PotDeleteDto;
 import com.ssafy.ssuk.pot.dto.requset.PotInsertDto;
 import com.ssafy.ssuk.pot.dto.response.PotResponseDto;
+import com.ssafy.ssuk.pot.dto.response.PotSlideResponseDto;
 import com.ssafy.ssuk.pot.mapper.PotMapper;
 import com.ssafy.ssuk.pot.service.PotService;
+import com.ssafy.ssuk.utils.response.CommonResponseEntity;
+import com.ssafy.ssuk.utils.response.SuccessCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -66,4 +68,10 @@ public class PotController {
         return ResponseEntity.ok("해제 완료");
     }
 
+    // 슬라이드용 화분 정보 불러오기
+    @GetMapping("/slide")
+    public ResponseEntity<?> getSlidePotList(@RequestAttribute Integer userId) {
+        List<PotSlideResponseDto> potList = potService.getSlidePotList(userId);
+        return CommonResponseEntity.getResponseEntity(SuccessCode.OK, potList);
+    }
 }

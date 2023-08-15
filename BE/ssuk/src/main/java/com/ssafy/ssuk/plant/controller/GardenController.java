@@ -11,7 +11,6 @@ import com.ssafy.ssuk.plant.domain.Plant;
 import com.ssafy.ssuk.plant.dto.request.*;
 import com.ssafy.ssuk.plant.dto.response.GardenRegisterResponseDto;
 import com.ssafy.ssuk.plant.dto.response.GardenSearchOneResponseDto;
-import com.ssafy.ssuk.plant.dto.response.ResponseDto;
 import com.ssafy.ssuk.plant.service.GardenService;
 import com.ssafy.ssuk.plant.service.PlantService;
 import com.ssafy.ssuk.pot.domain.Pot;
@@ -23,7 +22,6 @@ import com.ssafy.ssuk.utils.response.SuccessCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.DynamicInsert;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -162,10 +160,7 @@ public class GardenController {
             @PathVariable Integer gardenId) {
         gardenService.deleteFromGarden(userId, gardenId);
 
-        if (badgeService.checkUserBadge(BadgeCode.바람과_함께_사라지다.getCode(), userId) == false) {
-            badgeService.saveUserBadge(BadgeCode.바람과_함께_사라지다.getCode(), userId);
-            notificationService.pushAndInsertNotificationForBadge(userId,BadgeCode.바람과_함께_사라지다);
-        }
+        userBadgeCheck(userId, BadgeCode.바람과_함께_사라지다);
         return CommonResponseEntity.getResponseEntity(SuccessCode.SUCCESS_CODE);
     }
 
@@ -186,7 +181,16 @@ public class GardenController {
             BindingResult bindingResult) {
         checkValidated(bindingResult);
         gardenService.modifyRecord(userId, gardenRecordRequestDto);
+        userBadgeCheck(userId, BadgeCode.쑥쑥이의_성장_기록);
         return CommonResponseEntity.getResponseEntity(SuccessCode.SUCCESS_CODE);
+    }
+
+    private void userBadgeCheck(Integer userId, BadgeCode badgeCode) {
+        if (!badgeService.checkUserBadge(badgeCode.getCode(), userId)) {
+            badgeService.saveUserBadge(badgeCode.getCode(), userId);
+            notificationService.pushAndInsertNotificationForBadge(userId, badgeCode);
+            log.info("업적달성");
+        }
     }
 
     private static void checkValidated(BindingResult bindingResult) {
