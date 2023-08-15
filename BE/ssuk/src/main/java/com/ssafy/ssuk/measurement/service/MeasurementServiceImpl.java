@@ -15,9 +15,12 @@ import com.ssafy.ssuk.notify.repository.NotificationRepository;
 import com.ssafy.ssuk.notify.service.FcmService;
 import com.ssafy.ssuk.plant.domain.Garden;
 import com.ssafy.ssuk.plant.repository.domain.GardenRepository;
+import com.ssafy.ssuk.pot.domain.Pot;
 import com.ssafy.ssuk.user.domain.User;
 import com.ssafy.ssuk.utils.image.ImageInfo;
 import com.ssafy.ssuk.utils.image.S3UploadService;
+import com.ssafy.ssuk.utils.response.CommonResponseEntity;
+import com.ssafy.ssuk.utils.response.SuccessCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -43,9 +47,16 @@ public class MeasurementServiceImpl implements MeasurementService {
     @Override
     public List<Measurement> findRecentValueByPot_Id(Integer user_id, Integer pot_id) {
         // 해당 유저가 화분을 보유하고 있는지 체킹을 할까? 고려해보자
+        List<Measurement> result = measurementRepository.findRecentValueByPot_Id(pot_id);
 
+        if(result.size() == 0) {
+            result.add(new Measurement(0, new Pot(pot_id), 0.0, LocalDate.now(), SensorType.T));
+            result.add(new Measurement(0, new Pot(pot_id),0.0, LocalDate.now(),SensorType.W));
+            result.add(new Measurement(0, new Pot(pot_id),0.0, LocalDate.now(),SensorType.M));
+            result.add(new Measurement(0, new Pot(pot_id),0.0, LocalDate.now(),SensorType.H));
+        }
         //화분아이디로 센서값 뱉기
-        return measurementRepository.findRecentValueByPot_Id(pot_id);
+        return result;
     }
 
     //시리얼 넘버 뱉기

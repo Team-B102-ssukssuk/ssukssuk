@@ -46,9 +46,10 @@ public class MeasurementController {
     //조회
     @GetMapping("/{pot_id}")
     ResponseEntity<?> findByUser_IdAndPot_Id(@RequestAttribute(required = true) Integer userId, @PathVariable Integer pot_id) {
-        List<Measurement> result = mesurementService.findRecentValueByPot_Id(userId, pot_id);
+        List<Measurement> find = mesurementService.findRecentValueByPot_Id(userId, pot_id);
 
-        return ResponseEntity.ok(result);
+        log.info("센서 조회");
+        return CommonResponseEntity.getResponseEntity(SuccessCode.OK,find);
     }
 
 
