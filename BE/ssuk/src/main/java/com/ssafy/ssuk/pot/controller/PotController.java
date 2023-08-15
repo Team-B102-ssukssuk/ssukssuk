@@ -2,6 +2,7 @@ package com.ssafy.ssuk.pot.controller;
 
 import com.ssafy.ssuk.exception.dto.CustomException;
 import com.ssafy.ssuk.exception.dto.ErrorCode;
+import com.ssafy.ssuk.notify.service.NotificationService;
 import com.ssafy.ssuk.plant.service.GardenService;
 import com.ssafy.ssuk.pot.domain.Pot;
 import com.ssafy.ssuk.pot.dto.requset.PotDeleteDto;
@@ -27,12 +28,14 @@ public class PotController {
     private final PotService potService;
     private final GardenService gardenService;
     private final PotMapper potMapper;
+    private final NotificationService notificationService;
 
     @Autowired
-    public PotController(PotService potService, GardenService gardenService, PotMapper potMapper) {
+    public PotController(PotService potService, GardenService gardenService, PotMapper potMapper, NotificationService notificationService) {
         this.potService = potService;
         this.gardenService = gardenService;
         this.potMapper = potMapper;
+        this.notificationService = notificationService;
     }
 
     //보유한 화분 전체 조회
@@ -64,6 +67,7 @@ public class PotController {
             throw new CustomException(ErrorCode.INPUT_EXCEPTION);
 
         potService.delete(potDeleteDto.getPotId(), userId);
+        notificationService.deleteAllNotificationWithPotId(potDeleteDto.getPotId());
 
         return ResponseEntity.ok("해제 완료");
     }

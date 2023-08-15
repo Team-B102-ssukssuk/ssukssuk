@@ -30,4 +30,12 @@ public interface NotificationRepository extends JpaRepository<Notification, Inte
     @Query("update Notification n set n.visible = 0, n.check_date=now() where n.user.id = :userId")
     @Modifying
     void updateAllNotification(@Param("userId") Integer userId);
+
+    @Modifying
+    @Query("update Notification n set n.visible = 0, n.check_date=now() where n.garden.id = :gardenId")
+    void updateAllNotificationWithGardenId(@Param("gardenId") Integer gardenId);
+
+    @Modifying
+    @Query("update Notification n set n.visible = 0, n.check_date=now() where n.pot.id = :potId")
+    void updateAllNotificationWithPotId(@Param("potId") Integer potId);
 }

@@ -133,6 +133,7 @@ public class GardenController {
 
         Integer gardenId = gardenDeleteRequestDto.getGardenId();
         gardenService.deleteFromPot(userId, gardenId);
+        notificationService.deleteAllNotificationWithGardenId(gardenId);
         return CommonResponseEntity.getResponseEntity(SuccessCode.SUCCESS_CODE);
     }
 
@@ -161,6 +162,7 @@ public class GardenController {
         gardenService.deleteFromGarden(userId, gardenId);
 
         userBadgeCheck(userId, BadgeCode.바람과_함께_사라지다);
+        notificationService.deleteAllNotificationWithGardenId(gardenId);
         return CommonResponseEntity.getResponseEntity(SuccessCode.SUCCESS_CODE);
     }
 
