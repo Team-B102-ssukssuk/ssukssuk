@@ -56,10 +56,6 @@ const PotScreen = (props) => {
   };
 
   useEffect(() => {
-    registerForPushNotificationsAsync();
-  }, []);
-
-  useEffect(() => {
     setTokenExpiredCallback(() => {
       console.log("토큰 만료 혹은 충돌");
       navigation.navigate("Intro");
@@ -117,6 +113,7 @@ const PotScreen = (props) => {
     if (isFocused) {
       getPotData(); // Fetch data only when the screen is focused
       setDeleteIconVisible(false);
+      registerForPushNotificationsAsync();
     }
   }, [isFocused]); // The effect depends on the isFocused value
 
@@ -198,7 +195,6 @@ const PotScreen = (props) => {
     for (let i = startIndex; i < endIndex; i++) {
       if (i < isPotData.length) {
         const plant = isPotData[i];
-        console.log("테스트" + plant);
         const potId = plant.potId;
         pots.push(
           <View

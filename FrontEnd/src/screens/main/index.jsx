@@ -15,7 +15,7 @@ import LoadingScreen from "../loading";
 import axios from "axios";
 import plantImages from "../../assets/img/plantImages";
 import CookieRunBold from "../../components/common/CookieRunBold";
-import { setGardenID } from "../../redux/action";
+import { setGardenID, storePotID } from "../../redux/action";
 import ModalSensor from "../../components/SensorModal";
 import { useIsFocused } from "@react-navigation/native";
 import ModalPlantRegist from "../../components/modalplantregist";
@@ -45,6 +45,8 @@ const MainScreen = (props) => {
   const [isHeartVisible, setHeartVisible] = useState(false);
   const [selectedSensorType, setSelectedSensorType] = useState(null);
   const [isOpenSensorModalVisible, setOpenSensorModalVisible] = useState(false);
+  const [isSlideData, setSlideData] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const getPlantImageSource = (plantId, level) => {
     const imageName = `${plantId}_${level}.gif`;
@@ -97,37 +99,97 @@ const MainScreen = (props) => {
       });
   };
 
-  const getUserData = () => {
-    customAxios
-      .get(`/sensor/${props.potID}`)
-      .then((res) => {
-        console.log("여기", res.data);
+  const handleArrowClick = async (direction) => {
+    let updatedIndex = currentIndex; // 업데이트될 currentIndex
 
-        const temperatureData = res.data.find(
-          (sensor) => sensor.sensorType === "T"
-        );
-        const moistureData = res.data.find(
-          (sensor) => sensor.sensorType === "M"
-        );
-        const humidityData = res.data.find(
-          (sensor) => sensor.sensorType === "H"
-        );
+    if (direction === "left") {
+      if (currentIndex > 0) {
+        updatedIndex = currentIndex - 1;
+      }
+    } else if (direction === "right") {
+      if (currentIndex < isSlideData.length - 1) {
+        updatedIndex = currentIndex + 1;
+      }
+    }
 
-        if (temperatureData) {
-          setTemperature(temperatureData.measurementValue);
-        }
+    await setCurrentIndex(updatedIndex); // await를 사용하여 setCurrentIndex 완료를 기다림
+    props.storePotID(isSlideData[updatedIndex].potId);
+    props.setGardenID(isSlideData[updatedIndex].gardenId);
 
-        if (moistureData) {
-          setMoisture(moistureData.measurementValue);
-        }
+    console.log(isSlideData[updatedIndex].gardenId);
 
-        if (humidityData) {
-          setHumidity(humidityData.measurementValue);
-        }
-      })
-      .catch(() => {
-        console.log("문제");
+    if (isSlideData[updatedIndex].gardenId === null) {
+      setCharacterTrue(false);
+      setCharacterData({
+        plantNickname: null,
       });
+      getUserData(isSlideData[updatedIndex].potId);
+    } else {
+      getPlantData(isSlideData[updatedIndex].gardenId);
+      getUserData(isSlideData[updatedIndex].potId);
+    }
+  };
+
+  const getUserData = (potId) => {
+    if (potId === 999) {
+      customAxios
+        .get(`/sensor/${props.potID}`)
+        .then((res) => {
+          const temperatureData = res.data.data.find(
+            (sensor) => sensor.sensorType === "T"
+          );
+          const moistureData = res.data.data.find(
+            (sensor) => sensor.sensorType === "M"
+          );
+          const humidityData = res.data.data.find(
+            (sensor) => sensor.sensorType === "H"
+          );
+
+          if (temperatureData) {
+            setTemperature(temperatureData.measurementValue);
+          }
+
+          if (moistureData) {
+            setMoisture(moistureData.measurementValue);
+          }
+
+          if (humidityData) {
+            setHumidity(humidityData.measurementValue);
+          }
+        })
+        .catch(() => {
+          console.log("문제");
+        });
+    } else {
+      customAxios
+        .get(`/sensor/${potId}`)
+        .then((res) => {
+          const temperatureData = res.data.data.find(
+            (sensor) => sensor.sensorType === "T"
+          );
+          const moistureData = res.data.data.find(
+            (sensor) => sensor.sensorType === "M"
+          );
+          const humidityData = res.data.data.find(
+            (sensor) => sensor.sensorType === "H"
+          );
+
+          if (temperatureData) {
+            setTemperature(temperatureData.measurementValue);
+          }
+
+          if (moistureData) {
+            setMoisture(moistureData.measurementValue);
+          }
+
+          if (humidityData) {
+            setHumidity(humidityData.measurementValue);
+          }
+        })
+        .catch(() => {
+          console.log("문제");
+        });
+    }
   };
 
   const getPlantData = (gardenId) => {
@@ -135,7 +197,6 @@ const MainScreen = (props) => {
       customAxios
         .get(`/plant/${props.gardenID}`)
         .then((res) => {
-          console.log(res.data);
           setCharacterData(res.data.data);
           setCharacterTrue(true);
         })
@@ -146,7 +207,6 @@ const MainScreen = (props) => {
       customAxios
         .get(`/plant/${gardenId}`)
         .then((res) => {
-          console.log(res.data);
           setCharacterData(res.data.data);
           setCharacterTrue(true);
         })
@@ -156,61 +216,51 @@ const MainScreen = (props) => {
     }
   };
 
+  const getSlideData = () => {
+    customAxios
+      .get("/pot/slide")
+      .then((res) => {
+        setSlideData(res.data.data);
+        setCurrentIndex(
+          res.data.data.findIndex((item) => item.potId === props.potID)
+        );
+      })
+      .catch(() => {
+        console.log("슬라이드 데이터 오류");
+      });
+  };
+
   useEffect(() => {
     if (isFocused) {
       console.log("정원ID: " + props.gardenID);
       getNotificationData();
-      getUserData();
       getPlantData(999);
-      changeBackgroundImage();
       registNotification();
+      getSlideData();
 
       setTimeout(() => {
         setIsLoading(false);
       }, 500);
-
-      // 30초마다 getUserData 함수 호출하는 interval 설정
-      const sensorInterval = setInterval(() => {
-        getUserData();
-      }, 30000); // 30초를 밀리초로 변환
-
-      const interval = setInterval(() => {
-        changeBackgroundImage();
-      }, 3600000); // 매 시간마다 호출 (밀리초 단위)
-
-      return () => {
-        clearInterval(sensorInterval);
-        clearInterval(interval);
-      };
     }
   }, [isFocused]);
 
-  // useEffect(() => {
-  //   // 컴포넌트가 마운트될 때 getUserData 함수 호출
-  //   getUserData();
-  //   getPlantData(999);
-  //   changeBackgroundImage();
-  //   registNotification();
+  useEffect(() => {
+    getUserData(999);
+    changeBackgroundImage();
 
-  //   setTimeout(() => {
-  //     setIsLoading(false);
-  //   }, 500);
+    const sensorInterval = setInterval(() => {
+      getUserData(999);
+    }, 30000); // 30초를 밀리초로 변환
 
-  //   // 30초마다 getUserData 함수 호출하는 interval 설정
-  //   const sensorInterval = setInterval(() => {
-  //     getUserData();
-  //   }, 30000); // 30초를 밀리초로 변환
+    const interval = setInterval(() => {
+      changeBackgroundImage();
+    }, 3600000); // 매 시간마다 호출 (밀리초 단위)
 
-  //   const interval = setInterval(() => {
-  //     changeBackgroundImage();
-  //   }, 3600000); // 매 시간마다 호출 (밀리초 단위)
-
-  //   // 컴포넌트가 언마운트될 때 interval 정리
-  //   return () => {
-  //     clearInterval(sensorInterval);
-  //     clearInterval(interval);
-  //   };
-  // }, []);
+    return () => {
+      clearInterval(sensorInterval);
+      clearInterval(interval);
+    };
+  }, []);
 
   const toggleSettingModal = () => {
     setSettingModalVisible(!isSettingModalVisible);
@@ -246,14 +296,11 @@ const MainScreen = (props) => {
         console.log("식물 등록 성공");
         props.setGardenID(res.data.data.gardenId);
         getPlantData(res.data.data.gardenId);
+        getSlideData();
       })
       .catch(() => {
         navigation.navigate("Error");
       });
-
-    console.log("Planting seed with nickname: " + nickname);
-    console.log("Selected plantId: " + plantId);
-    console.log("Selected plantName: " + plantName);
   };
 
   const handleEdit = (inputValue) => {
@@ -392,11 +439,13 @@ const MainScreen = (props) => {
         </View>
         {isCharacterData.plantNickname != null ? (
           <View style={styles.nameTagSection}>
-            <Image
-              source={require("../../assets/img/LeftArrow.png")}
-              resizeMode="contain"
-              style={styles.rightArrowSize}
-            ></Image>
+            <TouchableOpacity onPress={() => handleArrowClick("left")}>
+              <Image
+                source={require("../../assets/img/LeftArrow.png")}
+                resizeMode="contain"
+                style={styles.rightArrowSize}
+              ></Image>
+            </TouchableOpacity>
             <TouchableOpacity
               onPress={toggleEditModal}
               style={styles.nameTagSize}
@@ -406,19 +455,42 @@ const MainScreen = (props) => {
                 resizeMode="contain"
                 style={{ width: "100%", height: "100%" }}
               ></Image>
+              <CookieRunBold style={styles.characterName}>
+                {isCharacterData.plantNickname}
+              </CookieRunBold>
             </TouchableOpacity>
-
-            <Image
-              source={require("../../assets/img/RightArrow.png")}
-              resizeMode="contain"
-              style={styles.leftArrowSize}
-            ></Image>
-            <CookieRunBold style={styles.characterName}>
-              {isCharacterData.plantNickname}
-            </CookieRunBold>
+            <TouchableOpacity onPress={() => handleArrowClick("right")}>
+              <Image
+                source={require("../../assets/img/RightArrow.png")}
+                resizeMode="contain"
+                style={styles.leftArrowSize}
+              ></Image>
+            </TouchableOpacity>
           </View>
         ) : (
-          <View style={styles.nameTagSection}></View>
+          <View style={styles.nameTagSection}>
+            <TouchableOpacity onPress={() => handleArrowClick("left")}>
+              <Image
+                source={require("../../assets/img/LeftArrow.png")}
+                resizeMode="contain"
+                style={styles.rightArrowSize}
+              ></Image>
+            </TouchableOpacity>
+            <View style={styles.nameTagSize}>
+              <Image
+                source={require("../../assets/img/nameTag.png")}
+                resizeMode="contain"
+                style={{ width: "100%", height: "100%" }}
+              ></Image>
+            </View>
+            <TouchableOpacity onPress={() => handleArrowClick("right")}>
+              <Image
+                source={require("../../assets/img/RightArrow.png")}
+                resizeMode="contain"
+                style={styles.leftArrowSize}
+              ></Image>
+            </TouchableOpacity>
+          </View>
         )}
         {isCharacterTrue ? (
           <View style={styles.characterSection}>
@@ -506,4 +578,6 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { setGardenID })(MainScreen);
+export default connect(mapStateToProps, { storePotID, setGardenID })(
+  MainScreen
+);

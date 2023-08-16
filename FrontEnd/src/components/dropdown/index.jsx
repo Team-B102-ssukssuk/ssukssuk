@@ -20,7 +20,7 @@ const CustomDropdown = ({ options, onSelect }) => {
     const resolvedImage = Image.resolveAssetSource(image);
 
     if (resolvedImage == null) {
-      return require("../../assets/img/silhouette.png");
+      return require("../../assets/img/ComingSoon.png");
     }
 
     return resolvedImage;
@@ -57,9 +57,23 @@ const CustomDropdown = ({ options, onSelect }) => {
       <View key={`dropdown_${rowIndex}`} style={styles.rowContainer}>
         {row.map((subcategory, columnIndex) => (
           <View key={`dropdown_${columnIndex}`} style={styles.rowItem}>
-            <TouchableOpacity
-              onPress={() => handleSubcategoryPress(subcategory)}
-            >
+            {subcategory.plantId <= 4 ? (
+              <TouchableOpacity
+                onPress={() => handleSubcategoryPress(subcategory)}
+              >
+                <Image
+                  source={getPlantImageSource(subcategory.plantId, 1)}
+                  resizeMode="contain"
+                  style={[
+                    styles.emptyImg,
+                    {
+                      width: 75,
+                      height: 75,
+                    },
+                  ]}
+                />
+              </TouchableOpacity>
+            ) : (
               <Image
                 source={getPlantImageSource(subcategory.plantId, 1)}
                 resizeMode="contain"
@@ -71,7 +85,8 @@ const CustomDropdown = ({ options, onSelect }) => {
                   },
                 ]}
               />
-            </TouchableOpacity>
+            )}
+
             <CookieRunBold style={{ textAlign: "center", color: "#4D0C0C" }}>
               {subcategory.plantName}
             </CookieRunBold>

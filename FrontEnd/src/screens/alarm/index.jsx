@@ -113,13 +113,16 @@ const AlarmScreen = ({ navigation, storePotID, setGardenID }) => {
           <TouchableOpacity
             onPress={() => {
               deleteNotification(item.notificationId);
-              navigation.navigate("Garden");
+              storePotID(item.potId);
+              setGardenID(item.gardenId);
+              navigation.navigate("Main");
             }}
           >
             <LevelUpComponent
               date={item.notification_date}
               nickname={item.ninckName}
               gardenId={item.gardenId}
+              level={item.level}
             />
           </TouchableOpacity>
         ) : item.notificationType === "B" ? (
