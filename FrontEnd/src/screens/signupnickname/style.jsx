@@ -126,6 +126,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
+  logoWhiteSize: {
+    resizeMode: "contain",
+    width: 200,
+    height: 150,
+  },
 });
 
 export default styles;

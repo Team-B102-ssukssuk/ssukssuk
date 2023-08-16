@@ -130,6 +130,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  logoWhiteSize: {
+    resizeMode: "contain",
+    width: 200,
+    height: 150,
+  },
 });
 
 export default styles;

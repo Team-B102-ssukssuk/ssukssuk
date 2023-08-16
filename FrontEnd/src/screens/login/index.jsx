@@ -91,7 +91,10 @@ const LoginScreen = ({ navigation }) => {
       style={styles.container}
     >
       <View>
-        <Image source={require("../../assets/img/LogoWhite.png")} />
+        <Image
+          source={require("../../assets/img/LogoWhite.png")}
+          style={styles.logoWhiteSize}
+        />
       </View>
       <View style={styles.logincontainer}>
         <Text style={[styles.loginErrorMessage, { opacity: errorOpacity }]}>
