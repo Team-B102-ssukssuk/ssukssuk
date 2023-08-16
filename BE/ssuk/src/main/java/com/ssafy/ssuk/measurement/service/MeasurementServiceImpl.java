@@ -6,6 +6,7 @@ import com.ssafy.ssuk.exception.dto.ErrorCode;
 import com.ssafy.ssuk.measurement.domain.Measurement;
 import com.ssafy.ssuk.measurement.domain.SensorType;
 import com.ssafy.ssuk.measurement.dto.request.UploadRequestDto;
+import com.ssafy.ssuk.measurement.dto.response.GroundResponseDto;
 import com.ssafy.ssuk.measurement.dto.response.MeasurementResponseDto;
 import com.ssafy.ssuk.measurement.dto.socket.SensorMessageDto;
 import com.ssafy.ssuk.measurement.repository.MeasurementRepository;
@@ -51,7 +52,7 @@ public class MeasurementServiceImpl implements MeasurementService {
 
         if(result.size() == 0) {
             result.add(new Measurement(0, new Pot(pot_id), 0.0, LocalDate.now(), SensorType.T));
-            result.add(new Measurement(0, new Pot(pot_id),0.0, LocalDate.now(),SensorType.W));
+            result.add(new Measurement(0, new Pot(pot_id),100.0, LocalDate.now(),SensorType.W));
             result.add(new Measurement(0, new Pot(pot_id),0.0, LocalDate.now(),SensorType.M));
             result.add(new Measurement(0, new Pot(pot_id),0.0, LocalDate.now(),SensorType.H));
         }
@@ -81,7 +82,7 @@ public class MeasurementServiceImpl implements MeasurementService {
         Integer userId = garden.getUser().getId();
 
         if (sensorMessageDto.getSensorType().equals(SensorType.M)) {
-            if (garden.getPlant().getMoistureMin() > sensorMessageDto.getMeasurementValue()) {
+            if (garden.getPlant().getMoistureMin() < sensorMessageDto.getMeasurementValue()) {
 
                 String nickName = garden.getNickname();
 
@@ -203,6 +204,13 @@ public class MeasurementServiceImpl implements MeasurementService {
     @Override
     public List<MeasurementResponseDto> selectValueByPot_id(Integer potId, SensorType sensorType) {
         List<MeasurementResponseDto> result = measurementRepository.selectValueByPot_id(potId, sensorType);
+        return result;
+    }
+
+    @Override
+    public List<GroundResponseDto> selectGroundByPot_Id(Integer potId, SensorType sensorType) {
+        List<GroundResponseDto> result = measurementRepository.selectGroundByPot_id(potId, sensorType);
+
         return result;
     }
 }

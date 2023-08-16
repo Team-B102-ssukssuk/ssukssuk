@@ -8,6 +8,7 @@ import com.ssafy.ssuk.measurement.domain.Measurement;
 import com.ssafy.ssuk.measurement.domain.SensorType;
 import com.ssafy.ssuk.measurement.dto.request.RaspberryRequestDto;
 import com.ssafy.ssuk.measurement.dto.request.UploadRequestDto;
+import com.ssafy.ssuk.measurement.dto.response.GroundResponseDto;
 import com.ssafy.ssuk.measurement.dto.response.MeasurementResponseDto;
 import com.ssafy.ssuk.measurement.service.MeasurementService;
 import com.ssafy.ssuk.notify.service.NotificationService;
@@ -119,7 +120,7 @@ public class MeasurementController {
     @GetMapping("/ground/{potId}")
     ResponseEntity<?> selectGround(@RequestAttribute Integer userId, @PathVariable Integer potId) {
         log.info("토양 수분");
-        List<MeasurementResponseDto> result = mesurementService.selectValueByPot_id(potId, SensorType.W);
+        List<GroundResponseDto> result = mesurementService.selectGroundByPot_Id(potId, SensorType.W);
         return CommonResponseEntity.getResponseEntity(SuccessCode.OK, result);
     }
 
