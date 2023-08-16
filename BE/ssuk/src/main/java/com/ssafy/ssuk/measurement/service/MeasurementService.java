@@ -3,6 +3,7 @@ package com.ssafy.ssuk.measurement.service;
 import com.ssafy.ssuk.measurement.domain.Measurement;
 import com.ssafy.ssuk.measurement.domain.SensorType;
 import com.ssafy.ssuk.measurement.dto.request.UploadRequestDto;
+import com.ssafy.ssuk.measurement.dto.response.GroundResponseDto;
 import com.ssafy.ssuk.measurement.dto.response.MeasurementResponseDto;
 import com.ssafy.ssuk.measurement.dto.socket.SensorMessageDto;
 import org.springframework.data.repository.query.Param;
@@ -23,4 +24,6 @@ public interface MeasurementService {
     Integer updateLevel(UploadRequestDto uploadRequestDto);
 
     List<MeasurementResponseDto> selectValueByPot_id(Integer potId, SensorType sensorType);
+
+    List<GroundResponseDto> selectGroundByPot_Id(Integer potId, SensorType sensorType);
 }
