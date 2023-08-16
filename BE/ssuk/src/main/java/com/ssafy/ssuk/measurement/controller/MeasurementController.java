@@ -10,6 +10,7 @@ import com.ssafy.ssuk.measurement.dto.request.RaspberryRequestDto;
 import com.ssafy.ssuk.measurement.dto.request.UploadRequestDto;
 import com.ssafy.ssuk.measurement.dto.response.GroundResponseDto;
 import com.ssafy.ssuk.measurement.dto.response.MeasurementResponseDto;
+import com.ssafy.ssuk.measurement.dto.response.RecentMeasurementResponseDto;
 import com.ssafy.ssuk.measurement.service.MeasurementService;
 import com.ssafy.ssuk.notify.service.NotificationService;
 import com.ssafy.ssuk.utils.response.CommonResponseEntity;
@@ -47,7 +48,7 @@ public class MeasurementController {
     //조회
     @GetMapping("/{pot_id}")
     ResponseEntity<?> findByUser_IdAndPot_Id(@RequestAttribute(required = true) Integer userId, @PathVariable Integer pot_id) {
-        List<Measurement> find = mesurementService.findRecentValueByPot_Id(userId, pot_id);
+        List<RecentMeasurementResponseDto> find = mesurementService.findRecentValueByPot_Id(userId, pot_id);
 
         log.info("센서 조회");
         return CommonResponseEntity.getResponseEntity(SuccessCode.OK,find);
