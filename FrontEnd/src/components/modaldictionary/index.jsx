@@ -27,7 +27,7 @@ const ModalDictionary = ({ isVisible, onClose }) => {
     customAxios
       .get("/plantinfo")
       .then((res) => {
-        console.log(res.data.data[1].plants[0]);
+        // console.log(JSON.stringify(res.data.data));
         setDictionaryData(res.data.data);
       })
       .catch(() => {
@@ -165,24 +165,35 @@ const ModalDictionary = ({ isVisible, onClose }) => {
         {/* 모달 내용 */}
         <CookieRunBold style={styles.modalText}>도감</CookieRunBold>
         <ScrollView>
-          {isDictionaryData.map((category) =>
-            category.categoryName === selectedCategory ? (
-              <View key={`category_${category.categoryId}`}>
-                {category.plants.map((plant) => (
+          {isDictionaryData.map((category) => (
+            <View key={`category_${category.categoryId}`}>
+              {console.log("여기 : " + JSON.stringify(category))}
+              {category.categoryName === selectedCategory &&
+                category.plants.map((plant) => (
                   <View key={`category_plant_${plant.plantId}`}>
                     <View style={styles.content}>
                       <CookieRunBold style={styles.dictionaryText}>
                         {plant.plantName}
                       </CookieRunBold>
-                      <View style={styles.dictionaryContainer}>
-                        {renderEmptyImageRows(plant.plantInfos, plant.plantId)}
-                      </View>
+                      {plant.isDone ? (
+                        <View style={styles.dictionaryContainer}>
+                          {renderEmptyImageRows(
+                            plant.plantInfos,
+                            plant.plantId
+                          )}
+                        </View>
+                      ) : (
+                        <Image
+                          source={require("../../assets/img/ComingSoon.png")}
+                          style={styles.comingsoon}
+                          resizeMode="contain"
+                        />
+                      )}
                     </View>
                   </View>
                 ))}
-              </View>
-            ) : null
-          )}
+            </View>
+          ))}
         </ScrollView>
       </View>
 

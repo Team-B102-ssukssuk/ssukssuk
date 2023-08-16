@@ -12,6 +12,10 @@ const ModalPlantSeed = ({ isVisible, onClose, onSeedPlant }) => {
   const [selectedNickname, setSelectedNickname] = useState(null);
   const [selectedPlantId, setSelectedPlantId] = useState(null);
 
+  useEffect(() => {
+    setSelectedPlantId(null);
+  }, [isVisible]);
+
   const getPlantImageSource = (plantId, level) => {
     const imageName = `${plantId}_${level}.gif`;
     const image = plantImages[imageName];

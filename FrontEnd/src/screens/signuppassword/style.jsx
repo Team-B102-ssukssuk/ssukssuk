@@ -123,6 +123,11 @@ const styles = StyleSheet.create({
   logoPadding: {
     padding: 35,
   },
+  logoWhiteSize: {
+    resizeMode: "contain",
+    width: 200,
+    height: 150,
+  },
 });
 
 export default styles;

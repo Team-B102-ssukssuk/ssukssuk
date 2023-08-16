@@ -119,7 +119,10 @@ const PasswordMakeScreen = ({ navigation, route }) => {
         </View>
       </View>
       <View style={styles.logoPadding}>
-        <Image source={require("../../assets/img/LogoWhite.png")} />
+        <Image
+          source={require("../../assets/img/LogoWhite.png")}
+          style={styles.logoWhiteSize}
+        />
       </View>
       <View style={styles.logincontainer}>
         <View style={styles.loginInlineBlock}>

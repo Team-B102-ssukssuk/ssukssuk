@@ -22,7 +22,6 @@ export const customAxios = axios.create({
 // Add an interceptor to the request to set the Authorization header with the access token
 customAxios.interceptors.request.use(async (config) => {
   const accessToken = await getAccessToken();
-  console.log(accessToken);
   if (accessToken) {
     config.headers.Authorization = `Bearer ${accessToken}`;
   }
@@ -63,25 +62,30 @@ customAxios.interceptors.response.use(
     } = error;
 
     console.log("응답 : " + status);
-    // console.log(error.response.data.message);
+    console.log(error.response.data.statusName);
 
     if (status === 400 || status === 409) {
-      if (tokenExpiredCallback) {
-        const response = await postRefreshToken();
-        console.log(response.status);
-        if (response.status === 200) {
-          const newAccessToken = response.data.accessToken;
-          AsyncStorage.setItem("accessToken", newAccessToken);
-          AsyncStorage.setItem("refreshToken", response.data.refreshToken);
-          console.log("성공");
-          customAxios.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
-          config.headers.Authorization = `Bearer ${newAccessToken}`;
-          return customAxios(config);
-        } else if (response.status === 409) {
-          tokenExpiredCallback(); // Call the callback to handle token expiration
-        } else {
-          // alert("Unexpected reason.");
-          tokenExpiredCallback();
+      if (
+        error.response.data.statusName === "EXPIRED_AUTH_TOKEN" ||
+        error.response.data.statusName === "NOT_FOUND_AUTH_TOKEN"
+      ) {
+        if (tokenExpiredCallback) {
+          const response = await postRefreshToken();
+          console.log(response.status);
+          if (response.status === 200) {
+            const newAccessToken = response.data.accessToken;
+            AsyncStorage.setItem("accessToken", newAccessToken);
+            AsyncStorage.setItem("refreshToken", response.data.refreshToken);
+            console.log("성공");
+            customAxios.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
+            config.headers.Authorization = `Bearer ${newAccessToken}`;
+            return customAxios(config);
+          } else if (response.status === 409) {
+            tokenExpiredCallback(); // Call the callback to handle token expiration
+          } else {
+            // alert("Unexpected reason.");
+            tokenExpiredCallback();
+          }
         }
       }
     }

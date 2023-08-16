@@ -123,7 +123,10 @@ const SignUpPasswordScreen = ({ route, navigation }) => {
         </View>
       </View>
       <View style={styles.logoPadding}>
-        <Image source={require("../../assets/img/LogoWhite.png")} />
+        <Image
+          source={require("../../assets/img/LogoWhite.png")}
+          style={styles.logoWhiteSize}
+        />
       </View>
       <View style={styles.logincontainer}>
         <View style={styles.loginInlineBlock}>
@@ -155,9 +158,7 @@ const SignUpPasswordScreen = ({ route, navigation }) => {
           onPress={checkPassword}
           disabled={isNextButtonDisabled}
         >
-          <CookieRunRegular style={styles.emailNextButtonText}>
-            다음
-          </CookieRunRegular>
+          <Text style={styles.emailNextButtonText}>다음</Text>
         </TouchableOpacity>
       </View>
     </ImageBackground>

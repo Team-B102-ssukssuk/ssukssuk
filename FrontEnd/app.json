@@ -12,7 +12,7 @@
     "android": {
       "package": "com.ssafy.ssuk",
       "googleServicesFile": "./google-services.json",
-      "versionCode": 1,
+      "versionCode": 7,
       "permissions": []
     },
     "extra": {

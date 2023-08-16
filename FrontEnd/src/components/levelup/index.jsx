@@ -5,9 +5,8 @@ import customAxios from "../../utils/axios";
 import { useEffect, useState } from "react";
 import plantImages from "../../assets/img/plantImages";
 
-const LevelUpComponent = ({ date, nickname, gardenId }) => {
+const LevelUpComponent = ({ date, nickname, gardenId, level }) => {
   const [isPlantId, setPlantId] = useState(null);
-  const [isLevel, setLevel] = useState(null);
 
   const getPlantImageSource = (plantId, level) => {
     const imageName = `${plantId}_${level}.gif`;
@@ -43,7 +42,6 @@ const LevelUpComponent = ({ date, nickname, gardenId }) => {
       .get(`/plant/${gardenId}`)
       .then((res) => {
         setPlantId(res.data.data.plantId);
-        setLevel(res.data.data.level);
       })
       .catch((err) => {
         console.log(err);
@@ -62,7 +60,7 @@ const LevelUpComponent = ({ date, nickname, gardenId }) => {
         <View style={styles.alertContainer}>
           <View style={styles.alignLeft}>
             <Image
-              source={getPlantImageSource(isPlantId, isLevel)}
+              source={getPlantImageSource(isPlantId, level)}
               style={styles.waterIcon}
             />
           </View>

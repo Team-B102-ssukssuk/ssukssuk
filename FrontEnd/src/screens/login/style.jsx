@@ -106,6 +106,11 @@ const styles = StyleSheet.create({
   loginSubText: {
     color: "#888888",
   },
+  logoWhiteSize: {
+    resizeMode: "contain",
+    width: 200,
+    height: 150,
+  },
 });
 
 export default styles;

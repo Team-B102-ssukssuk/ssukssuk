@@ -180,7 +180,7 @@ const ModalPlantInfo = ({ isVisible, onClose, selectedGardenID }) => {
                   textAlignVertical: "top", // 텍스트 입력이 상단부터 시작하도록 설정
                   fontSize: 12,
                 }}
-                value={setPlantInfoData.firstRecord}
+                value={isPlantInfoData.firstRecord}
                 onChangeText={(text) =>
                   setPlantInfoData({ ...isPlantInfoData, firstRecord: text })
                 }
@@ -267,7 +267,7 @@ const ModalPlantInfo = ({ isVisible, onClose, selectedGardenID }) => {
                   textAlignVertical: "top", // 텍스트 입력이 상단부터 시작하도록 설정
                   fontSize: 12,
                 }}
-                value={setPlantInfoData.secondRecord}
+                value={isPlantInfoData.secondRecord}
                 onChangeText={(text) =>
                   setPlantInfoData({ ...isPlantInfoData, secondRecord: text })
                 }
@@ -354,7 +354,7 @@ const ModalPlantInfo = ({ isVisible, onClose, selectedGardenID }) => {
                   textAlignVertical: "top", // 텍스트 입력이 상단부터 시작하도록 설정
                   fontSize: 12,
                 }}
-                value={setPlantInfoData.thirdRecord}
+                value={isPlantInfoData.thirdRecord}
                 onChangeText={(text) =>
                   setPlantInfoData({ ...isPlantInfoData, thirdRecord: text })
                 }

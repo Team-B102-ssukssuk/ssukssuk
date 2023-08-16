@@ -1,23 +1,36 @@
-// ModalSetting.js
-
 import React, { useState } from "react";
 import { View, TouchableOpacity, Switch } from "react-native";
 import Modal from "react-native-modal";
 import CookieRunBold from "../common/CookieRunBold";
 import styles from "./style";
 import { COLORS } from "../../constants/theme";
+import { Audio } from "expo-av"; // Expo Audio 라이브러리를 추가
 
 const ModalSetting = ({ isVisible, onClose }) => {
   const [toggleSoundValue, setSoundToggleValue] = useState(false);
-  // const [toggleEffectValue, setToggleEffectValue] = useState(false);
+  const [sound, setSound] = useState();
 
-  const handleSoundToggle = () => {
+  const handleSoundToggle = async () => {
     setSoundToggleValue(!toggleSoundValue);
-  };
 
-  // const handleEffectToggle = () => {
-  //   setToggleEffectValue(!toggleEffectValue);
-  // };
+    // 소리를 켜거나 끌 때, 배경음악 재생 상태를 변경
+    if (!toggleSoundValue) {
+      if (sound) {
+        await sound.playAsync();
+      } else {
+        const { sound } = await Audio.Sound.createAsync(
+          require("../../assets/sound/귀여워.mp3")
+        );
+        setSound(sound);
+        await sound.playAsync();
+        sound.setIsLoopingAsync(true);
+      }
+    } else {
+      if (sound) {
+        await sound.stopAsync();
+      }
+    }
+  };
 
   return (
     <Modal
@@ -36,11 +49,9 @@ const ModalSetting = ({ isVisible, onClose }) => {
         <CookieRunBold style={styles.modalText}>설정</CookieRunBold>
         <View style={styles.settingSection}>
           <CookieRunBold style={styles.settingText}>소리</CookieRunBold>
-          {toggleSoundValue ? (
-            <CookieRunBold style={styles.onText}>ON</CookieRunBold>
-          ) : (
-            <CookieRunBold style={styles.offText}>OFF</CookieRunBold>
-          )}
+          <CookieRunBold style={styles.onText}>
+            {toggleSoundValue ? "ON" : "OFF"}
+          </CookieRunBold>
           <Switch
             value={toggleSoundValue}
             onValueChange={handleSoundToggle}
@@ -48,23 +59,8 @@ const ModalSetting = ({ isVisible, onClose }) => {
             thumbColor={toggleSoundValue ? COLORS.white : COLORS.white}
           />
         </View>
-        {/* <View style={styles.settingSection}>
-          <CookieRunBold style={styles.settingText}>효과음</CookieRunBold>
-          {toggleEffectValue ? (
-            <CookieRunBold style={styles.onText}>ON</CookieRunBold>
-          ) : (
-            <CookieRunBold style={styles.offText}>OFF</CookieRunBold>
-          )}
-          <Switch
-            value={toggleEffectValue}
-            onValueChange={handleEffectToggle}
-            trackColor={{ false: COLORS.lightGrey, true: COLORS.lightBrown }}
-            thumbColor={toggleEffectValue ? COLORS.white : COLORS.white}
-          />
-        </View> */}
         <View style={styles.modalButtonAlign}>
           <TouchableOpacity style={styles.CloseButton} onPress={onClose}>
-            {/* 모달 내용 외의 영역을 클릭하면 모달이 닫히도록 설정 */}
             <CookieRunBold style={styles.CloseText}>닫기</CookieRunBold>
           </TouchableOpacity>
         </View>
