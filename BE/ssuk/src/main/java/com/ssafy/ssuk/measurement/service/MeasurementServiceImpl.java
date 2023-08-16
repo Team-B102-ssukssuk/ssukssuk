@@ -8,6 +8,7 @@ import com.ssafy.ssuk.measurement.domain.SensorType;
 import com.ssafy.ssuk.measurement.dto.request.UploadRequestDto;
 import com.ssafy.ssuk.measurement.dto.response.GroundResponseDto;
 import com.ssafy.ssuk.measurement.dto.response.MeasurementResponseDto;
+import com.ssafy.ssuk.measurement.dto.response.RecentMeasurementResponseDto;
 import com.ssafy.ssuk.measurement.dto.socket.SensorMessageDto;
 import com.ssafy.ssuk.measurement.repository.MeasurementRepository;
 import com.ssafy.ssuk.notify.domain.Notification;
@@ -33,6 +34,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -46,18 +48,22 @@ public class MeasurementServiceImpl implements MeasurementService {
     private final CollectionService collectionService;
 
     @Override
-    public List<Measurement> findRecentValueByPot_Id(Integer user_id, Integer pot_id) {
+    public List<RecentMeasurementResponseDto> findRecentValueByPot_Id(Integer user_id, Integer pot_id) {
         // 해당 유저가 화분을 보유하고 있는지 체킹을 할까? 고려해보자
         List<Measurement> result = measurementRepository.findRecentValueByPot_Id(pot_id);
 
-        if(result.size() == 0) {
+        if (result.size() == 0) {
             result.add(new Measurement(0, new Pot(pot_id), 0.0, LocalDate.now(), SensorType.T));
-            result.add(new Measurement(0, new Pot(pot_id),100.0, LocalDate.now(),SensorType.W));
-            result.add(new Measurement(0, new Pot(pot_id),0.0, LocalDate.now(),SensorType.M));
-            result.add(new Measurement(0, new Pot(pot_id),0.0, LocalDate.now(),SensorType.H));
+            result.add(new Measurement(0, new Pot(pot_id), 100.0, LocalDate.now(), SensorType.W));
+            result.add(new Measurement(0, new Pot(pot_id), 0.0, LocalDate.now(), SensorType.M));
+            result.add(new Measurement(0, new Pot(pot_id), 0.0, LocalDate.now(), SensorType.H));
         }
+        List<RecentMeasurementResponseDto> collect = result.
+                stream()
+                .map(m -> new RecentMeasurementResponseDto(m.getId(), m.getMeasurementValue(), m.getMeasurementTime(), m.getSensorType()))
+                .collect(Collectors.toList());
         //화분아이디로 센서값 뱉기
-        return result;
+        return collect;
     }
 
     //시리얼 넘버 뱉기
@@ -142,7 +148,7 @@ public class MeasurementServiceImpl implements MeasurementService {
 
         log.info("레벨업 서비스ttttttt");
         Integer level = uploadRequestDto.getLevel();
-        if(!(level == 1 && findGarden.getLevel() == 1) && level - findGarden.getLevel() != 1) {
+        if (!(level == 1 && findGarden.getLevel() == 1) && level - findGarden.getLevel() != 1) {
             throw new CustomException(ErrorCode.INPUT_EXCEPTION);
         }
         if (findGarden.getLevel() < level && level <= 3) { // 레벨업
@@ -187,7 +193,7 @@ public class MeasurementServiceImpl implements MeasurementService {
             gardenRepository.save(findGarden); // 갱신
 
             return findGarden.getUser().getId();
-        } else if(level == 1 && findGarden.getFirstImage() == null) {
+        } else if (level == 1 && findGarden.getFirstImage() == null) {
             ImageInfo imageInfo = null;
             try {
                 imageInfo = s3UploadService.uploadPlant(uploadRequestDto.getFile());

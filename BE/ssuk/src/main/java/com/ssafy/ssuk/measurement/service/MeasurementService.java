@@ -5,6 +5,7 @@ import com.ssafy.ssuk.measurement.domain.SensorType;
 import com.ssafy.ssuk.measurement.dto.request.UploadRequestDto;
 import com.ssafy.ssuk.measurement.dto.response.GroundResponseDto;
 import com.ssafy.ssuk.measurement.dto.response.MeasurementResponseDto;
+import com.ssafy.ssuk.measurement.dto.response.RecentMeasurementResponseDto;
 import com.ssafy.ssuk.measurement.dto.socket.SensorMessageDto;
 import org.springframework.data.repository.query.Param;
 
@@ -13,7 +14,7 @@ import java.util.List;
 
 public interface MeasurementService {
     //센서값 조회
-    List<Measurement> findRecentValueByPot_Id(Integer user_id, Integer pot_id);
+    List<RecentMeasurementResponseDto> findRecentValueByPot_Id(Integer user_id, Integer pot_id);
 
     void insertMeasurement(Measurement measurement);
 
