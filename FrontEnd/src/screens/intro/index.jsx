@@ -116,18 +116,18 @@ const slides = [
         식물과 함께 캐릭터를 성장시켜 보세요.
       </CookieRunRegular>
     ),
-    image: require("../../assets/img/토양1.png"),
+    image: require("../../assets/img/slideMockUp2.png"),
     backgroundColor: "white",
   },
   {
     key: "s3",
-    title: <CookieRunBold>&quot;나만의 정원에서 함께!&quot;</CookieRunBold>,
+    title: <CookieRunBold>&quot;기록과 함께 꼼꼼하게!&quot;</CookieRunBold>,
     text: (
       <CookieRunRegular style={styles.subfontcolor}>
-        키우고 있는 식물을 정원에서 확인해 보세요.
+        키우는 식물의 기록을 보며 정성스레 키워보세요.
       </CookieRunRegular>
     ),
-    image: require("../../assets/img/토양1.png"),
+    image: require("../../assets/img/slideMockUp3.png"),
     backgroundColor: "white",
   },
 ];

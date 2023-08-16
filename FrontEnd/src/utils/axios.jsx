@@ -1,6 +1,13 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+let tokenExpiredCallback = null;
+
+// Set a callback function to be called when token expires
+export function setTokenExpiredCallback(callback) {
+  tokenExpiredCallback = callback;
+}
+
 // 로컬 스토리지에 accessToken 값 추출
 export async function getAccessToken() {
   const value = await AsyncStorage.getItem("accessToken");
@@ -26,8 +33,6 @@ customAxios.interceptors.request.use(async (config) => {
 export async function postRefreshToken() {
   try {
     const refreshToken = await AsyncStorage.getItem("refreshToken");
-
-    console.log("refreshToken : " + refreshToken);
 
     const response = await axios.post(
       "http://i9b102.p.ssafy.io:8080/user/token",
@@ -57,28 +62,27 @@ customAxios.interceptors.response.use(
       response: { status },
     } = error;
 
-    // console.log("응답 : " + status);
+    console.log("응답 : " + status);
     // console.log(error.response.data.message);
 
-    if (status === 409 && error.response.data.message === "Expired JWT Token") {
-      const originRequest = config;
-      const response = await postRefreshToken();
-      console.log(response.status);
-      if (response.status === 200) {
-        const newAccessToken = response.data.accessToken;
-        AsyncStorage.setItem("accessToken", newAccessToken);
-        AsyncStorage.setItem("refreshToken", response.data.refreshToken);
-        console.log("성공");
-        customAxios.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
-        originRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-        return customAxios(originRequest);
-      } else if (response.status === 409) {
-        // Handle unauthorized or conflict scenarios
-        // For example, you might want to log the user out or navigate to a login screen
-        // You can use your own logic here based on your application flow
-        console.log("토큰 만료 혹은 충돌");
-      } else {
-        alert("Unexpected reason.");
+    if (status === 400 || status === 409) {
+      if (tokenExpiredCallback) {
+        const response = await postRefreshToken();
+        console.log(response.status);
+        if (response.status === 200) {
+          const newAccessToken = response.data.accessToken;
+          AsyncStorage.setItem("accessToken", newAccessToken);
+          AsyncStorage.setItem("refreshToken", response.data.refreshToken);
+          console.log("성공");
+          customAxios.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
+          config.headers.Authorization = `Bearer ${newAccessToken}`;
+          return customAxios(config);
+        } else if (response.status === 409) {
+          tokenExpiredCallback(); // Call the callback to handle token expiration
+        } else {
+          // alert("Unexpected reason.");
+          tokenExpiredCallback();
+        }
       }
     }
 

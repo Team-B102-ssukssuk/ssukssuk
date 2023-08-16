@@ -15,40 +15,93 @@ const PasswordMakeScreen = ({ navigation, route }) => {
   const [password, setPassword] = useState("");
   const [PasswordRe, setPasswordRe] = useState("");
   const [errorOpacity, setErrorOpacity] = useState(0);
+  const [verifyError, setVerifyError] = useState(
+    "최소 8글자 대소문자, 특수문자, 숫자 포함"
+  );
   const [nextButtonColor, setNextButtonColor] = useState("#CACACA");
+  const [isPasswordValid, setIsPasswordValid] = useState(false);
 
   const { SignUpData } = route.params;
 
+  // const isNextButtonDisabled = PasswordRe.length < 8 && password.length < 8;
+
+  const isNextButtonDisabled = PasswordRe.length < 8 || password.length < 8;
+
   const makeNewPassword = async () => {
     try {
-      if (password === PasswordRe && password !== "") {
-        const requestData = {
-          email: SignUpData.email,
-          password: password,
-        };
-        const response = await axios.put(
-          "http://i9b102.p.ssafy.io:8080/user/password",
-          requestData
-        );
-        console.log(requestData);
-        navigation.navigate("Login");
-        console.log(response);
-      } else {
-        setErrorOpacity(100);
-        return;
+      if (password === PasswordRe && password !== "" && isPasswordValid) {
+        setErrorOpacity(0);
+        setNextButtonColor("#2DD0AF");
+        console.log("만들어~ : " + isPasswordValid);
+        {
+          const requestData = {
+            email: SignUpData.email,
+            password: password,
+          };
+          const response = await axios.put(
+            "http://i9b102.p.ssafy.io:8080/auth/password",
+            requestData
+          );
+          console.log(response.message);
+          console.log("로긴 갔지롱");
+          navigation.navigate("Login");
+        }
       }
     } catch (error) {
       console.error("에러날 게 있나", error);
     }
   };
 
+  const validatePasswordComplexity = () => {
+    const minLength = 8;
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password); // 추가된 부분
+
+    const isComplexEnough =
+      password.length >= minLength &&
+      hasUpperCase &&
+      hasLowerCase &&
+      hasNumber &&
+      hasSpecial; // 모든 조건을 충족해야 true가 됩니다
+
+    setIsPasswordValid(isComplexEnough);
+
+    if (isComplexEnough) {
+      setErrorOpacity(0);
+      setVerifyError("");
+      setIsPasswordValid(true);
+    } else {
+      setErrorOpacity(100);
+      setIsPasswordValid(false);
+    }
+  };
+
   useEffect(() => {
     if (password === "" && PasswordRe === "") {
       setNextButtonColor("#CACACA");
-    } else {
+      setErrorOpacity(100);
+      setVerifyError("최소 8글자 대소문자, 특수문자, 숫자 포함");
+      setIsPasswordValid(false);
+    } else if (password === PasswordRe && password !== "" && isPasswordValid) {
       setNextButtonColor("#2DD0AF");
+      setErrorOpacity(0);
+      setVerifyError("");
+      setIsPasswordValid(true);
+    } else if (password === PasswordRe && password !== "" && !isPasswordValid) {
+      setErrorOpacity(100);
+      setNextButtonColor("#CACACA");
+      setVerifyError("최소 8글자 대소문자, 특수문자, 숫자 포함");
+      setIsPasswordValid(false);
+    } else {
+      setNextButtonColor("#CACACA");
+      setErrorOpacity(100);
+      setVerifyError("비밀번호가 일치하지 않습니다.");
+      setIsPasswordValid(false);
     }
-  }, [password, PasswordRe]);
+    validatePasswordComplexity();
+  }, [password, PasswordRe, isPasswordValid]);
 
   return (
     <ImageBackground
@@ -86,14 +139,19 @@ const PasswordMakeScreen = ({ navigation, route }) => {
           secureTextEntry={true}
         ></TextInput>
         <Text style={[styles.verifyErrorMessage, { opacity: errorOpacity }]}>
-          비밀번호가 일치하지 않습니다.
+          {verifyError}
         </Text>
         <TouchableOpacity
-          style={[styles.emailNextButton, { backgroundColor: nextButtonColor }]}
+          style={[
+            styles.emailNextButton,
+            { backgroundColor: nextButtonColor },
+            isNextButtonDisabled ? { opacity: 0.5 } : {},
+          ]}
           activeOpacity={0.3}
           onPress={makeNewPassword}
+          disabled={isNextButtonDisabled}
         >
-          <Text style={styles.emailNextButtonText}>로그인</Text>
+          <Text style={styles.emailNextButtonText}>변경</Text>
         </TouchableOpacity>
       </View>
     </ImageBackground>

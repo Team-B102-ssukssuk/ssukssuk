@@ -13,6 +13,7 @@ import ModalPlantSeed from "../../components/modalplantseed";
 import LoadingScreen from "../loading";
 import { useIsFocused } from "@react-navigation/native";
 import plantImages from "../../assets/img/plantImages";
+import ModalPlantInfo from "../../components/plantInfo";
 
 const GardenScreen = () => {
   const isFocused = useIsFocused();
@@ -25,6 +26,14 @@ const GardenScreen = () => {
   const [isPlantData, setPlantData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [deleteAction, setDeleteAction] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [isSeletedGardenId, setSelectedGardenId] = useState(null);
+
+  const handleImageClick = (plantId, level, gardenId) => {
+    setSelectedImage(getPlantImageSource(plantId, level));
+    setSelectedGardenId(gardenId);
+    console.log(gardenId, plantId, level);
+  };
 
   const handleSeedPlant = (nickname, option) => {
     // 씨앗 심기 관련 로직
@@ -58,6 +67,7 @@ const GardenScreen = () => {
   useEffect(() => {
     if (isFocused) {
       getGardenData(); // Fetch data only when the screen is focused
+      setDeleteIconVisible(false);
     }
   }, [isFocused]); // The effect depends on the isFocused value
 
@@ -77,8 +87,8 @@ const GardenScreen = () => {
       .put(`plant/delete/${isDeleteGardenId}`)
       .then(() => {
         console.log("삭제성공");
-        navigation.navigate("Pot");
         setDeleteAction(!deleteAction);
+        getGardenData();
       })
       .catch(() => {
         console.log("정원 식물 삭제 관련 오류");
@@ -113,6 +123,7 @@ const GardenScreen = () => {
       >
         <View style={styles.userInfoSection}>
           <View style={styles.header}>
+            {/* <TouchableOpacity onPress={() => navigation.push("Slider")}> */}
             <TouchableOpacity onPress={() => navigation.push("Main")}>
               <Icon name="arrow-back-ios" size={28} color="#fff" />
             </TouchableOpacity>
@@ -163,14 +174,24 @@ const GardenScreen = () => {
                         </Animatable.View>
                         <View style={styles.gardenCharacter}>
                           {/* Transparent character image */}
-                          <Image
-                            source={getPlantImageSource(
-                              garden.plantId,
-                              garden.level
-                            )}
-                            resizeMode="contain"
-                            style={styles.gardenCharacterResize}
-                          />
+                          <TouchableOpacity
+                            onPress={() =>
+                              handleImageClick(
+                                garden.plantId,
+                                garden.level,
+                                garden.gardenId
+                              )
+                            }
+                          >
+                            <Image
+                              source={getPlantImageSource(
+                                garden.plantId,
+                                garden.level
+                              )}
+                              resizeMode="contain"
+                              style={styles.gardenCharacterResize}
+                            />
+                          </TouchableOpacity>
                         </View>
                       </View>
                     ) : (
@@ -187,14 +208,24 @@ const GardenScreen = () => {
                         </View>
                         <View style={styles.gardenCharacter}>
                           {/* Transparent character image */}
-                          <Image
-                            source={getPlantImageSource(
-                              garden.plantId,
-                              garden.level
-                            )}
-                            resizeMode="contain"
-                            style={styles.gardenCharacterResize}
-                          />
+                          <TouchableOpacity
+                            onPress={() =>
+                              handleImageClick(
+                                garden.plantId,
+                                garden.level,
+                                garden.gardenId
+                              )
+                            }
+                          >
+                            <Image
+                              source={getPlantImageSource(
+                                garden.plantId,
+                                garden.level
+                              )}
+                              resizeMode="contain"
+                              style={styles.gardenCharacterResize}
+                            />
+                          </TouchableOpacity>
                         </View>
                       </View>
                     )}
@@ -259,7 +290,10 @@ const GardenScreen = () => {
         <TouchableOpacity style={styles.trashCanMargin} onPress={visibleIcon}>
           <Image
             source={require("../../assets/img/trashCan.png")}
-            style={styles.trashCan}
+            style={[
+              styles.trashCan,
+              !isDeleteIconVisible ? styles.trashCanClicked : null,
+            ]}
           />
         </TouchableOpacity>
       </ImageBackground>
@@ -273,6 +307,11 @@ const GardenScreen = () => {
         onClose={() => setDeleteModalVisible(false)}
         onDelete={handleDelete}
         typeName="식물"
+      />
+      <ModalPlantInfo
+        isVisible={selectedImage !== null}
+        onClose={() => setSelectedImage(null)}
+        selectedGardenID={isSeletedGardenId}
       />
     </View>
   );

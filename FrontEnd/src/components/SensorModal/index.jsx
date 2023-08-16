@@ -1,29 +1,39 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, ImageBackground } from "react-native";
 import Modal from "react-native-modal";
-import { LineChart, XAxis } from "react-native-svg-charts";
+import { LineChart, XAxis, YAxis } from "react-native-svg-charts";
 import * as shape from "d3-shape";
 import CookieRunBold from "../common/CookieRunBold";
 import styles from "./style";
+import customAxios from "../../utils/axios";
 
-const ModalSensor = ({ isVisible, onClose, selectedSensorType }) => {
-  // Dummy data with date and value
-  const data = [
-    { date: "08-01", value: 50 },
-    { date: "08-02", value: 10 },
-    { date: "08-03", value: 40 },
-    { date: "08-04", value: 40 },
-    { date: "08-05", value: 40 },
-    { date: "08-06", value: 40 },
-    { date: "08-07", value: 40 },
-    { date: "08-08", value: 40 },
-    { date: "08-09", value: 40 },
-    { date: "08-10", value: 40 },
-    { date: "08-11", value: 40 },
-  ];
+const ModalSensor = ({
+  isVisible,
+  onClose,
+  selectedSensorType,
+  selectedPotId,
+}) => {
+  const [isSensorData, setSensorData] = useState([]);
 
-  const dates = data.map((item) => item.date);
-  const values = data.map((item) => item.value);
+  const getSensorData = () => {
+    customAxios
+      .get(`/sensor/${selectedSensorType}/${selectedPotId}`)
+      .then((res) => {
+        setSensorData(res.data.data);
+      })
+      .catch(() => {
+        console.log("센서값 불러오기 오류");
+      });
+  };
+
+  useEffect(() => {
+    if (isVisible) {
+      getSensorData();
+    }
+  }, [isVisible]);
+
+  const dates = isSensorData.map((item) => item.date);
+  const values = isSensorData.map((item) => item.avg);
 
   // Determine how many labels to skip based on the data length
   const labelsToShow = Math.min(5, Math.ceil(dates.length / 5)); // Show maximum 5 labels
@@ -52,17 +62,34 @@ const ModalSensor = ({ isVisible, onClose, selectedSensorType }) => {
             <CookieRunBold
               style={{ fontSize: 24, marginBottom: 10, color: "#FFF" }}
             >
-              {selectedSensorType}
+              {selectedSensorType === "temperature"
+                ? "온도 센서"
+                : selectedSensorType === "humidity"
+                ? "습도 센서"
+                : "토양 수분 센서"}
             </CookieRunBold>
             {/* LineChart */}
-            <LineChart
-              style={{ width: 250, height: 250, marginTop: 3, marginLeft: 5 }} // Adjust width and height as needed
-              data={values}
-              curve={shape.curveNatural}
-              svg={{ stroke: "#FFF", strokeWidth: 2 }}
-              contentInset={{ top: 40, bottom: 20 }} // Increased bottom inset for labels
-            />
-            {/* X-axis with labels */}
+            <View style={{ flexDirection: "row" }}>
+              {/* X-axis with labels */}
+              <YAxis
+                data={values}
+                contentInset={{ top: 40, bottom: 40 }}
+                svg={{
+                  fontSize: 10,
+                  fontWeight: "bold",
+                  fill: "#fff",
+                }}
+                numberOfTicks={5} // Number of ticks you want to display on the y-axis
+                formatLabel={(value) => `${value}`} // Format labels according to your requirement
+              />
+              <LineChart
+                style={{ width: 250, height: 250, marginTop: 3, marginLeft: 5 }} // Adjust width and height as needed
+                data={values}
+                curve={shape.curveNatural}
+                svg={{ stroke: "#FFF", strokeWidth: 2 }}
+                contentInset={{ top: 40, bottom: 40 }} // Increased bottom inset for labels
+              />
+            </View>
             <View style={{ width: 250 }}>
               <XAxis
                 style={{ marginHorizontal: -10 }} // Adjust margin as needed
@@ -73,7 +100,7 @@ const ModalSensor = ({ isVisible, onClose, selectedSensorType }) => {
                   }
                   return "";
                 }}
-                contentInset={{ left: 25, right: 5 }}
+                contentInset={{ left: 25, right: 25 }}
                 svg={{
                   fontSize: Math.min(10, (250 / dates.length) * 2.5), // Calculate font size based on chart width
                   fontWeight: "bold",

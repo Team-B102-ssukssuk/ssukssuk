@@ -15,13 +15,49 @@ import ProfileScreen from "../screens/profile";
 import ErrorScreen from "../screens/error";
 
 import KakaoLoginScreen from "../screens/kakaologin";
+// import Swiper from "react-native-swiper";
 
 const Stack = createStackNavigator();
+
+// const SliderMainScreen = () => {
+//   return (
+//     <Swiper loop={false} showsPagination={false} index={1}>
+//       <PotScreen />
+//       <MainScreen />
+//       <GardenScreen />
+//     </Swiper>
+//   );
+// };
+
+// const SliderGardenScreen = () => {
+//   return (
+//     <Swiper loop={false} showsPagination={false} index={2}>
+//       <PotScreen />
+//       <MainScreen />
+//       <GardenScreen />
+//     </Swiper>
+//   );
+// };
+
+// const SliderPotScreen = () => {
+//   return (
+//     <Swiper loop={false} showsPagination={false} index={0}>
+//       <PotScreen />
+//       <MainScreen />
+//       <GardenScreen />
+//     </Swiper>
+//   );
+// };
 
 const Router = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="Pot"
+          component={PotScreen}
+        />
         <Stack.Screen
           options={{ headerShown: false }}
           name="Intro"
@@ -31,11 +67,6 @@ const Router = () => {
           options={{ headerShown: false }}
           name="Login"
           component={LoginScreen}
-        />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="Pot"
-          component={PotScreen}
         />
         <Stack.Screen
           options={{ headerShown: false }}
@@ -93,6 +124,21 @@ const Router = () => {
           name="Error"
           component={ErrorScreen}
         />
+        {/* <Stack.Screen
+          options={{ headerShown: false }}
+          name="Slider"
+          component={SliderMainScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="SliderGarden"
+          component={SliderGardenScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="SliderPot"
+          component={SliderPotScreen}
+        /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );

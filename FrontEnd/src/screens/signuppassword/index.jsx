@@ -26,6 +26,8 @@ const SignUpPasswordScreen = ({ route, navigation }) => {
   // const { email } = SignUpData;
   // 세팅된 비밀번호 값이 동일하면 서버로 데이터 보내주기
 
+  const isNextButtonDisabled = PasswordRe.length < 8 || password.length < 8;
+
   const checkPassword = () => {
     if (password === PasswordRe && password !== "" && isPasswordValid) {
       setErrorOpacity(0);
@@ -84,18 +86,21 @@ const SignUpPasswordScreen = ({ route, navigation }) => {
       setNextButtonColor("#CACACA");
       setErrorOpacity(100);
       setVerifyError("최소 8글자 대소문자, 특수문자, 숫자 포함");
+      setIsPasswordValid(false);
     } else if (password === PasswordRe && password !== "" && isPasswordValid) {
-      setNextButtonColor("#CACACA");
-      setErrorOpacity(100);
-      setVerifyError("비밀번호가 일치하지 않습니다.");
+      setNextButtonColor("#2DD0AF");
+      setErrorOpacity(0);
+      setVerifyError("");
     } else if (password === PasswordRe && password !== "" && !isPasswordValid) {
       setErrorOpacity(100);
       setNextButtonColor("#CACACA");
       setVerifyError("최소 8글자 대소문자, 특수문자, 숫자 포함");
+      setIsPasswordValid(false);
     } else {
       setNextButtonColor("#CACACA");
       setErrorOpacity(100);
       setVerifyError("비밀번호가 일치하지 않습니다.");
+      setIsPasswordValid(false);
     }
     validatePasswordComplexity();
   }, [password, PasswordRe, isPasswordValid]);
@@ -141,9 +146,14 @@ const SignUpPasswordScreen = ({ route, navigation }) => {
           {verifyError}
         </Text>
         <TouchableOpacity
-          style={[styles.emailNextButton, { backgroundColor: nextButtonColor }]}
+          style={[
+            styles.emailNextButton,
+            { backgroundColor: nextButtonColor },
+            isNextButtonDisabled ? { opacity: 0.5 } : {},
+          ]}
           activeOpacity={0.3}
           onPress={checkPassword}
+          disabled={isNextButtonDisabled}
         >
           <CookieRunRegular style={styles.emailNextButtonText}>
             다음

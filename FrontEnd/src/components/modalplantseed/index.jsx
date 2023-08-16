@@ -4,11 +4,25 @@ import Modal from "react-native-modal";
 import CustomDropdown from "../dropdown";
 import CookieRunBold from "../common/CookieRunBold";
 import styles from "./style";
+import plantImages from "../../assets/img/plantImages";
 
 const ModalPlantSeed = ({ isVisible, onClose, onSeedPlant }) => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [selectedSubcategory, setSelectedSubcategory] = useState(null);
   const [selectedNickname, setSelectedNickname] = useState(null);
+  const [selectedPlantId, setSelectedPlantId] = useState(null);
+
+  const getPlantImageSource = (plantId, level) => {
+    const imageName = `${plantId}_${level}.gif`;
+    const image = plantImages[imageName];
+    const resolvedImage = Image.resolveAssetSource(image);
+
+    if (resolvedImage == null) {
+      return require("../../assets/img/silhouette.png");
+    }
+
+    return resolvedImage;
+  };
 
   useEffect(() => {
     if (isVisible) {
@@ -68,7 +82,7 @@ const ModalPlantSeed = ({ isVisible, onClose, onSeedPlant }) => {
       name: "선인장",
       subcategories: [
         {
-          plantId: 17,
+          plantId: 3,
           plantName: "백도선",
         },
         {
@@ -100,7 +114,7 @@ const ModalPlantSeed = ({ isVisible, onClose, onSeedPlant }) => {
         <CookieRunBold style={styles.modalText}>씨앗 심기</CookieRunBold>
         <View style={styles.characterSection}>
           <Image
-            source={require("../../assets/img/lettuce_3.gif")}
+            source={getPlantImageSource(selectedPlantId, 1)}
             resizeMode="contain"
             style={styles.characterSize}
           />
@@ -110,9 +124,10 @@ const ModalPlantSeed = ({ isVisible, onClose, onSeedPlant }) => {
           {!selectedSubcategory ? (
             <CustomDropdown
               options={categories}
-              onSelect={(plantId, plantName) =>
-                setSelectedOption({ plantId, plantName })
-              }
+              onSelect={(plantId, plantName) => {
+                setSelectedOption({ plantId, plantName });
+                setSelectedPlantId(plantId);
+              }}
             />
           ) : (
             <TextInput

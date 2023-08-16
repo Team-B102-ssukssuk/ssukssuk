@@ -6,8 +6,15 @@ const styles = StyleSheet.create({
     flex: 1,
     // Add other container styles as needed
   },
+  swipeableContainer: {
+    width: "100%", // Customize the width as needed
+  },
   userInfoSection: {
     // Add styles for the user info section as needed
+  },
+  deleteButton: {
+    alignItems: "center",
+    justifyContent: "center",
   },
   header: {
     flexDirection: "row",

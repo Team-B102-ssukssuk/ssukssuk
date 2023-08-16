@@ -358,6 +358,7 @@ const ProfileScreen = ({ navigation }) => {
           onRegist={handleEdit}
           title="닉네임 수정"
           placeholder="변경하시려는 닉네임을 말씀해주세요"
+          maxInputLength={8}
         />
       </ScrollView>
       {isOpen && renderBackDrop()}

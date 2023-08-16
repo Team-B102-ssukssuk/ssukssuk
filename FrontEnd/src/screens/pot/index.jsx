@@ -8,7 +8,7 @@ import ModalPlantDelete from "../../components/modalplantdelete";
 import ModalPlantRegist from "../../components/modalplantregist";
 import * as Animatable from "react-native-animatable";
 import { useNavigation } from "@react-navigation/native";
-import customAxios from "../../utils/axios";
+import customAxios, { setTokenExpiredCallback } from "../../utils/axios";
 import { connect } from "react-redux";
 import { storePotID, setGardenID } from "../../redux/action";
 import QRCodeScanner from "../../components/qrCode";
@@ -59,6 +59,13 @@ const PotScreen = (props) => {
     registerForPushNotificationsAsync();
   }, []);
 
+  useEffect(() => {
+    setTokenExpiredCallback(() => {
+      console.log("토큰 만료 혹은 충돌");
+      navigation.navigate("Intro");
+    });
+  }, []);
+
   const registerForPushNotificationsAsync = async () => {
     const { status: existingStatus } =
       await Notifications.getPermissionsAsync();
@@ -91,8 +98,10 @@ const PotScreen = (props) => {
     customAxios
       .get("/pot")
       .then((res) => {
-        props.storePotID(res.data[0].potId);
-        props.setGardenID(res.data[0].gardenId);
+        if (res.data.length !== 0) {
+          props.storePotID(res.data[0].potId);
+          props.setGardenID(res.data[0].gardenId);
+        }
 
         setPotData(res.data);
         setTimeout(() => {
@@ -107,6 +116,7 @@ const PotScreen = (props) => {
   useEffect(() => {
     if (isFocused) {
       getPotData(); // Fetch data only when the screen is focused
+      setDeleteIconVisible(false);
     }
   }, [isFocused]); // The effect depends on the isFocused value
 
@@ -152,6 +162,7 @@ const PotScreen = (props) => {
       setQRcodeVisible(!isQRcodeVisible);
     } else {
       setRegistModalVisible(true);
+      setTrashcanVisible(true);
     }
   };
 
@@ -178,6 +189,7 @@ const PotScreen = (props) => {
     // Store the potID in Redux using the action
     props.storePotID(potId);
     props.setGardenID(gardenId);
+    // navigation.push("Slider");
     navigation.push("Main");
   };
 
@@ -346,8 +358,9 @@ const PotScreen = (props) => {
           "성공적으로 화분이 등록되었습니다.",
           "checkmark-circle-sharp"
         );
+        setRegistMessage(null);
         getPotData();
-        showTrashcan(true);
+        setTrashcanVisible(true);
       })
       .catch((err) => {
         if (err.response.status === 409) {
@@ -436,12 +449,14 @@ const PotScreen = (props) => {
         isVisible={isRegistModalVisible}
         onClose={() => {
           setRegistModalVisible(false);
-          showTrashcan(true);
+          setTrashcanVisible(true);
+          setRegistMessage(null);
         }}
         onRegist={handleRegist}
         title="화분 등록"
         placeholder="화분 고유 ID를 입력해주세요"
         errormessage={isRegistMessage}
+        maxInputLength={8}
       />
       {isQRcodeVisible && (
         <QRCodeScanner
