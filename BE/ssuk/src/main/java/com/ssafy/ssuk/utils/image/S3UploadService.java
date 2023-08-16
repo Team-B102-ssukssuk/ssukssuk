@@ -55,12 +55,6 @@ public class S3UploadService {
         return upload(profileDir, uploadFile);
     }
 
-    public ImageInfo uploadForce(MultipartFile multipartFile) throws IOException {
-        File uploadFile = convert(multipartFile)
-                .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File로 전환이 실패했습니다."));
-        return uploadOne(uploadFile);
-    }
-
     public ImageInfo uploadPlant(String bytesStr) throws IOException {
         File uploadFile = convert(bytesStr)
                 .orElseThrow(() -> new IllegalArgumentException("String -> File로 전환이 실패했습니다."));
@@ -102,7 +96,7 @@ public class S3UploadService {
     }
 
     private static File extracted(String url) throws IOException {
-        File tempFile = new File(UUID.randomUUID() + "");
+        File tempFile = new File(UUID.randomUUID() + ".jpg");
         if(tempFile.createNewFile()) {
             try (BufferedInputStream bufferedInputStream = new BufferedInputStream(new URL(url).openStream());
                  FileOutputStream fileOutputStream = new FileOutputStream(tempFile)) {
@@ -114,14 +108,6 @@ public class S3UploadService {
             }
         }
         return tempFile;
-    }
-
-    private ImageInfo uploadOne(File uploadFile) {
-        String fileName = uploadFile.getName();
-        String uploadImageUrl = putS3(uploadFile, fileName);
-        log.debug("uploadImageUrl={}", uploadImageUrl);
-        removeNewFile(uploadFile);  // 로컬에 생성된 파일 삭제
-        return new ImageInfo(fileName, uploadImageUrl);
     }
 
     private ImageInfo upload(String dir, File uploadFile) {
@@ -149,7 +135,7 @@ public class S3UploadService {
 
     // s3에는 multipartfile이 전송이 안된다함
     private Optional<File> convert(MultipartFile file) throws IOException {
-        File convertFile = new File(UUID.randomUUID() + "");
+        File convertFile = new File(UUID.randomUUID() + ".jpg");
         if(convertFile.createNewFile()) {
             try (FileOutputStream fos = new FileOutputStream(convertFile)) {
                 fos.write(file.getBytes());
