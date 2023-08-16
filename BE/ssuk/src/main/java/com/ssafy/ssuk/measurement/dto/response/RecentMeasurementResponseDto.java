@@ -16,7 +16,7 @@ public class RecentMeasurementResponseDto {
 
     public RecentMeasurementResponseDto(Integer id, Double measurementValue, LocalDate measurementTime, SensorType sensorType) {
         this.id = id;
-        if (sensorType.equals(SensorType.W))
+        if (sensorType.equals(SensorType.M))
             this.measurementValue = 100 - measurementValue;
         else
             this.measurementValue = measurementValue;
