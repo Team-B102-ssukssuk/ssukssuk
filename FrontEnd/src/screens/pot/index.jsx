@@ -20,17 +20,20 @@ import { useIsFocused } from "@react-navigation/native";
 import plantImages from "../../assets/img/plantImages";
 import ModalMap from "../../components/modalmap";
 import { BarCodeScanner } from "expo-barcode-scanner";
+import ModalPlantPicking from "../../components/plantpicking";
 
 const PotScreen = (props) => {
   const isFocused = useIsFocused();
   const navigation = useNavigation();
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [isPickingModalVisible, setPickingModalVisible] = useState(false);
   const [isRegistModalVisible, setRegistModalVisible] = useState(false);
   const [isDeleteIconVisible, setDeleteIconVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isQRcodeVisible, setQRcodeVisible] = useState(false);
   const [isRegistMessage, setRegistMessage] = useState(null);
   const [isPotId, setPotID] = useState(0);
+  const [isGardenId, setGardenId] = useState(0);
   const [isPotData, setPotData] = useState([]);
   const [isToastVisible, setIsToastVisible] = useState(false);
   const [toastTitle, setToastTitle] = useState("");
@@ -178,6 +181,11 @@ const PotScreen = (props) => {
     setDeleteModalVisible(!isDeleteModalVisible);
   };
 
+  const togglePickingModal = (gardenId) => {
+    setGardenId(gardenId);
+    setPickingModalVisible(!isPickingModalVisible);
+  };
+
   const visibleIcon = () => {
     setDeleteIconVisible(!isDeleteIconVisible);
   };
@@ -211,7 +219,7 @@ const PotScreen = (props) => {
                   >
                     <TouchableOpacity
                       style={styles.potSign}
-                      onPress={() => toggleDeleteModal(plant.potId)}
+                      onPress={() => togglePickingModal(plant.gardenId)}
                     >
                       <View style={styles.potName}>
                         <CookieRunBold style={styles.potText}>
@@ -333,6 +341,23 @@ const PotScreen = (props) => {
       })
       .catch((err) => {
         console.log("화분 삭제 관련 오류" + err);
+      });
+    setDeleteModalVisible(false);
+  };
+
+  const handlePicking = (gardenId) => {
+    // Log the potID before deleting
+    const data = {
+      gardenId: gardenId,
+    };
+    customAxios
+      .put("/plant/kill", data)
+      .then(() => {
+        getPotData();
+        visibleIcon();
+      })
+      .catch((err) => {
+        console.log("식물 뽑기 관련 오류" + err);
       });
     setDeleteModalVisible(false);
   };
@@ -473,6 +498,12 @@ const PotScreen = (props) => {
         onClose={() => setIsOpenMapModalVisible(false)}
         navigation={navigation}
       />
+      <ModalPlantPicking
+        isVisible={isPickingModalVisible}
+        onClose={() => setPickingModalVisible(false)}
+        onDelete={handlePicking}
+        gardenId={isGardenId}
+      ></ModalPlantPicking>
     </View>
   );
 };

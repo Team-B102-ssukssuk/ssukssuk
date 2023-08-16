@@ -14,7 +14,14 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     alignItems: "center",
     borderWidth: 2,
-    borderColor: COLORS.lightBrown, // Set the border color here
+    borderColor: COLORS.lightBrown,
+    position: "absolute",
+    top: "50%", // Center vertically
+    left: "50%", // Center horizontally
+    transform: [
+      { translateX: -((SIZES.width - 20) / 2) }, // Adjust for half width
+      { translateY: -(SIZES.height / 2 / 2) }, // Adjust for half height
+    ],
   },
   rowContainer: {
     flexDirection: "row",

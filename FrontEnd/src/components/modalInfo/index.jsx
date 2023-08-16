@@ -22,6 +22,7 @@ const ModalInfo = ({ isVisible, onClose, plant, plantImg }) => {
       animationOutTiming={300}
       backdropTransitionInTiming={0}
       backdropTransitionOutTiming={300}
+      backdropPressToClose={true} // This line allows closing the modal when tapping outside
     >
       <View style={styles.modalContainer}>
         <View style={styles.content}>
