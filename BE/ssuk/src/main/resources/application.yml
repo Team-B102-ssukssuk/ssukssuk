@@ -66,6 +66,3 @@ decorator:
 jasypt:
   encryptor:
     password: ${ENCODE_KEY}
-
-weather:
-  key: ENC(vr6HbA4oILDIj7sP83NS14O9oGkWqhactCoIzm1IIvCPr1Uv6RvY3ACyng9MLVMllBM1KWKzCD3CFw+tHKzf+hIlAidWBtqvze/dreYsLEppJNQS6pF72X+0hj9wTP3GX9s3VCNl9RTJ4K5MHegUaA==)
