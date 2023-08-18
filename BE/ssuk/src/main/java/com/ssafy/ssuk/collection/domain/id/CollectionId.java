@@ -1,0 +1,28 @@
+package com.ssafy.ssuk.collection.domain.id;
+
+import com.ssafy.ssuk.plant.domain.Info;
+import com.ssafy.ssuk.plant.domain.id.InfoId;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import java.io.Serializable;
+
+@Data
+@Embeddable
+@NoArgsConstructor
+public class CollectionId implements Serializable {
+    @Column(name = "USER_ID")
+    private Integer userId;
+    @Column(name = "PLANT_ID")
+    private Integer plantId;
+    @Column(name = "LEVEL")
+    private Integer level;
+
+    public CollectionId(Integer userId, Integer plantId, Integer level) {
+        this.userId = userId;
+        this.plantId = plantId;
+        this.level = level;
+    }
+}

@@ -1,0 +1,81 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '2.7.14'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+}
+
+group = 'com.ssafy'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '1.8'
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.3.1'
+	compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	runtimeOnly 'com.mysql:mysql-connector-j'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	//testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:2.3.1'
+	runtimeOnly 'com.mysql:mysql-connector-j'
+	//dto entity mapper 관련
+	implementation 'org.mapstruct:mapstruct:1.4.2.Final'
+	annotationProcessor "org.mapstruct:mapstruct-processor:1.4.2.Final"
+	annotationProcessor(
+			'org.projectlombok:lombok',
+			'org.projectlombok:lombok-mapstruct-binding:0.1.0',
+			'org.mapstruct:mapstruct-processor:1.4.2.Final'
+	)
+	//테스트에서 사용할 경우
+	//testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+
+	// 메일 발송 라이브러리
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+	// sercurity
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	// JWT
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+	// redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	// s3
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+	// 쿼리 ? 표시해주는거
+	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.6'
+	//fcm
+	implementation 'com.google.firebase:firebase-admin:6.8.1'
+	implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.2.2'
+	implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
+	// http 요청, 응답
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux', version: '2.7.7'
+	// 설정파일 어노테이션
+	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+	// jasypt
+	implementation "com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4"
+	// json
+	implementation group: 'org.json', name: 'json', version: '20200518'
+
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
