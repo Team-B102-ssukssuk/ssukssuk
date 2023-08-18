@@ -30,12 +30,12 @@ const ModalPlantInfo = ({ isVisible, onClose, selectedGardenID }) => {
   };
 
   const getInfoData = () => {
-    console.log(selectedGardenID);
+    // console.log(selectedGardenID);
 
     customAxios
       .get(`/plant/${selectedGardenID}`)
       .then((res) => {
-        console.log("성공 ->" + JSON.stringify(res.data.data));
+        // console.log("성공 ->" + JSON.stringify(res.data.data));
         setPlantInfoData(res.data.data);
       })
       .catch(() => {
@@ -149,7 +149,7 @@ const ModalPlantInfo = ({ isVisible, onClose, selectedGardenID }) => {
             />
           )}
 
-          <View style={{ width: 180 }}>
+          <View style={{ width: "65%" }}>
             <View
               style={{ flexDirection: "row", justifyContent: "space-between" }}
             >
@@ -169,7 +169,7 @@ const ModalPlantInfo = ({ isVisible, onClose, selectedGardenID }) => {
             {isFirstEditing ? (
               <TextInput
                 style={{
-                  width: 180,
+                  width: "100%",
                   borderWidth: 2,
                   borderColor: "#896A50", // 테두리 색상 설정
                   borderRadius: 8,
@@ -236,7 +236,7 @@ const ModalPlantInfo = ({ isVisible, onClose, selectedGardenID }) => {
               }}
             />
           )}
-          <View style={{ width: 180 }}>
+          <View style={{ width: "65%" }}>
             <View
               style={{ flexDirection: "row", justifyContent: "space-between" }}
             >
@@ -256,7 +256,7 @@ const ModalPlantInfo = ({ isVisible, onClose, selectedGardenID }) => {
             {isSecondEditing ? (
               <TextInput
                 style={{
-                  width: 180,
+                  width: "100%",
                   borderWidth: 2,
                   borderColor: "#896A50", // 테두리 색상 설정
                   borderRadius: 8,
@@ -323,7 +323,7 @@ const ModalPlantInfo = ({ isVisible, onClose, selectedGardenID }) => {
               }}
             />
           )}
-          <View style={{ width: 180 }}>
+          <View style={{ width: "65%" }}>
             <View
               style={{ flexDirection: "row", justifyContent: "space-between" }}
             >
@@ -343,7 +343,7 @@ const ModalPlantInfo = ({ isVisible, onClose, selectedGardenID }) => {
             {isThirdEditing ? (
               <TextInput
                 style={{
-                  width: 180,
+                  width: "100%",
                   borderWidth: 2,
                   borderColor: "#896A50", // 테두리 색상 설정
                   borderRadius: 8,

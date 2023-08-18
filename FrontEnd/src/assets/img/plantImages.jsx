@@ -8,6 +8,9 @@ const plantImages = {
   "3_1.gif": require("../../assets/img/3_1.gif"),
   "3_2.gif": require("../../assets/img/3_2.gif"),
   "3_3.gif": require("../../assets/img/3_3.gif"),
+  "4_1.gif": require("../../assets/img/4_1.gif"),
+  "4_2.gif": require("../../assets/img/4_2.gif"),
+  "4_3.gif": require("../../assets/img/4_3.gif"),
 };
 
 export default plantImages;

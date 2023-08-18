@@ -6,10 +6,20 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 // import CookieRunBold from "../common/CookieRunBold";
 // import { COLORS } from "../../constants/theme";
 
-const ModalMap = ({ isVisible, onClose, navigation }) => {
+const ModalMap = ({
+  isVisible,
+  onClose,
+  onLogout,
+  clearSensorInterval,
+  navigation,
+}) => {
   const goPot = () => {
     onClose(false);
 
+    if (onLogout) {
+      onLogout();
+      clearSensorInterval();
+    }
     const delayNavigation = setTimeout(() => {
       // navigation.navigate("SliderPot"); // 네비게이션을 이용하여 "Pot" 화면으로 이동
       navigation.navigate("Pot");
@@ -22,6 +32,11 @@ const ModalMap = ({ isVisible, onClose, navigation }) => {
     onClose(false);
     deleteTokens();
 
+    if (onLogout) {
+      onLogout();
+      clearSensorInterval();
+    }
+
     const delayNavigation = setTimeout(() => {
       navigation.navigate("Login");
     }, 300);
@@ -32,6 +47,10 @@ const ModalMap = ({ isVisible, onClose, navigation }) => {
   const goMain = () => {
     onClose(false);
 
+    if (onLogout) {
+      onLogout();
+      clearSensorInterval();
+    }
     const delayNavigation = setTimeout(() => {
       navigation.navigate("Main");
     }, 300);
@@ -42,6 +61,10 @@ const ModalMap = ({ isVisible, onClose, navigation }) => {
   const goGarden = () => {
     onClose(false);
 
+    if (onLogout) {
+      onLogout();
+      clearSensorInterval();
+    }
     const delayNavigation = setTimeout(() => {
       // navigation.navigate("SliderGarden");
       navigation.navigate("Garden");
@@ -52,6 +75,11 @@ const ModalMap = ({ isVisible, onClose, navigation }) => {
 
   const goProfile = () => {
     onClose(false);
+
+    if (onLogout) {
+      onLogout();
+      clearSensorInterval();
+    }
 
     const delayNavigation = setTimeout(() => {
       navigation.navigate("Profile");

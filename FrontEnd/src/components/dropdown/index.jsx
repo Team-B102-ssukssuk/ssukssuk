@@ -55,7 +55,7 @@ const CustomDropdown = ({ options, onSelect }) => {
       rows.push(row);
     }
 
-    console.log(rows);
+    // console.log(rows);
 
     return rows.map((row, rowIndex) => (
       <View key={`dropdown_${rowIndex}`} style={styles.rowContainer}>

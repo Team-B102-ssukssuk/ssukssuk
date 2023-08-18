@@ -33,7 +33,7 @@ const AlarmScreen = ({ navigation, storePotID, setGardenID }) => {
       .get("/notification")
       .then((response) => {
         setNotificationData(response.data.data);
-        console.log("알림 -> " + JSON.stringify(response.data.data));
+        // console.log("알림 -> " + JSON.stringify(response.data.data));
         setIsLoading(false);
       })
       .catch(() => {
@@ -57,7 +57,7 @@ const AlarmScreen = ({ navigation, storePotID, setGardenID }) => {
   };
 
   const renderSwipeableContent = (item) => {
-    console.log(item);
+    // console.log(item);
     const onSwipeableLeftOpen = () => {
       deleteNotification(item.notificationId);
       const updatedData = isNotificationData.filter(

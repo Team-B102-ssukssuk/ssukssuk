@@ -111,7 +111,7 @@ const SignUpScreen = ({ navigation }) => {
         email: email,
         code: verifyNumber,
       };
-      console.log(requestData.verificationCode);
+      // console.log(requestData.verificationCode);
       console.log("222");
       const response = await axios.post(
         "http://i9b102.p.ssafy.io:8080/auth/join/emailcheck",

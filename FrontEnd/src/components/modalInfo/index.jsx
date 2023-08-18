@@ -6,7 +6,7 @@ import CookieRunRegular from "../common/CookieRunRegular";
 import styles from "./style";
 
 const ModalInfo = ({ isVisible, onClose, plant, plantImg }) => {
-  console.log(plantImg);
+  // console.log(plantImg);
   if (!plant) {
     return null;
   }

@@ -63,10 +63,10 @@ const ModalSensor = ({
               style={{ fontSize: 24, marginBottom: 10, color: "#FFF" }}
             >
               {selectedSensorType === "temperature"
-                ? "온도 센서"
+                ? "온도 기록"
                 : selectedSensorType === "humidity"
-                ? "습도 센서"
-                : "토양 수분 센서"}
+                ? "습도 기록"
+                : "토양 수분 기록"}
             </CookieRunBold>
             {/* LineChart */}
             <View style={{ flexDirection: "row" }}>

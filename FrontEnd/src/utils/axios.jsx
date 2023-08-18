@@ -61,8 +61,12 @@ customAxios.interceptors.response.use(
       response: { status },
     } = error;
 
-    console.log("응답 : " + status);
-    console.log(error.response.data.statusName);
+    // console.log("응답 : " + status);
+    // console.log(error.response.data.statusName);
+
+    // if (error.error.response.data.statusName === "NOT_FOUND_AUTH_TOKEN") {
+    //   return Promise.reject(error);
+    // }
 
     if (status === 400 || status === 409) {
       if (
@@ -71,7 +75,7 @@ customAxios.interceptors.response.use(
       ) {
         if (tokenExpiredCallback) {
           const response = await postRefreshToken();
-          console.log(response.status);
+          // console.log(response.status);
           if (response.status === 200) {
             const newAccessToken = response.data.accessToken;
             AsyncStorage.setItem("accessToken", newAccessToken);

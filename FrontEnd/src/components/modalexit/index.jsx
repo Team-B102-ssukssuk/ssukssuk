@@ -5,7 +5,7 @@ import CookieRunBold from "../common/CookieRunBold";
 import CookieRunRegular from "../common/CookieRunRegular";
 import styles from "./style";
 
-const ModalExit = ({ isVisible, onClose }) => {
+const ModalExit = ({ isVisible, onClose, navigation }) => {
   // Handle back button press when the modal is open
   const handleBackButton = () => {
     // Close the modal and prevent the default back functionality
@@ -24,6 +24,7 @@ const ModalExit = ({ isVisible, onClose }) => {
 
   // Function to handle deletion and app exit
   const handleDeleteAndExit = () => {
+    navigation.navigate("Pot");
     // Close the modal
     BackHandler.exitApp(); // 앱 종료
     // Perform the deletion logic here (onDelete(potID))

@@ -60,13 +60,13 @@ const Router = () => {
         />
         <Stack.Screen
           options={{ headerShown: false }}
-          name="Intro"
-          component={IntroScreen}
+          name="Login"
+          component={LoginScreen}
         />
         <Stack.Screen
           options={{ headerShown: false }}
-          name="Login"
-          component={LoginScreen}
+          name="Intro"
+          component={IntroScreen}
         />
         <Stack.Screen
           options={{ headerShown: false }}

@@ -18,6 +18,7 @@ import CookieRunRegular from "../../components/common/CookieRunRegular";
 import LoadingScreen from "../loading";
 import * as ImagePicker from "expo-image-picker";
 import { Alert, Linking } from "react-native";
+import ToastNotification from "../../components/toast";
 
 const ProfileScreen = ({ navigation }) => {
   const [isEditModalVisible, setEditModalVisible] = useState(false);
@@ -38,10 +39,26 @@ const ProfileScreen = ({ navigation }) => {
   });
   const [badgeIndex, setBadgeIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [toastTitle, setToastTitle] = useState("");
+  const [toastContent, setToastContent] = useState("");
+  const [toastIconName, setToastIconName] = useState("");
+  const [isToastVisible, setIsToastVisible] = useState(false);
+
+  const showToast = (title, content, iconName) => {
+    setIsToastVisible(true);
+    setToastTitle(title);
+    setToastContent(content);
+    setToastIconName(iconName);
+
+    // Start the timer to hide the toast after a few seconds
+    setTimeout(() => {
+      setIsToastVisible(false);
+    }, 2000); // Set the duration for the toast to stay visible (2 seconds in this case)
+  };
 
   const getUserData = () => {
     customAxios.get("/user/info").then((res) => {
-      console.log(res.data.data);
+      // console.log(res.data.data);
       setUserData(res.data.data);
       setTimeout(() => {
         setIsLoading(false);
@@ -109,7 +126,7 @@ const ProfileScreen = ({ navigation }) => {
         getUserData();
       }
     } catch (error) {
-      console.error("Image upload error:", error);
+      showToast("실패", "사진은 5MB 이하만 가능합니다.", "alert-sharp");
     }
   };
 
@@ -374,6 +391,13 @@ const ProfileScreen = ({ navigation }) => {
         renderContent={renderInner}
         onCloseEnd={onClose}
       />
+      {isToastVisible && (
+        <ToastNotification
+          title={toastTitle}
+          content={toastContent}
+          iconName={toastIconName}
+        />
+      )}
     </ImageBackground>
   );
 };

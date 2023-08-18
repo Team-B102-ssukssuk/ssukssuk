@@ -39,7 +39,7 @@ const SignUpPasswordScreen = ({ route, navigation }) => {
       navigation.navigate("SignUpNickname", {
         SignUpData: updatedSignUpData,
       });
-      console.log(SignUpData);
+      // console.log(SignUpData);
     } else if (password === PasswordRe && password !== "" && !isPasswordValid) {
       setErrorOpacity(100);
       setNextButtonColor("#CACACA");
@@ -51,7 +51,7 @@ const SignUpPasswordScreen = ({ route, navigation }) => {
     } else {
       setErrorOpacity(100);
       setNextButtonColor("#CACACA");
-      console.log(SignUpData);
+      // console.log(SignUpData);
     }
   };
 

@@ -4,7 +4,6 @@
     "icon": "./src/assets/img/Logo.png",
     "version": "2.0.0",
     "slug": "SSOOK-SSOOK",
-
     "ios": {
       "bundleIdentifier": "com.ssafy.ssuk",
       "buildNumber": "2.0.0"
@@ -12,7 +11,7 @@
     "android": {
       "package": "com.ssafy.ssuk",
       "googleServicesFile": "./google-services.json",
-      "versionCode": 7,
+      "versionCode": 12,
       "permissions": []
     },
     "extra": {

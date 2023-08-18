@@ -53,7 +53,7 @@ const GardenScreen = () => {
     customAxios
       .get("/plant/all")
       .then((res) => {
-        console.log(res.data.data);
+        // console.log(res.data.data);
         setPlantData(res.data.data);
         setTimeout(() => {
           setIsLoading(false);

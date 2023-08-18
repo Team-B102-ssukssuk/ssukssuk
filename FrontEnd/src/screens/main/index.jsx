@@ -47,6 +47,7 @@ const MainScreen = (props) => {
   const [isOpenSensorModalVisible, setOpenSensorModalVisible] = useState(false);
   const [isSlideData, setSlideData] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [sensorIntervalId, setSensorIntervalId] = useState(null);
 
   const getPlantImageSource = (plantId, level) => {
     const imageName = `${plantId}_${level}.gif`;
@@ -54,6 +55,16 @@ const MainScreen = (props) => {
     const resolvedImage = Image.resolveAssetSource(image);
 
     return resolvedImage;
+  };
+
+  const clearSensorInterval = () => {
+    clearInterval(sensorIntervalId);
+    setSensorIntervalId(null);
+  };
+
+  const handleLogout = () => {
+    clearSensorInterval();
+    // 다른 로그아웃 관련 동작 수행
   };
 
   const toggleEditModal = () => {
@@ -100,7 +111,7 @@ const MainScreen = (props) => {
   };
 
   const handleArrowClick = async (direction) => {
-    let updatedIndex = currentIndex; // 업데이트될 currentIndex
+    let updatedIndex = currentIndex;
 
     if (direction === "left") {
       if (currentIndex > 0) {
@@ -112,11 +123,12 @@ const MainScreen = (props) => {
       }
     }
 
-    await setCurrentIndex(updatedIndex); // await를 사용하여 setCurrentIndex 완료를 기다림
+    // Clear the previous interval if it exists
+    clearSensorInterval();
+
+    await setCurrentIndex(updatedIndex);
     props.storePotID(isSlideData[updatedIndex].potId);
     props.setGardenID(isSlideData[updatedIndex].gardenId);
-
-    console.log(isSlideData[updatedIndex].gardenId);
 
     if (isSlideData[updatedIndex].gardenId === null) {
       setCharacterTrue(false);
@@ -128,6 +140,14 @@ const MainScreen = (props) => {
       getPlantData(isSlideData[updatedIndex].gardenId);
       getUserData(isSlideData[updatedIndex].potId);
     }
+
+    // Set a new interval for calling getUserData
+    const intervalId = setInterval(() => {
+      console.log("이게 문제");
+      getPlantData(isSlideData[updatedIndex].gardenId);
+      getUserData(isSlideData[updatedIndex].potId);
+    }, 10000);
+    setSensorIntervalId(intervalId);
   };
 
   const getUserData = (potId) => {
@@ -135,6 +155,7 @@ const MainScreen = (props) => {
       customAxios
         .get(`/sensor/${props.potID}`)
         .then((res) => {
+          console.log("센서");
           const temperatureData = res.data.data.find(
             (sensor) => sensor.sensorType === "T"
           );
@@ -164,6 +185,7 @@ const MainScreen = (props) => {
       customAxios
         .get(`/sensor/${potId}`)
         .then((res) => {
+          console.log("센서");
           const temperatureData = res.data.data.find(
             (sensor) => sensor.sensorType === "T"
           );
@@ -237,27 +259,34 @@ const MainScreen = (props) => {
       getPlantData(999);
       registNotification();
       getSlideData();
+      getUserData(999);
 
       setTimeout(() => {
         setIsLoading(false);
       }, 500);
+
+      const intervalId = setInterval(() => {
+        getNotificationData();
+        getUserData(999);
+        getPlantData(999);
+      }, 10000);
+
+      setSensorIntervalId(intervalId);
+
+      return () => {
+        clearInterval(intervalId);
+      };
     }
   }, [isFocused]);
 
   useEffect(() => {
-    getUserData(999);
     changeBackgroundImage();
-
-    const sensorInterval = setInterval(() => {
-      getUserData(999);
-    }, 30000); // 30초를 밀리초로 변환
 
     const interval = setInterval(() => {
       changeBackgroundImage();
     }, 3600000); // 매 시간마다 호출 (밀리초 단위)
 
     return () => {
-      clearInterval(sensorInterval);
       clearInterval(interval);
     };
   }, []);
@@ -309,8 +338,8 @@ const MainScreen = (props) => {
         gardenId: props.gardenID,
         nickname: inputValue,
       })
-      .then((res) => {
-        console.log(res.data);
+      .then(() => {
+        // console.log(res.data);
         getPlantData(999);
       });
     setEditModalVisible(false);
@@ -496,7 +525,11 @@ const MainScreen = (props) => {
           <View style={styles.characterSection}>
             <Image
               source={getPlantImageSource(
-                isCharacterData.plantId,
+                moisture === 0
+                  ? isCharacterData.plantId
+                  : moisture < 45 && isCharacterData.plantId === 1
+                  ? 4
+                  : isCharacterData.plantId,
                 isCharacterData.level
               )}
               resizeMode="contain"
@@ -543,7 +576,12 @@ const MainScreen = (props) => {
       />
       <ModalMap
         isVisible={isOpenMapModalVisible}
-        onClose={() => setIsOpenMapModalVisible(false)}
+        onClose={() => {
+          setIsOpenMapModalVisible(false);
+          clearSensorInterval(); // Clear the interval when closing the modal
+        }}
+        onLogout={handleLogout}
+        clearSensorInterval={clearSensorInterval} // Pass the callback function
         navigation={navigation}
       />
       <ModalDictionary
