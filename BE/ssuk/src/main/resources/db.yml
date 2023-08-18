@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/ssuk_ssuk?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
+    #url: jdbc:mysql://localhost:3306/ssuk_ssuk?useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
+    username: ENC(uFXOVJvegof42AwjD0946A==)
+    password: ENC(+1QeK/QWvLlXsLfsEGUTnJXo5ZxvGWji)

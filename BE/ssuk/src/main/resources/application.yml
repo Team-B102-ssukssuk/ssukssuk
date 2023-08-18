@@ -1,0 +1,71 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: ENC(lqouFcXjn9u4UJfNsWv/pDiEAN6MnK0vNQ2qXLnImojqXZEpxNeB1+213wRr99Pa)
+            client-name: Kakao
+            client-secret: ENC(+05K2oA2HR3sw3xqvZAfLczRYClfvXwb/kg/HMRUFcvm2rooSPMAPN9pLf/Zk1KM)
+            redirect-uri: http://i9b102.p.ssafy.io:8080/auth/kakao
+#            redirect-uri: http://10.0.2.2:8080/user/kakao
+            scope: profile_nickname, profile_image, account_email
+            authorization-grant-type: authorization_code
+            client-authentication-method: POST
+          provider:
+            kakao:
+              authorization-uri: https://kauth.kakao.com/oauth/authorize
+              token-uri: https://kauth.kakao.com/oauth/token
+              user-info-uri: https://kapi.kakao.com/v2/user/me
+              user-name-attribute: id
+              logout-uri: https://kapi.kakao.com/v1/user/logout
+
+  redis:
+    lettuce:
+      pool:
+        max-active: 5
+        max-idle: 5
+        min-idle: 2
+    host: localhost
+    port: 6379
+    password: ENC(+1QeK/QWvLlXsLfsEGUTnJXo5ZxvGWji)
+
+  jpa:
+    database: mysql   # 추가 해준 부분
+    open-in-view: true
+    hibernate:
+      ddl-auto: none
+      #ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      use-new-id-generator-mappings: false
+#    show-sql: true
+    properties:
+      hibernate.format_sql: true
+      dialect: org.hibernate.dialect.MySQL8InnoDBDialect
+
+  config:
+    import:
+      - port.yml
+      - cloud.yml
+      - db.yml
+      - email.yml
+      - jwt.yml
+
+logging:
+  level:
+    com.ssafy.ssuk: debug
+
+# ? 없는 로그 출력
+# true가 default 운영환경에서는 false로 변경!!
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true
+
+jasypt:
+  encryptor:
+    password: ${ENCODE_KEY}
+
+weather:
+  key: ENC(vr6HbA4oILDIj7sP83NS14O9oGkWqhactCoIzm1IIvCPr1Uv6RvY3ACyng9MLVMllBM1KWKzCD3CFw+tHKzf+hIlAidWBtqvze/dreYsLEppJNQS6pF72X+0hj9wTP3GX9s3VCNl9RTJ4K5MHegUaA==)
