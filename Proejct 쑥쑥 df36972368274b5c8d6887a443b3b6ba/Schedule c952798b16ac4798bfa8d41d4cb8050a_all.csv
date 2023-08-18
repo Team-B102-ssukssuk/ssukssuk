@@ -1,0 +1,13 @@
+﻿회의명,회의유형,회의일시,회의장소,👥  Team
+4주차 스프린트 회고,,2023년 8월 4일,,
+Sub-PJT III,전체회의,2023년 8월 4일,,
+팀장 회의 3회차,팀장회의,2023년 7월 27일,,
+Tensorflow + WebSocket 세팅에 대한 고찰,IoT,2023년 7월 27일,,이정섭 (https://www.notion.so/e595d74d05bd4cccbbcb11f6b9844eaf?pvs=21)
+CI / CD 적용에 대한 회의록 및 현황,백엔드회의,2023년 7월 27일,,"송소연 (https://www.notion.so/ab61949845384b299dfa2fd766d20421?pvs=21), 이덕용 (https://www.notion.so/eef3a77be6b6487f85b92a22beec9e1f?pvs=21), 홍지민 (https://www.notion.so/e4f35dc987af4e4c8c4258cf8fa8c4f2?pvs=21)"
+백엔드 팀 회의 기록,백엔드회의,2023년 7월 21일,,"송소연 (https://www.notion.so/ab61949845384b299dfa2fd766d20421?pvs=21), 이덕용 (https://www.notion.so/eef3a77be6b6487f85b92a22beec9e1f?pvs=21), 홍지민 (https://www.notion.so/e4f35dc987af4e4c8c4258cf8fa8c4f2?pvs=21)"
+팀장 미팅 2회차,팀장회의,2023년 7월 21일,,이정섭 (https://www.notion.so/e595d74d05bd4cccbbcb11f6b9844eaf?pvs=21)
+2주차 개요 설명,중간회의,2023년 7월 17일,,
+어플 내 콘텐츠 형상관리에 대한 고찰,중간회의,2023년 7월 21일,,"이정섭 (https://www.notion.so/e595d74d05bd4cccbbcb11f6b9844eaf?pvs=21), 이덕용 (https://www.notion.so/eef3a77be6b6487f85b92a22beec9e1f?pvs=21), 홍지민 (https://www.notion.so/e4f35dc987af4e4c8c4258cf8fa8c4f2?pvs=21), 송소연 (https://www.notion.so/ab61949845384b299dfa2fd766d20421?pvs=21)"
+ERD 컨설턴트 미팅,전체회의,2023년 7월 19일,102호,"이정섭 (https://www.notion.so/e595d74d05bd4cccbbcb11f6b9844eaf?pvs=21), 송소연 (https://www.notion.so/ab61949845384b299dfa2fd766d20421?pvs=21), 이덕용 (https://www.notion.so/eef3a77be6b6487f85b92a22beec9e1f?pvs=21), 홍지민 (https://www.notion.so/e4f35dc987af4e4c8c4258cf8fa8c4f2?pvs=21), 손수형 (https://www.notion.so/3fcb8bf979b947809cc29d6ee19f2c3c?pvs=21), 차지은 (https://www.notion.so/9db05a906c2a45988019333898f11c86?pvs=21)"
+ERD 피드백 적용,백엔드회의,2023년 7월 18일,,"이정섭 (https://www.notion.so/e595d74d05bd4cccbbcb11f6b9844eaf?pvs=21), 홍지민 (https://www.notion.so/e4f35dc987af4e4c8c4258cf8fa8c4f2?pvs=21), 송소연 (https://www.notion.so/ab61949845384b299dfa2fd766d20421?pvs=21), 이덕용 (https://www.notion.so/eef3a77be6b6487f85b92a22beec9e1f?pvs=21)"
+Erd 설계 회의,디자인회의,2023년 7월 17일,SSAFY B102호,"차지은 (https://www.notion.so/9db05a906c2a45988019333898f11c86?pvs=21), 이정섭 (https://www.notion.so/e595d74d05bd4cccbbcb11f6b9844eaf?pvs=21), 홍지민 (https://www.notion.so/e4f35dc987af4e4c8c4258cf8fa8c4f2?pvs=21), 송소연 (https://www.notion.so/ab61949845384b299dfa2fd766d20421?pvs=21), 이덕용 (https://www.notion.so/eef3a77be6b6487f85b92a22beec9e1f?pvs=21), 손수형 (https://www.notion.so/3fcb8bf979b947809cc29d6ee19f2c3c?pvs=21)"
