@@ -1,6 +1,7 @@
 # README
 
 # 🍃 Web IOT 프로젝트 - 쑥쑥
+![Untitled](images/last.jpg)
 
 ## 🌱 프로젝트 진행 기간 🌱
 
